@@ -1,0 +1,6 @@
+# Streamlit Cloud requirements (demo mode - no AWS/Bedrock needed)
+streamlit>=1.35.0
+faker>=25.0.0
+pandas>=2.0.0
+numpy<2
+requests>=2.31.0

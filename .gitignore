@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+pip-wheel-metadata/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment / secrets
+.env
+.env.*
+.streamlit/secrets.toml
+
+# AWS credentials
+.aws/
+credentials
+
+# FAISS index (rebuild from data)
+faiss_index/
+
+# Logs
+logs/
+*.log
+
+# Data (generated - commit only if needed for demo)
+# data/  <- uncomment to exclude generated data
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Coverage / testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# CDK
+cdk.out/
+cdk.context.json
+
+# Distribution
+*.zip
+*.tar.gz
