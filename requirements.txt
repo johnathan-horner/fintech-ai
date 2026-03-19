@@ -11,6 +11,6 @@ pydantic>=2.0.0
 faker>=25.0.0
 yfinance>=0.2.40
 pandas>=2.0.0
-"numpy<2"
+numpy<2
 aws-cdk-lib>=2.140.0
 constructs>=10.0.0
