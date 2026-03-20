@@ -64,14 +64,7 @@ with st.sidebar:
     st.caption("SR 11-7 MRM Framework")
 
 if DEMO_MODE:
-    st.markdown(
-        '<div class="demo-banner">'
-        "<strong>[DEMO] Demo Mode</strong> -- "
-        "Running on synthetic portfolio data with mock AI responses. "
-        "No AWS credentials required."
-        "</div>",
-        unsafe_allow_html=True,
-    )
+    st.info("**[DEMO] Demo Mode** -- Running on synthetic portfolio data with mock AI responses. No AWS credentials required.")
 
 from streamlit_app.demo_pages import (
     page_portfolio, page_market, page_risk,

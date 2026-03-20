@@ -193,7 +193,8 @@ def page_portfolio():
 
             # Weight progress bar
             st.caption("Portfolio Weight:")
-            st.progress(weight / 20.0)  # Normalize to 0-1 range assuming max 20%
+            progress_value = min(weight / 20.0, 1.0)  # Normalize to 0-1 range, cap at 1.0
+            st.progress(progress_value)
 
 
 def page_market():
@@ -401,18 +402,18 @@ def page_portfolio_management():
     col1, col2 = st.columns(2)
     with col1:
         st.caption("**Target Sector Weights**")
-        targets_data = [
+        import pandas as pd
+        targets_data = pd.DataFrame([
             ["Technology", "43.5%", "30%", "Reduce"],
             ["Financials", "20.8%", "20.8%", "Hold"],
             ["Healthcare", "0%", "8%", "Add"],
             ["Energy", "8.3%", "8%", "Hold"],
             ["Consumer Disc", "4.9%", "2%", "Reduce"],
             ["Cash", "0%", "5%", "Add"],
-        ]
+        ], columns=["Sector", "Current", "Target", "Action"])
 
         st.dataframe(
             targets_data,
-            columns=["Sector", "Current", "Target", "Action"],
             use_container_width=True
         )
 
