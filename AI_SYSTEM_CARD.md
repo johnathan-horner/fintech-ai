@@ -41,8 +41,8 @@
 ## Performance Metrics
 - **RAG Accuracy**: Retrieval relevance scoring and answer attribution
 - **Model Validation**: Backtest accuracy, stability scores, data quality metrics
-- **Response Time**: <3 seconds for portfolio analysis, <5 seconds for market insights
-- **Uptime**: 99.5% availability target with monitoring and alerting
+
+Evaluation metrics will be published here once measured on a held-out split.
 
 ## Risk Management and Monitoring
 - **Model Risk**: SR 11-7 compliance framework with independent validation
