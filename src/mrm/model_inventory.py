@@ -9,19 +9,28 @@ SR 11-7 defines three components of sound model risk management:
 
 This module covers the Model Inventory - the authoritative registry of all
 models in use, their risk tier, validation status, and lifecycle stage.
+
+Validation status is NOT hand-written: it is derived from
+data/mrm/approvals.json, which only the eval harness (scripts/run_eval.py)
+writes. ``require_approved`` enforces the approved version before every
+model call.
 """
 
 import json
 import os
-import hashlib
 from datetime import datetime, timedelta
-from typing import Optional
 from enum import Enum
+from typing import List, Optional
 
-INVENTORY_PATH = os.path.join(os.path.dirname(__file__), "../../../data/mrm_inventory.json")
+from src.llm import config
+from src.llm.guard import GovernanceBlocked
+from src.mrm.approvals import approvals_mtime, approvals_path, load_approvals
+from src.utils.data import DATA_DIR
+
+INVENTORY_PATH = os.path.join(DATA_DIR, "mrm_inventory.json")
 
 
-#  Enums 
+#  Enums
 
 class ModelTier(str, Enum):
     """
@@ -59,7 +68,16 @@ class ModelType(str, Enum):
     ORCHESTRATION = "Multi-Agent Orchestration"
 
 
-#  Model Definitions 
+APPROVAL_TO_VALIDATION_STATUS = {
+    "APPROVED": ValidationStatus.APPROVED,
+    "CONDITIONAL": ValidationStatus.CONDITIONAL,
+    "FAILED": ValidationStatus.FAILED,
+}
+
+LLM_COMPONENTS = ("MRM-001", "MRM-002", "MRM-003", "MRM-004", "MRM-005")
+
+
+#  Model Definitions (static documentation; status fields are derived)
 
 FINTECH_AI_MODELS = [
     {
@@ -68,31 +86,29 @@ FINTECH_AI_MODELS = [
         "type": ModelType.RAG,
         "tier": ModelTier.TIER_2,
         "description": (
-            "LCEL RAG chain using Amazon Bedrock Claude 3 Sonnet + FAISS vector store. "
-            "Answers analyst questions about portfolio, earnings, and macro data. "
-            "Human-in-the-loop: analyst reviews and acts on outputs."
+            "RAG chain: HyDE retrieval over a FAISS index of the bundled synthetic data, "
+            "local cross-encoder re-ranking (ms-marco-MiniLM-L-6-v2), answer generation with the "
+            "configured chat model (demo: Gemini 2.5 Flash free tier; production target: Amazon "
+            "Bedrock Claude) and an independent grader model scoring every answer."
         ),
         "owner": "Johnathan Horner",
         "business_use": "Analyst decision support - market and portfolio Q&A",
-        "inputs": ["Natural language query", "FAISS vector store", "Conversation history"],
-        "outputs": ["Natural language analysis", "Source document references"],
-        "dependencies": ["Amazon Bedrock Claude 3 Sonnet", "Titan Embeddings v1", "FAISS"],
-        "data_sources": ["Synthetic portfolio data", "Synthetic earnings transcripts", "Synthetic macro data"],
+        "inputs": ["Natural language query", "FAISS vector store", "Conversation history (last 5 turns)"],
+        "outputs": ["Natural language analysis with source citations", "Re-ranked source list with scores", "Grader result"],
+        "dependencies": ["Chat model (config)", "HyDE model (config)", "Embedding model (config)", "FAISS", "fastembed cross-encoder"],
+        "data_sources": ["Synthetic portfolio data", "Synthetic market data", "Synthetic earnings transcripts", "Synthetic macro data", "Computed risk metrics"],
         "status": ModelStatus.PRODUCTION,
-        "validation_status": ValidationStatus.CONDITIONAL,
-        "validation_date": "2025-01-15",
-        "next_validation_due": "2026-01-15",
         "validation_frequency_months": 12,
-        "last_reviewed": datetime.today().strftime("%Y-%m-%d"),
         "known_limitations": [
-            "Hallucination risk on specific numeric outputs - must be cross-checked",
-            "Context window limited to 5 conversation turns",
-            "FAISS index requires rebuild when underlying data changes",
-            "No real-time market data - index refresh latency up to 6 hours",
+            "Hallucination risk on specific numeric outputs - mitigated by grader + deterministic numeric check",
+            "Conversation memory limited to the last 5 turns",
+            "FAISS index must be rebuilt when underlying data or embedding model changes (manifest check enforces this)",
+            "Bundled data is synthetic and static - no live market feed",
         ],
         "mitigations": [
-            "Investment disclaimer appended to all outputs",
-            "Source documents returned alongside every answer",
+            "Investment disclaimer appended to all API outputs",
+            "Source ids and re-ranker scores returned alongside every answer",
+            "Independent grader model (different model id) + numeric consistency check on every answer",
             "Human analyst review required before any trading action",
             "Guardrails filter blocked topics (insider trading, market manipulation)",
         ],
@@ -107,21 +123,18 @@ FINTECH_AI_MODELS = [
         "type": ModelType.LLM_AGENT,
         "tier": ModelTier.TIER_2,
         "description": (
-            "LangGraph LLM agent using Claude 3 Sonnet. Analyzes price trends, "
-            "technical indicators (RSI, SMA, MACD), sector momentum, and earnings patterns."
+            "LangGraph agent node using the configured chat model. Analyses sector exposure, "
+            "technical indicators (RSI, SMA, MACD), earnings beat/miss and macro backdrop from "
+            "the bundled data and computed metrics."
         ),
         "owner": "Johnathan Horner",
         "business_use": "Market trend identification and technical alert generation",
-        "inputs": ["Portfolio positions JSON", "FAISS-retrieved market context"],
+        "inputs": ["Portfolio positions JSON", "Computed KPIs and technical signals", "Latest earnings and macro records"],
         "outputs": ["Market analysis narrative", "Technical alerts list", "Sector breakdown"],
-        "dependencies": ["Amazon Bedrock Claude 3 Sonnet", "FAISS", "MRM-001 vector store"],
-        "data_sources": ["Synthetic market OHLCV data", "Synthetic earnings transcripts"],
+        "dependencies": ["Chat model (config)", "src/utils/metrics.py", "LangGraph"],
+        "data_sources": ["Synthetic market OHLCV data", "Synthetic earnings transcripts", "Synthetic macro data"],
         "status": ModelStatus.PRODUCTION,
-        "validation_status": ValidationStatus.CONDITIONAL,
-        "validation_date": "2025-01-15",
-        "next_validation_due": "2026-01-15",
         "validation_frequency_months": 12,
-        "last_reviewed": datetime.today().strftime("%Y-%m-%d"),
         "known_limitations": [
             "Technical indicators are derived from synthetic data - not real market feeds",
             "LLM may over-interpret noise as signal in volatile market regimes",
@@ -130,8 +143,8 @@ FINTECH_AI_MODELS = [
         ],
         "mitigations": [
             "Outputs labeled as AI-generated analysis, not trading signals",
-            "Technical alerts require analyst confirmation before action",
-            "Sector breakdown cross-checked against portfolio management system",
+            "Technical alerts are computed deterministically; the LLM only narrates them",
+            "Every output graded by an independent model against its exact inputs",
         ],
         "materiality_rationale": (
             "Tier 2: Technical alerts are informational. "
@@ -144,41 +157,30 @@ FINTECH_AI_MODELS = [
         "type": ModelType.LLM_AGENT,
         "tier": ModelTier.TIER_1,
         "description": (
-            "LangGraph agent calculating portfolio VaR, position-level risk scores, "
-            "and generating risk reports. Directly informs risk limit decisions."
+            "LangGraph agent node that narrates portfolio VaR, Monte Carlo CVaR, stress tests and "
+            "position risk scores computed by MRM-006. Directly informs risk discussions."
         ),
         "owner": "Johnathan Horner",
-        "business_use": "Portfolio risk measurement, VaR calculation, risk limit monitoring",
-        "inputs": ["Portfolio positions JSON", "Macro indicator data", "Market analysis output"],
-        "outputs": ["Portfolio VaR (1-day, 10-day)", "Position risk scores (0-100)", "Risk report narrative"],
-        "dependencies": [
-            "Amazon Bedrock Claude 3 Sonnet",
-            "src/utils/metrics.py (VaR, Sharpe, Beta calculations)",
-            "MRM-002 Market Analysis Agent",
-        ],
+        "business_use": "Portfolio risk narrative over computed VaR / CVaR / stress results",
+        "inputs": ["Computed risk metrics (MRM-006)", "Macro indicator data", "Market analysis output"],
+        "outputs": ["Risk report narrative", "Position risk scores (computed, 0-100)"],
+        "dependencies": ["Chat model (config)", "MRM-006 Financial Metrics Engine", "MRM-002 Market Analysis Agent"],
         "data_sources": ["Synthetic portfolio data", "Synthetic macro indicators"],
         "status": ModelStatus.PRODUCTION,
-        "validation_status": ValidationStatus.PENDING,
-        "validation_date": None,
-        "next_validation_due": "2025-03-01",
         "validation_frequency_months": 6,
-        "last_reviewed": datetime.today().strftime("%Y-%m-%d"),
         "known_limitations": [
-            "VaR uses simplified parametric method (weighted beta * assumed market vol) - not full historical simulation",
-            "Does not model correlation between positions (assumes linear additivity)",
-            "LLM risk narrative may not reflect actual quantitative risk metrics",
-            "No stress testing or scenario analysis implemented",
-            "Backtesting of VaR predictions not yet implemented",
+            "Portfolio VaR shown in the UI is the simplified beta x assumed-vol estimate from MRM-006",
+            "LLM risk narrative may not reflect the quantitative metrics exactly - graded on every run",
+            "Stress scenarios are stylised historical shocks applied through beta, not full revaluation",
         ],
         "mitigations": [
-            "VaR labeled as 'simplified estimate' in all outputs",
-            "Risk scores are directional indicators, not precise measurements",
-            "Independent risk team must validate VaR methodology before Tier 1 use",
-            "PENDING validation - not approved for use in risk limit decisions until validated",
+            "All numbers in the prompt come from src/utils/metrics.py",
+            "Independent grader + numeric check flag unsupported numbers",
+            "Live use blocked unless the exact model + prompt version is approved by the eval harness",
         ],
         "materiality_rationale": (
-            "Tier 1: VaR outputs may inform risk limit decisions and regulatory reporting. "
-            "Requires independent validation and approval before production use in limit monitoring."
+            "Tier 1: Risk narratives may inform risk limit discussions. "
+            "Requires independent validation and approval before production use."
         ),
     },
     {
@@ -187,38 +189,31 @@ FINTECH_AI_MODELS = [
         "type": ModelType.LLM_AGENT,
         "tier": ModelTier.TIER_1,
         "description": (
-            "LangGraph agent generating portfolio rebalancing recommendations, "
-            "hedge strategies, entry/exit suggestions, and tax-loss harvesting opportunities."
+            "LangGraph agent node suggesting risk reductions, concentration adjustments and "
+            "tax-loss harvesting candidates for portfolio manager review."
         ),
         "owner": "Johnathan Horner",
-        "business_use": "Portfolio optimization recommendations and rebalancing guidance",
-        "inputs": ["Portfolio data", "Market analysis", "Risk assessment", "VaR output"],
-        "outputs": ["Rebalancing plan", "Hedge recommendations", "Entry/exit suggestions", "Action items"],
-        "dependencies": ["Amazon Bedrock Claude 3 Sonnet", "MRM-002", "MRM-003"],
+        "business_use": "Portfolio rebalancing suggestions for human review",
+        "inputs": ["Portfolio data", "Computed risk scores", "Concentration vs policy limits", "Upstream agent summaries"],
+        "outputs": ["Recommendation memo", "Action items (computed from risk scores)"],
+        "dependencies": ["Chat model (config)", "MRM-002", "MRM-003", "MRM-006"],
         "data_sources": ["Synthetic portfolio data", "All upstream agent outputs"],
         "status": ModelStatus.STAGING,
-        "validation_status": ValidationStatus.PENDING,
-        "validation_date": None,
-        "next_validation_due": "2025-03-01",
         "validation_frequency_months": 6,
-        "last_reviewed": datetime.today().strftime("%Y-%m-%d"),
         "known_limitations": [
             "Recommendations are LLM-generated - not optimized via quantitative portfolio theory",
             "Does not account for transaction costs, market impact, or liquidity constraints",
             "Tax-loss harvesting suggestions require CPA/tax advisor review",
             "No integration with order management system (OMS) - manual execution only",
-            "Dependent on MRM-003 (PENDING validation) - inherits its limitations",
         ],
         "mitigations": [
-            "Status: STAGING - not in production until MRM-003 is validated",
             "All recommendations include mandatory investment disclaimer",
             "Portfolio manager must review and approve all actions before execution",
             "No automated order routing - human approval gate required",
         ],
         "materiality_rationale": (
             "Tier 1: Recommendations directly influence portfolio construction. "
-            "Requires full validation of itself and all upstream models (MRM-002, MRM-003) "
-            "before production promotion."
+            "Requires validation of itself and upstream models before production promotion."
         ),
     },
     {
@@ -227,31 +222,26 @@ FINTECH_AI_MODELS = [
         "type": ModelType.ORCHESTRATION,
         "tier": ModelTier.TIER_1,
         "description": (
-            "LangGraph StateGraph orchestrating MRM-002, MRM-003, and MRM-004 sequentially. "
-            "Manages shared state and error propagation across the pipeline."
+            "LangGraph StateGraph running market_analysis -> risk_assessment -> portfolio_management -> END "
+            "with shared state and error propagation."
         ),
         "owner": "Johnathan Horner",
         "business_use": "End-to-end AI analysis pipeline execution",
         "inputs": ["Portfolio data JSON"],
-        "outputs": ["Combined output of all three agents"],
+        "outputs": ["Combined output of all three agents with per-section traces"],
         "dependencies": ["MRM-002", "MRM-003", "MRM-004", "LangGraph"],
         "data_sources": ["All upstream sources"],
         "status": ModelStatus.STAGING,
-        "validation_status": ValidationStatus.PENDING,
-        "validation_date": None,
-        "next_validation_due": "2025-04-01",
         "validation_frequency_months": 6,
-        "last_reviewed": datetime.today().strftime("%Y-%m-%d"),
         "known_limitations": [
-            "Errors in upstream agents propagate - no compensation logic yet",
-            "Sequential execution - if MRM-003 fails, MRM-004 receives incomplete data",
-            "No circuit breaker for repeated failures",
-            "Total latency 60-120 seconds - not suitable for real-time risk decisions",
+            "Errors in upstream agents propagate - sections fall back to deterministic text",
+            "Sequential execution - total latency is the sum of three model calls plus three grader calls",
+            "No circuit breaker beyond the per-session request cap",
         ],
         "mitigations": [
             "Error list captured in state and surfaced to dashboard",
-            "Each agent fails gracefully with fallback messages",
-            "Status: STAGING - production promotion blocked until all component models validated",
+            "Each agent fails gracefully with a deterministic, data-derived fallback",
+            "Each agent is independently gated by its own approval record",
         ],
         "materiality_rationale": (
             "Tier 1: As orchestrator of Tier 1 models, inherits highest risk tier. "
@@ -264,33 +254,28 @@ FINTECH_AI_MODELS = [
         "type": ModelType.QUANTITATIVE,
         "tier": ModelTier.TIER_1,
         "description": (
-            "Python-based quantitative metrics library. Calculates VaR (parametric), "
-            "Sharpe Ratio (annualized), Beta (OLS regression), max drawdown, "
-            "and position risk scores."
+            "Python quantitative metrics library (src/utils/metrics.py): parametric VaR, Monte Carlo "
+            "CVaR/Expected Shortfall (fat-tail mixture), historical and parametric rolling VaR, stress "
+            "tests, Sharpe/Sortino/Calmar, Beta and position risk scores."
         ),
         "owner": "Johnathan Horner",
         "business_use": "Quantitative risk measurement supporting MRM-003",
-        "inputs": ["Returns series", "Portfolio positions", "Market returns"],
-        "outputs": ["VaR estimates", "Sharpe ratios", "Beta coefficients", "Risk scores"],
+        "inputs": ["Portfolio positions", "Synthetic daily price history (data/price_history.json)"],
+        "outputs": ["VaR / CVaR estimates", "Stress test P&L", "Risk scores"],
         "dependencies": ["Python standard library (math, statistics)"],
-        "data_sources": ["Portfolio positions JSON"],
+        "data_sources": ["Portfolio positions JSON", "Synthetic price history"],
         "status": ModelStatus.PRODUCTION,
-        "validation_status": ValidationStatus.PENDING,
-        "validation_date": None,
-        "next_validation_due": "2025-03-01",
         "validation_frequency_months": 12,
-        "last_reviewed": datetime.today().strftime("%Y-%m-%d"),
         "known_limitations": [
-            "VaR uses parametric normal distribution assumption - underestimates tail risk",
+            "Headline parametric VaR uses weighted beta x an assumed 1.2% market vol, not estimated covariance",
             "Sharpe calculation assumes i.i.d. returns - not valid in trending markets",
-            "Beta estimated from limited synthetic data - unstable with short windows",
+            "Backtest runs on synthetic price history, so it validates mechanics rather than real-market calibration",
             "Position risk score weighting (beta 35%, PnL 30%, concentration 25%, rating 10%) is heuristic, not empirically calibrated",
-            "No fat-tail or jump risk modeling (no CVaR/ES implementation)",
         ],
         "mitigations": [
-            "All metric outputs include 'simplified estimate' labeling",
-            "Independent quant validation of all formulas required before Tier 1 use",
-            "Methodology documented in docs/MRM_VALIDATION.md for independent review",
+            "Out-of-sample rolling-window VaR backtest with Kupiec POF and Basel traffic light",
+            "CVaR/ES reported alongside VaR",
+            "Methodology documented in docs/MRM_FRAMEWORK.md for independent review",
         ],
         "materiality_rationale": (
             "Tier 1: Quantitative outputs used in risk decisions. "
@@ -300,7 +285,32 @@ FINTECH_AI_MODELS = [
 ]
 
 
-#  Inventory Manager 
+#  Current (running) version of each component
+
+def current_version(inventory_id: str) -> dict:
+    """model_id + prompt versions that would run right now for a component."""
+    from src.prompts import registry
+    from src.prompts.templates import COMPONENT_PROMPTS
+
+    if inventory_id == "MRM-001":
+        mid = (
+            f"{config.model_id('chat')}+hyde:{config.model_id('hyde')}"
+            f"+emb:{config.model_id('embedding')}"
+        )
+    elif inventory_id in LLM_COMPONENTS:
+        mid = config.model_id("chat")
+    else:
+        mid = "src/utils/metrics.py"
+    prompts = registry.refs(COMPONENT_PROMPTS.get(inventory_id, []))
+    return {"model_id": mid, "prompt_versions": prompts, "provider": config.get_provider()}
+
+
+def _add_months(date_str: str, months: int) -> str:
+    d = datetime.fromisoformat(date_str[:19])
+    return (d + timedelta(days=round(months * 30.44))).strftime("%Y-%m-%d")
+
+
+#  Inventory Manager
 
 class ModelInventory:
     """
@@ -308,8 +318,38 @@ class ModelInventory:
     Tracks all models, their risk tiers, validation status, and lifecycle.
     """
 
-    def __init__(self):
-        self.models = {m["model_id"]: m for m in FINTECH_AI_MODELS}
+    def __init__(self, approvals: Optional[dict] = None):
+        self.approvals = load_approvals() if approvals is None else approvals
+        self.models = {}
+        for m in FINTECH_AI_MODELS:
+            model = dict(m)
+            approval = self.approvals.get(m["model_id"])
+            if approval:
+                model["approved_version"] = {
+                    k: approval.get(k)
+                    for k in ("model_id", "prompt_versions", "approved_at", "approved_by", "evidence", "status", "metrics")
+                }
+                model["validation_status"] = APPROVAL_TO_VALIDATION_STATUS[approval["status"]]
+                model["validation_date"] = (approval.get("approved_at") or "")[:10] or None
+                model["next_validation_due"] = (
+                    _add_months(approval["approved_at"], m["validation_frequency_months"])
+                    if approval.get("approved_at") else None
+                )
+            else:
+                model["approved_version"] = None
+                model["validation_status"] = ValidationStatus.PENDING
+                model["validation_date"] = None
+                model["next_validation_due"] = None
+            model["current_version"] = current_version(m["model_id"])
+            appr = model["approved_version"]
+            model["version_mismatch"] = bool(appr) and (
+                appr.get("model_id") != model["current_version"]["model_id"]
+                or sorted(appr.get("prompt_versions") or []) != sorted(model["current_version"]["prompt_versions"])
+            )
+            if model["version_mismatch"]:
+                # The approval covers an older model/prompt version: re-validation required.
+                model["validation_status"] = ValidationStatus.PENDING
+            self.models[m["model_id"]] = model
 
     def get_all(self) -> list:
         return list(self.models.values())
@@ -360,17 +400,62 @@ class ModelInventory:
     def export_json(self, path: str = INVENTORY_PATH):
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as f:
-            json.dump({"models": self.get_all(), "exported_at": datetime.today().isoformat()}, f, indent=2)
+            json.dump({"models": self.get_all(), "exported_at": datetime.today().isoformat()}, f, indent=2, default=str)
         print(f"Model inventory exported to {path}")
 
 
-# Singleton
+#  Approval gate
+
+def check_approval(inventory_id: str, model_id: str, prompt_versions: List[str], approvals: Optional[dict] = None) -> dict:
+    """
+    Decide whether ``inventory_id`` may call ``model_id`` with ``prompt_versions``.
+    Returns {"allowed": bool, "status": str, "reason": str}.
+    """
+    approvals = load_approvals() if approvals is None else approvals
+    rec = approvals.get(inventory_id)
+    if not rec:
+        return {"allowed": False, "status": "NOT_VALIDATED",
+                "reason": f"{inventory_id} is not yet validated (no approval record from the eval harness)"}
+    status = rec.get("status")
+    if status not in ("APPROVED", "CONDITIONAL"):
+        return {"allowed": False, "status": status,
+                "reason": f"{inventory_id} validation status is {status} (eval run {rec.get('evidence')})"}
+    if rec.get("model_id") != model_id:
+        return {"allowed": False, "status": "VERSION_MISMATCH",
+                "reason": f"{inventory_id} running model '{model_id}' differs from approved '{rec.get('model_id')}'"}
+    if sorted(rec.get("prompt_versions") or []) != sorted(prompt_versions or []):
+        return {"allowed": False, "status": "VERSION_MISMATCH",
+                "reason": (f"{inventory_id} running prompts {sorted(prompt_versions or [])} differ from approved "
+                           f"{sorted(rec.get('prompt_versions') or [])}")}
+    return {"allowed": True, "status": status,
+            "reason": f"{inventory_id} {status} (eval run {rec.get('evidence')})"}
+
+
+def require_approved(inventory_id: str, model_id: str, prompt_versions: List[str], approvals: Optional[dict] = None) -> dict:
+    """Run BEFORE any model call. Raises GovernanceBlocked when not allowed."""
+    result = check_approval(inventory_id, model_id, prompt_versions, approvals)
+    if not result["allowed"]:
+        raise GovernanceBlocked(result["reason"])
+    return result
+
+
+def require_current_approved(inventory_id: str) -> dict:
+    """require_approved() for the version that is configured right now."""
+    cur = current_version(inventory_id)
+    return require_approved(inventory_id, cur["model_id"], cur["prompt_versions"])
+
+
+# Singleton (rebuilt when approvals.json changes)
 _inventory = None
+_inventory_mtime = None
+
 
 def get_inventory() -> ModelInventory:
-    global _inventory
-    if _inventory is None:
+    global _inventory, _inventory_mtime
+    mtime = (approvals_path(), approvals_mtime())
+    if _inventory is None or mtime != _inventory_mtime:
         _inventory = ModelInventory()
+        _inventory_mtime = mtime
     return _inventory
 
 
@@ -380,4 +465,3 @@ if __name__ == "__main__":
     print("=== FinTech AI Model Inventory ===")
     for k, v in stats.items():
         print(f"  {k}: {v}")
-    inv.export_json()

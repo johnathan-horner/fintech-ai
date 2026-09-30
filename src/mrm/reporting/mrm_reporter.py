@@ -6,14 +6,41 @@ Generates SR 11-7 compliant management reports for:
   - Regulatory Exam - on-demand full model documentation package
 """
 
-import json
+import os
 from datetime import datetime
-from src.mrm.model_inventory import get_inventory, ModelTier, ValidationStatus, ModelStatus
+from typing import List, Optional
+
+from src.mrm.model_inventory import get_inventory, ModelTier, ValidationStatus, LLM_COMPONENTS
 from src.mrm.monitoring.model_monitor import run_monitoring_report, check_validation_expiry
-from src.mrm.governance.model_governance import get_governance_summary, get_audit_log
+from src.mrm.governance.model_governance import (
+    ESCALATION_PROCEDURES, MODEL_USE_POLICY, get_audit_log, get_governance_summary,
+)
+from src.utils.data import REPO_ROOT
 
 
-def generate_cro_report() -> dict:
+def _recommendations(inv) -> List[str]:
+    """Recommendations derived from the current inventory state."""
+    recs = []
+    pending_llm = [m["model_id"] for m in inv.get_all()
+                   if m["model_id"] in LLM_COMPONENTS and m["validation_status"] == ValidationStatus.PENDING]
+    if pending_llm:
+        recs.append(f"Run the held-out eval harness (python scripts/run_eval.py --split heldout) to validate "
+                    f"{', '.join(pending_llm)} - live AI use is blocked until then.")
+    for m in inv.get_all():
+        if m["validation_status"] == ValidationStatus.FAILED:
+            recs.append(f"{m['model_id']} ({m['name']}) FAILED validation - remediate and re-run the eval before use.")
+        elif m["validation_status"] == ValidationStatus.CONDITIONAL:
+            recs.append(f"{m['model_id']} ({m['name']}) is CONDITIONAL - raise pass rate to >= 0.85 for full approval.")
+        cur, appr = m.get("current_version"), m.get("approved_version")
+        if appr and cur and (appr.get("model_id") != cur["model_id"]
+                             or sorted(appr.get("prompt_versions") or []) != sorted(cur["prompt_versions"])):
+            recs.append(f"{m['model_id']} running version differs from the approved version - re-run the eval.")
+    if not recs:
+        recs.append("All models hold a current approval for the running version; continue scheduled monitoring.")
+    return recs
+
+
+def generate_cro_report(traces: Optional[list] = None) -> dict:
     """
     Monthly CRO Model Risk Report.
     Summarizes model inventory health, validation status, monitoring alerts,
@@ -21,7 +48,7 @@ def generate_cro_report() -> dict:
     """
     inv = get_inventory()
     stats = inv.summary_stats()
-    monitoring = run_monitoring_report()
+    monitoring = run_monitoring_report(traces=traces)
     governance = get_governance_summary()
     expiry_alerts = check_validation_expiry()
 
@@ -37,17 +64,15 @@ def generate_cro_report() -> dict:
                 "action": "Complete independent validation or restrict to informational use only.",
             })
 
-    # Staging models not yet promoted
-    staging_models = inv.get_by_status(ValidationStatus.PENDING)
-
     # Monitoring critical alerts
     for perf in monitoring.get("performance", []):
         if perf.get("status") == "CRITICAL":
             critical_issues.append({
                 "issue": f"Model {perf['model_id']} in CRITICAL performance state.",
                 "risk": "MEDIUM - output quality may be degraded.",
-                "action": f"Review error rate ({perf['metrics'].get('error_rate', 'N/A'):.1%}) and latency.",
+                "action": f"Review error rate ({perf['metrics'].get('error_rate', 0):.1%}) and latency.",
             })
+    mrm006_drift = monitoring.get("drift", {}).get("MRM-006", {})
 
     return {
         "report_type": "CRO Monthly Model Risk Report",
@@ -89,8 +114,8 @@ def generate_cro_report() -> dict:
             "overall_status": monitoring.get("overall_status"),
             "models_critical": monitoring["summary"]["critical_alerts"],
             "models_warning": monitoring["summary"]["warning_alerts"],
-            "input_drift_psi": monitoring.get("drift", {}).get("psi_value"),
-            "drift_status": monitoring.get("drift", {}).get("alerts", [{}])[0].get("severity", "N/A"),
+            "input_drift_psi_mrm006": mrm006_drift.get("psi_value"),
+            "drift_status_mrm006": (mrm006_drift.get("alerts") or [{}])[0].get("severity", mrm006_drift.get("status", "N/A")),
         },
 
         "validation_schedule": [
@@ -98,7 +123,7 @@ def generate_cro_report() -> dict:
                 "model_id": m["model_id"],
                 "model_name": m["name"],
                 "tier": m["tier"],
-                "due_date": m.get("next_validation_due", "Not scheduled"),
+                "due_date": m.get("next_validation_due") or "Not scheduled (awaiting first validation)",
                 "current_status": m["validation_status"],
                 "priority": "URGENT" if m["tier"] == ModelTier.TIER_1 else "NORMAL",
             }
@@ -112,13 +137,7 @@ def generate_cro_report() -> dict:
             "pending_change_requests": governance.get("pending_change_requests", 0),
         },
 
-        "recommendations": [
-            "Complete independent validation of MRM-003 (Risk Assessment Agent) - currently PENDING, Tier 1.",
-            "Complete validation of MRM-006 (Financial Metrics Engine) - VaR methodology requires quant review.",
-            "Do not promote MRM-004 (Portfolio Agent) or MRM-005 (Orchestrator) to production until MRM-003 is approved.",
-            "Implement CVaR/Expected Shortfall alongside VaR in MRM-006 for Basel III compliance.",
-            "Establish formal re-validation cadence - Tier 1 every 6 months, Tier 2 every 12 months.",
-        ],
+        "recommendations": _recommendations(inv),
     }
 
 
@@ -139,7 +158,8 @@ def generate_model_card(model_id: str) -> dict:
         "model_card": {
             "model_id": model["model_id"],
             "model_name": model["name"],
-            "version": "1.0",
+            "running_version": model.get("current_version"),
+            "approved_version": model.get("approved_version"),
             "generated_at": datetime.today().isoformat(),
             "classification": "INTERNAL - CONFIDENTIAL",
         },
@@ -157,8 +177,8 @@ def generate_model_card(model_id: str) -> dict:
         "lifecycle_status": {
             "development_status": model["status"],
             "validation_status": model["validation_status"],
-            "last_validated": model.get("validation_date", "Never"),
-            "next_validation_due": model.get("next_validation_due", "Not scheduled"),
+            "last_validated": model.get("validation_date") or "Never",
+            "next_validation_due": model.get("next_validation_due") or "Not scheduled",
             "validation_frequency": f"Every {model.get('validation_frequency_months', 12)} months",
         },
         "risk_profile": {
@@ -168,9 +188,10 @@ def generate_model_card(model_id: str) -> dict:
             "mitigations": model["mitigations"],
         },
         "governance": {
-            "approved_users": [],  # Populated from MODEL_USE_POLICY in governance module
+            "approved_users": MODEL_USE_POLICY.get(model_id, {}).get("approved_users", []),
+            "use_conditions": MODEL_USE_POLICY.get(model_id, {}).get("conditions", []),
             "audit_events": audit_entries[-10:] if audit_entries else [],
-            "change_history": [],  # Populated from change request log in prod
+            "change_history": [e for e in audit_entries if e.get("action", "").startswith("CHANGE_")][-10:],
         },
         "sr_11_7_checklist": {
             "limitations_documented": len(model.get("known_limitations", [])) > 0,
@@ -187,15 +208,18 @@ def generate_model_card(model_id: str) -> dict:
     }
 
 
-def generate_full_exam_package() -> dict:
+def generate_full_exam_package(traces: Optional[list] = None) -> dict:
     """
     Generate the full regulatory exam package - on-demand MRM documentation.
     Produces model cards for all models + CRO report + governance summary.
     """
     inv = get_inventory()
     model_cards = [generate_model_card(mid) for mid in inv.models.keys()]
-    cro_report = generate_cro_report()
+    cro_report = generate_cro_report(traces)
     governance = get_governance_summary()
+    from src.llm import config
+    not_approved = [m["model_id"] for m in inv.get_all()
+                    if m["validation_status"] not in (ValidationStatus.APPROVED, ValidationStatus.CONDITIONAL)]
 
     return {
         "exam_package": {
@@ -210,19 +234,19 @@ def generate_full_exam_package() -> dict:
         "cro_report": cro_report,
         "governance_summary": governance,
         "sr_11_7_compliance_attestation": {
-            "model_inventory_maintained": True,
-            "independent_validation_function": True,
-            "governance_framework_documented": True,
-            "audit_trail_maintained": True,
-            "use_policy_documented": True,
-            "escalation_procedures_defined": True,
+            "model_inventory_maintained": len(inv.models) > 0,
+            "independent_validation_function": config.model_id("grader") != config.model_id("chat"),
+            "governance_framework_documented": os.path.exists(os.path.join(REPO_ROOT, "docs", "MRM_FRAMEWORK.md")),
+            "audit_trail_maintained": len(get_audit_log()) > 0,
+            "use_policy_documented": all(mid in MODEL_USE_POLICY for mid in inv.models),
+            "escalation_procedures_defined": len(ESCALATION_PROCEDURES) > 0,
+            "all_models_validated": not not_approved,
             "notes": (
-                "MRM-003, MRM-004, MRM-005, and MRM-006 are PENDING independent validation. "
-                "Use of these models in material risk decisions is restricted pending validation completion."
+                f"Not approved for the running version: {', '.join(not_approved)}. Live use of these LLM components "
+                "is blocked by require_approved()." if not_approved else "All models approved for the running version."
             ),
         },
     }
-
 
 if __name__ == "__main__":
     print("Generating CRO Report...")

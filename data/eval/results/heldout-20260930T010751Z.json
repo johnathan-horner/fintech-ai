@@ -1,0 +1,717 @@
+{
+  "run_id": "heldout-20260930T010751Z",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-09-30T01:07:51+00:00",
+  "provider": "gemini",
+  "models": {
+    "chat": "gemini-3.5-flash-lite",
+    "grader": "gemini-3.1-flash-lite",
+    "hyde": "gemini-3.1-flash-lite",
+    "embedding": "gemini-embedding-001"
+  },
+  "versions": {
+    "MRM-003": {
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "risk_report@1.2.0#7ca70726"
+      ],
+      "provider": "gemini"
+    },
+    "MRM-004": {
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "portfolio_recommendations@1.2.0#c5fa95b1"
+      ],
+      "provider": "gemini"
+    }
+  },
+  "throttle_s": 20.0,
+  "items": [
+    {
+      "id": "mrm-003-full",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "full",
+      "outputs": [
+        "### RISK REPORT: Horner Capital Alpha Fund (HF-ALPHA-001)\n\n#### 1. VaR, CVaR, Tail Ratio & Beta\n- **Parametric VaR:** 1-day 95% VaR is $829,099.56 (2.562% of value); 10-day 95% VaR is $2,621,843.02; 1-day 99% VaR is $1,172,331.66. Risk level: HIGH.\n- **Monte Carlo CVaR / Expected Shorfal (95%):** 1-day VaR $890,636.15; 1-day CVaR $1,193,699.22 (3.689% of value); 10-day CVaR $3,774,808.38. Tail ratio CVaR/VaR: 1.34 (Moderate tail risk). CVaR risk level: CRITICAL.\n- **Beta:** Value-weighted portfolio beta: 1.298 (Simple average beta: 1.207). Positions with beta above 1.5: AAPL, CVX, MA, TSLA, UNH.\n\n#### 2. Historical Risk (Current Positions)\n- **Sharpe Ratio:** 0.065\n- **Sortino Ratio:** 0.066 (risk-free = latest Fed funds 5.22%)\n- **Annualized Volatility:** 21.09%\n- **Max Drawdown:** -16.29%\n\n#### 3. Stress Tests & Worst Drivers\n- **Summary:** Scenarios tested: 5. Severe or catastrophic: 4. Worst case scenario: 2008 Global Financial Crisis with portfolio P&L -$21,840,515.25 (-67.5%).\n- **2008 Global Financial Crisis (-40.0% shock):** Portfolio P&L -$21,840,515.25 (-67.5%), severity CATASTROPHIC. Worst positions: UNH -$5,335,551.25, AAPL -$3,815,382.40, CVX -$3,075,406.76, MSFT -$2,381,390.82, NVDA -$1,228,486.46.\n- **COVID-19 Market Crash (-34.0% shock):** Portfolio P&L -$17,136,404.27 (-52.96%), severity CATASTROPHIC. Worst positions: UNH -$4,186,355.59, AAPL -$2,993,607.73, CVX -$2,413,011.46, MSFT -$1,868,475.88, NVDA -$963,889.38.\n- **Tech Sector Selloff (-30% shock):** Portfolio P&L -$15,213,528.63 (-47.02%), severity CATASTROPHIC. Worst positions: AAPL -$4,622,482.53, MSFT -$2,885,146.58, UNH -$1,723,793.48, NVDA -$1,488,358.60, CVX -$993,592.95.\n- **Sudden Rate Shock +200bps (-15.0% shock):** Portfolio P&L -$6,930,163.49 (-21.42%), severity SEVERE. Worst positions: UNH -$1,693,011.45, AAPL -$1,210,650.19, CVX -$975,850.22, MSFT -$755,633.63, NVDA -$389,808.20.\n- **Flash Crash (-10% shock):** Portfolio P&L -$6,300,148.63 (-19.47%), severity SIGNIFICANT. Worst positions: UNH -$1,539,101.32, AAPL -$1,100,591.08, CVX -$887,136.57, MSFT -$686,939.66, NVDA -$354,371.09.\n\n#### 4. Highest-Risk Positions & Flags\n- **MA (Score 50/100, HIGH):** Elevated beta (1.59x); Severe drawdown (-31.65% unrealized loss).\n- **UNH (Score 45/100, HIGH):** Elevated beta (1.58x); High concentration (20.07% of portfolio).\n- **CVX (Score 45/100, HIGH):** Elevated beta (1.77x); Notable drawdown (-21.66% unrealized loss); Moderate concentration (10.33% of portfolio).\n- **XOM (Score 40/100, HIGH):** Severe drawdown (-29.09% unrealized loss); Analyst consensus: Sell.\n- **TSLA (Score 35/100, HIGH):** Very high beta (2.19x) - amplified market exposure.\n- **GOOGL (Score 30/100, MEDIUM):** Elevated beta (1.41x); Analyst consensus: Sell.\n- **AAPL (Score 30/100, MEDIUM):** Elevated beta (1.77x); Moderate concentration (12.81% of portfolio).\n- **MSFT (Score 25/100, MEDIUM):** High concentration (17.47% of portfolio).\n\n#### 5. Concentration vs. Policy Limits\n- **Sector Limit (30.0%):** Technology weight is 47.03%. Breach excess: 17.03 points ($5,510,194.13).\n- **Single-Name Limit (15.0%):** \n  - UNH weight is 20.07%. Breach excess: 5.07 points ($1,640,439.48).\n  - MSFT weight is 17.47%. Breach excess: 2.47 points ($799,188.46).\n\n#### 6. Macro Readings & Regime Impact\n- **Macro Indicators (2026-02):** Federal Funds Rate: 5.22, CPI YoY: 4.59, Core PCE: 2.86, 10Y Treasury Yield: 4.14, 2Y Treasury Yield: 5.28, Unemployment Rate: 3.76, GDP Growth QoQ: 2.92, ISM Manufacturing PMI: 48.7, Consumer Confidence Index: 108.7, VIX: 16.65.\n- **Derived Macro / Changes:** 10Y-2Y spread -1.14 percentage points (-114.0 bps), curve inverted: True. Month-over-month changes: Federal Funds Rate +0.59; CPI YoY +0.02; Core PCE +0.5; 10Y Treasury Yield +0.2; 2Y Treasury Yield +1.04; Unemployment Rate -0.53; GDP Growth QoQ +3.12; ISM Manufacturing PMI -1.7; Consumer Confidence Index +39.5; VIX -12.37.\n- **Regime & Bearings:** VIX regime: Low. PMI above 50: False. CPI trend: Rising. Rule-based market regime: Risk-Off. Fed holds rates steady amid mixed inflation signals.\n\n*Not investment advice.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 110,
+            "matched": 110,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 8012.3,
+      "error": null,
+      "trace_id": "261b07bb70444b70"
+    },
+    {
+      "id": "mrm-003-subset12",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset12",
+      "outputs": [
+        "### CRITICAL Risk Items\n- **CVX Position**: Risk score 60/100 (CRITICAL). Flags: Elevated beta (1.77x), Notable drawdown (-21.66% unrealized loss), High concentration (19.05% of portfolio). Action: Consider immediate exit or hedge.\n- **CVaR Risk Level**: CRITICAL. Monte Carlo CVaR at 95% shows 1-day VaR $499,860.87, 1-day CVaR $707,066.06 (4.031% of value), and 10-day CVaR $2,235,939.19 with a tail ratio of 1.415 (Elevated tail risk).\n\n---\n\n### 1. Portfolio VaR, Expected Shortfall, Tail Ratio, and Beta\n- **Value-weighted portfolio beta**: 1.382 (Simple average beta: 1.255). Positions with beta above 1.5: AAPL, CVX, MA, TSLA.\n- **Parametric VaR**: 1-day 95% VaR $478,432.94 (2.727% of value), 10-day 95% VaR $1,512,937.80; 1-day 99% VaR $676,495.45. Risk level: HIGH.\n- **Monte Carlo CVaR / Expected Shortfall (95%)**: Tail ratio CVaR/VaR: 1.415.\n\n---\n\n### 2. Historical Risk of Current Positions\n- **Annualized Sharpe**: 0.156\n- **Sortino**: 0.16 (risk-free = latest Fed funds 5.22%)\n- **Annualized volatility**: 22.72%\n- **Max drawdown**: -17.62%\n\n---\n\n### 3. Stress Tests and Worst Scenarios\nScenarios tested: 5 (all severe or catastrophic).\n- **2008 Global Financial Crisis**: Portfolio P&L -$12,603,096.67 (-71.85%), severity CATASTROPHIC. Driven by: AAPL -$3,815,382.40, CVX -$3,075,406.76, NVDA -$1,228,486.46, TSLA -$1,161,317.50, MA -$1,049,094.82.\n- **COVID-19 Market Crash (Feb-Mar 2020)**: Portfolio P&L -$9,888,583.54 (-56.37%), severity CATASTROPHIC. Driven by: AAPL -$2,993,607.73, CVX -$2,413,011.46, NVDA -$963,889.38, TSLA -$911,187.58, MA -$823,135.94.\n- **Tech Sector Selloff (-30%)**: Portfolio P&L -$8,840,182.03 (-50.4%), severity CATASTROPHIC. Driven by: AAPL -$4,622,482.53, NVDA -$1,488,358.60, CVX -$993,592.95, AVGO -$391,539.34, TSLA -$375,194.89.\n- **Sudden Rate Shock +200bps**: Portfolio P&L -$3,999,059.52 (-22.8%), severity SEVERE. Driven by: AAPL -$1,210,650.19, CVX -$975,850.22, NVDA -$389,808.20, TSLA -$368,494.98, MA -$332,885.86.\n- **Flash Crash (Single Day -10%)**: Portfolio P&L -$3,635,508.65 (-20.73%), severity SEVERE. Driven by: AAPL -$1,100,591.08, CVX -$887,136.57, NVDA -$354,371.09, TSLA -$334,995.43, MA -$302,623.51.\n\n---\n\n### 4. Highest-Risk Positions and Flags\n- **CVX**: Score 60/100, CRITICAL. Elevated beta (1.77x); Notable drawdown (-21.66% unrealized loss); High concentration (19.05% of portfolio).\n- **MA**: Score 50/100, HIGH. Elevated beta (1.59x); Severe drawdown (-31.65% unrealized loss).\n- **AAPL**: Score 45/100, HIGH. Elevated beta (1.77x); High concentration (23.63% of portfolio).\n- **XOM**: Score 40/100, HIGH. Severe drawdown (-29.09% unrealized loss); Analyst consensus: Sell.\n- **TSLA**: Score 35/100, HIGH. Very high beta (2.19x) - amplified market exposure.\n- **JNJ**: Score 15/100, MEDIUM. Notable drawdown (-10.62% unrealized loss).\n- **GS & JPM**: Score 10/100, LOW.\n\n---\n\n### 5. Concentration versus Policy Limits\n- **Sector breach**: Technology weight 40.41% vs 30.0% limit (excess 10.41 points / $1,826,051.46).\n- **Single-name breaches**: \n  - AAPL: 23.63% vs 15.0% limit (excess 8.63 points / $1,513,815.95).\n  - CVX: 19.05% vs 15.0% limit (excess 4.05 points / $710,423.48).\n\n---\n\n### 6. Macro Readings and Regime Impact\n- **Macro Indicators (2026-02)**: Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7, VIX 16.65. \n- **Regime Context**: Rule-based market regime is Risk-Off, with a low VIX regime (VIX 16.65, down -12.37 MoM) despite an inverted yield curve (10Y-2Y spread -1.14 percentage points / -114.0 bps). PMI is below 50 (48.7, False) and CPI trend is rising (CPI YoY +0.02 MoM change, Fed holds rates steady amid mixed inflation signals)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 102,
+            "matched": 102,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 6060.4,
+      "error": null,
+      "trace_id": "ea0c20987b344ba5"
+    },
+    {
+      "id": "mrm-003-subset13",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset13",
+      "outputs": [
+        "RISK REPORT:\n\n### CRITICAL Risk Flags & Metrics\n- **CVaR Risk Level:** CRITICAL. 1-day Monte Carlo CVaR at 95% is $883,932.51 (3.952% of value), with a 10-day CVaR of $2,795,240.02 and a tail ratio CVaR/VaR of 1.408 (Elevated tail risk).\n- **Highest-Risk Positions:**\n  - **MA:** Risk score 50/100 (HIGH). Flags: Elevated beta (1.59x); Severe drawdown (-31.65% unrealized loss).\n  - **UNH:** Risk score 45/100 (HIGH). Flags: Elevated beta (1.58x); High concentration (29.04% of portfolio).\n  - **CVX:** Risk score 45/100 (HIGH). Flags: Elevated beta (1.77x); Notable drawdown (-21.66% unrealized loss); Moderate concentration (14.94% of portfolio).\n  - **TSLA:** Risk score 35/100 (HIGH). Flags: Very high beta (2.19x) - amplified market exposure.\n  - **GOOGL:** Risk score 30/100 (MEDIUM). Flags: Elevated beta (1.41x); Analyst consensus: Sell.\n  - **MSFT:** Risk score 25/100 (MEDIUM). Flags: High concentration (25.28% of portfolio).\n  - **JNJ:** Risk score 15/100 (MEDIUM). Flags: Notable drawdown (-10.62% unrealized loss).\n  - **GS:** Risk score 10/100 (LOW). Flags: Analyst consensus: Sell.\n\n### 1. Portfolio VaR, Tail Risk, & Beta\n- Value-weighted portfolio beta: 1.348 (Simple average beta: 1.338). Positions with beta above 1.5: CVX, MA, TSLA, UNH.\n- Parametric VaR (weighted beta 1.348 x assumed 1.2% market vol): 1-day 95% VaR $595,273.21 (2.662% of value), 10-day 95% VaR $1,882,419.17; 1-day 99% VaR $841,705.46. Risk level: HIGH.\n- Monte Carlo 1-day VaR: $627,747.66.\n\n### 2. Historical Position Risk\n- Annualized Sharpe: -0.029.\n- Sortino: -0.029 (risk-free = latest Fed funds 5.22%).\n- Annualized volatility: 22.45%.\n- Max drawdown: -16.85%.\n\n### 3. Stress Tests & Worst Scenarios\n- **2008 Global Financial Crisis:** Market shock -40.0%, portfolio P&L -$15,680,955.86 (-70.12%), severity CATASTROPHIC. Drivers: UNH -$5,335,551.25, CVX -$3,075,406.76, MSFT -$2,381,390.82, TSLA -$1,161,317.50, MA -$1,049,094.82.\n- **COVID-19 Market Crash (Feb-Mar 2020):** Market shock -34.0%, portfolio P&L -$12,303,519.22 (-55.01%), severity CATASTROPHIC. Drivers: UNH -$4,186,355.59, CVX -$2,413,011.46, MSFT -$1,868,475.88, TSLA -$911,187.58, MA -$823,135.94.\n- **Tech Sector Selloff (-30%):** Market shock -30.0%, portfolio P&L -$8,455,104.80 (-37.81%), severity CATASTROPHIC. Drivers: MSFT -$2,885,146.58, UNH -$1,723,793.48, CVX -$993,592.95, GOOGL -$971,011.53, ORCL -$765,137.11.\n- **Sudden Rate Shock +200bps:** Market shock -15.0%, portfolio P&L -$4,975,687.92 (-22.25%), severity SEVERE. Drivers: UNH -$1,693,011.45, CVX -$975,850.22, MSFT -$755,633.63, TSLA -$368,494.98, MA -$332,885.86.\n- **Flash Crash (Single Day -10%):** Market shock -10.0%, portfolio P&L -$4,523,352.65 (-20.23%), severity SEVERE. Drivers: UNH -$1,539,101.32, CVX -$887,136.57, MSFT -$686,939.66, TSLA -$334,995.43, MA -$302,623.51.\n\n### 5. Concentration vs. Policy Limits\n- **Sectors:** Technology weight 36.34% vs 30.0% limit (excess 6.34 points / $1,417,905.79); Healthcare weight 34.27% vs 30.0% limit (excess 4.27 points / $954,961.79).\n- **Single Names:** MSFT 25.28% vs 15.0% limit (excess 10.28 points / $2,299,064.91); UNH 29.04% vs 15.0% limit (excess 14.04 points / $3,139,968.03).\n\n### 6. Macro Read-Through\n- Macro indicators for 2026-02 show a Federal Funds Rate of 5.22, CPI YoY at 4.59, Core PCE at 2.86, 10Y Treasury Yield at 4.14, and 2Y Treasury Yield at 5.28. \n- The 10Y-2Y spread is -1.14 percentage points (-114.0 bps) with an inverted curve (True). \n- VIX is at 16.65 (VIX regime: Low, down -12.37 MoM). ISM Manufacturing PMI is 48.7 (PMI above 50: False). CPI trend is Rising. \n- The rule-based market regime is Risk-Off, compounding vulnerabilities from high portfolio beta (1.348) and severe single-name concentration breaches.\n\n*Not investment advice.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 104,
+            "matched": 104,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 5843.6,
+      "error": null,
+      "trace_id": "1a10697916234ef7"
+    },
+    {
+      "id": "mrm-003-subset17",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset17",
+      "outputs": [
+        "RISK REPORT:\n\n**Flag CRITICAL Items:**\n- **CVX Risk Score:** 60/100 (CRITICAL). Flags: Elevated beta (1.77x), Notable drawdown (-21.66% unrealized loss), High concentration (15.14% of portfolio). Action: Consider immediate exit or hedge.\n- **CVaR Risk Level:** CRITICAL. Portfolio 1-day CVaR $829,497.62 (3.759% of value), 10-day CVaR $2,623,101.81. Tail ratio CVaR/VaR: 1.414 (Elevated tail risk).\n\n**1. VaR, Expected Shortfall, Tail Ratio, Beta:**\n- Value-weighted portfolio beta: 1.281 (Simple average beta: 1.167). Positions with beta above 1.5: CVX, MA, UNH.\n- 1-day 95% VaR: $558,057.46 (2.529% of value). \n- 10-day 95% VaR: $1,764,732.64.\n- 1-day 99% VaR: $789,083.07. Risk level: HIGH.\n- Monte Carlo CVaR/Expected Shortfall at 95%: 1-day VaR $586,721.94, 1-day CVaR $829,497.62 (3.759% of value), 10-day CVaR $2,623,101.81. Tail ratio: 1.414.\n\n**2. Historical Risk of Current Positions:**\n- Annualized Sharpe: -0.049.\n- Sortino: -0.049 (risk-free = latest Fed funds 5.22%).\n- Annualized volatility: 21.66%.\n- Max drawdown: -16.55%.\n\n**3. Stress Tests & Worst Scenarios:**\n- Worst scenario: 2008 Global Financial Crisis (market shock -40.0%), portfolio P&L -$14,700,601.70 (-66.61%), severity CATASTROPHIC. Driven by: UNH, CVX, MSFT, MA, GOOGL.\n- COVID-19 Market Crash: P&L -$11,534,318.26 (-52.26%), severity CATASTROPHIC. Driven by: UNH, CVX, MSFT, MA, GOOGL.\n- Tech Sector Selloff (-30%): P&L -$8,138,374.99 (-36.88%), severity CATASTROPHIC. Driven by: MSFT, UNH, CVX, GOOGL, ORCL.\n- Sudden Rate Shock +200bps: P&L -$4,664,614.00 (-21.14%), severity SEVERE. Driven by: UNH, CVX, MSFT, MA, GOOGL.\n- Flash Crash (Single Day -10%): P&L -$4,240,558.18 (-19.21%), severity SIGNIFICANT. Driven by: UNH, CVX, MSFT, MA, GOOGL.\n\n**4. Highest-Risk Positions (Scores & Flags):**\n- **MA:** 50/100, HIGH. Flags: Elevated beta (1.59x); Severe drawdown (-31.65% unrealized loss). Action: Review position size and add stop-loss.\n- **UNH:** 45/100, HIGH. Flags: Elevated beta (1.58x); High concentration (29.43% of portfolio). Action: Review position size and add stop-loss.\n- **XOM:** 40/100, HIGH. Flags: Severe drawdown (-29.09% unrealized loss); Analyst consensus: Sell. Action: Review position size and add stop-loss.\n- **GOOGL:** 30/100, MEDIUM. Flags: Elevated beta (1.41x); Analyst consensus: Sell.\n- **MSFT:** 25/100, MEDIUM. Flags: High concentration (25.62% of portfolio).\n\n**5. Concentration vs. Policy Limits:**\n- Sector limits (30.0%): Technology 36.82% (excess 6.82 points, $1,505,152.52), Healthcare 34.72% (excess 4.72 points, $1,041,689.13). Largest sector weight: 36.82%.\n- Single-name limits (15.0%): MSFT 25.62% (excess 10.62 points, $2,343,800.55), UNH 29.43% (excess 14.43 points, $3,184,655.55), CVX 15.14% (excess 0.14 points, $30,897.56). Largest single-name weight: 29.43%.\n\n**6. Macro Readings & Regime Bearings:**\n- Macro indicators for 2026-02: Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7, VIX 16.65.\n- Derived macro: 10Y-2Y spread -1.14 percentage points (-114.0 bps), curve inverted: True. VIX regime: Low. PMI above 50: False. CPI trend: Rising. Rule-based market regime: Risk-Off."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 80,
+            "matched": 80,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 5183.2,
+      "error": null,
+      "trace_id": "59973fd0c9024b08"
+    },
+    {
+      "id": "mrm-003-subset19",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset19",
+      "outputs": [
+        "RISK REPORT:\n\n### CRITICAL Risk Items & Policy Breaches\n- **CVaR Risk Level:** CRITICAL (1-day CVaR $1,015,054.86, 10-day CVaR $3,209,885.31, Tail ratio CVaR/VaR: 1.414).\n- **Concentration Breaches:** Sector limit (30.0%) breached by Technology (52.4%, excess 22.4 points, $5,552,101.57). Single-name limit (15.0%) breached by UNH (26.2%, excess 11.2 points, $2,776,050.79), MSFT (22.81%, excess 7.81 points, $1,935,799.70), and AAPL (16.72%, excess 1.72 points, $426,322.09).\n\n### 1. VaR, Monte Carlo CVaR, Tail Ratio & Beta\n- **Parametric VaR:** 1-day 95% VaR $684,167.38 (2.76%), 10-day 95% VaR $2,163,527.22; 1-day 99% VaR $967,400.20. Risk level: HIGH.\n- **Monte Carlo CVaR:** 1-day VaR $717,937.93, 1-day CVaR $1,015,054.86 (4.095%), 10-day CVaR $3,209,885.31.\n- **Tail Ratio:** 1.414 (Elevated tail risk).\n- **Weighted Beta:** 1.398 (Simple average beta: 1.32).\n\n### 2. Historical Risk\n- **Sharpe Ratio:** 0.143\n- **Sortino Ratio:** 0.147 (Risk-free = latest Fed funds 5.22%)\n- **Annualized Volatility:** 22.92%\n- **Max Drawdown:** -17.87%\n\n### 3. Stress Tests & Driving Positions\n- **Scenarios Tested:** 5 (all severe or catastrophic).\n- **Worst Case (2008 Global Financial Crisis):** Portfolio P&L -$18,022,646.31 (-72.71%). Driving positions: UNH -$5,335,551.25, AAPL -$3,815,382.40, CVX -$3,075,406.76, MSFT -$2,381,390.82, TSLA -$1,161,317.50.\n- **COVID-19 Crash:** Portfolio P&L -$14,140,845.56 (-57.05%). Driving positions: UNH -$4,186,355.59, AAPL -$2,993,607.73, CVX -$2,413,011.46, MSFT -$1,868,475.88, TSLA -$911,187.58.\n- **Tech Sector Selloff (-30%):** Portfolio P&L -$12,888,600.31 (-52.0%). Driving positions: AAPL -$4,622,482.53, MSFT -$2,885,146.58, UNH -$1,723,793.48, CVX -$993,592.95, GOOGL -$971,011.53.\n- **Sudden Rate Shock (+200bps):** Portfolio P&L -$5,718,724.31 (-23.07%). Driving positions: UNH -$1,693,011.45, AAPL -$1,210,650.19, CVX -$975,850.22, MSFT -$755,633.63, TSLA -$368,494.98.\n- **Flash Crash (Single Day -10%):** Portfolio P&L -$5,198,840.28 (-20.97%). Driving positions: UNH -$1,539,101.32, AAPL -$1,100,591.08, CVX -$887,136.57, MSFT -$686,939.66, TSLA -$334,995.43.\n\n### 4. Highest-Risk Positions & Flags\n- **UNH:** Risk score 45/100 (HIGH). Flags: Elevated beta (1.58x); High concentration (26.2% of portfolio).\n- **AAPL:** Risk score 45/100 (HIGH). Flags: Elevated beta (1.77x); High concentration (16.72% of portfolio).\n- **CVX:** Risk score 45/100 (HIGH). Flags: Elevated beta (1.77x); Notable drawdown (-21.66% unrealized loss); Moderate concentration (13.48% of portfolio).\n- **TSLA:** Risk score 35/100 (HIGH). Flags: Very high beta (2.19x) - amplified market exposure.\n- **GOOGL:** Risk score 30/100 (MEDIUM). Flags: Elevated beta (1.41x); Analyst consensus: Sell.\n- **MSFT:** Risk score 25/100 (MEDIUM). Flags: High concentration (22.81% of portfolio).\n\n### 5. Macro Readings & Market Regime\n- **Macro Indicators:** VIX 16.65, Federal Funds Rate 5.22, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, 10Y-2Y spread -1.14 percentage points (-114.0 bps), CPI YoY 4.59, Core PCE 2.86, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7.\n- **Regime Context:** VIX regime is Low, curve inverted is True, PMI above 50 is False, CPI trend is Rising, and rule-based market regime is Risk-Off. These indicators highlight macro headwinds that amplify the fund's concentrated tech exposure and elevated tail risk.\n\n*(Not investment advice)*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 96,
+            "matched": 96,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 5320.0,
+      "error": null,
+      "trace_id": "87756dee8b4d4a99"
+    },
+    {
+      "id": "mrm-003-subset3",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset3",
+      "outputs": [
+        "**RISK REPORT**\n\n**1. VaR, CVaR, and Beta**\n- Weighted beta: 1.362 (Simple average beta: 1.275). Positions with beta above 1.5: AAPL, CVX, MA, UNH.\n- 1-day 95% VaR: $722,235.88 (2.688% of value); 10-day 95% VaR: $2,283,910.39; 1-day 99% VaR: $1,021,228.36. Risk level: HIGH.\n- Monte Carlo CVaR/Expected Shortfall (95%): 1-day VaR $759,655.96, 1-day CVaR $1,071,268.63 (3.987% of value), 10-day CVaR $3,387,648.84. Tail ratio CVaR/VaR: 1.41. CVaR risk level: CRITICAL.\n\n**2. Historical Risk**\n- Annualized Sharpe: 0.081; Sortino: 0.083 (risk-free = latest Fed funds 5.22%).\n- Annualized volatility: 22.39%; max drawdown: -16.67%.\n\n**3. Stress Tests**\n- Worst scenario: 2008 Global Financial Crisis with portfolio P&L -$19,025,463.89 (-70.8%), severity CATASTROPHIC (driven by UNH, AAPL, CVX, MSFT, NVDA).\n- COVID-19 Market Crash: portfolio P&L -$14,927,671.67 (-55.55%), severity CATASTROPHIC (driven by UNH, AAPL, CVX, MSFT, NVDA).\n- Tech Sector Selloff (-30%): portfolio P&L -$13,455,821.10 (-50.08%), severity CATASTROPHIC (driven by AAPL, MSFT, UNH, NVDA, CVX).\n- Sudden Rate Shock +200bps: portfolio P&L -$6,036,926.04 (-22.47%), severity SEVERE (driven by UNH, AAPL, CVX, MSFT, NVDA).\n- Flash Crash (Single Day -10%): portfolio P&L -$5,488,114.58 (-20.42%), severity SEVERE (driven by UNH, AAPL, CVX, MSFT, NVDA).\n\n**4. Highest-Risk Positions & Flags**\n- MA: Risk score 50/100 (HIGH). Flags: Elevated beta (1.59x); Severe drawdown (-31.65% unrealized loss).\n- AAPL: Risk score 45/100 (HIGH). Flags: Elevated beta (1.77x); High concentration (15.43% of portfolio).\n- UNH: Risk score 45/100 (HIGH). Flags: Elevated beta (1.58x); High concentration (24.17% of portfolio).\n- CVX: Risk score 45/100 (HIGH). Flags: Elevated beta (1.77x); Notable drawdown (-21.66% unrealized loss); Moderate concentration (12.44% of portfolio).\n- XOM: Risk score 40/100 (HIGH). Flags: Severe drawdown (-29.09% unrealized loss); Analyst consensus: Sell.\n- GOOGL: Risk score 30/100 (MEDIUM). Flags: Elevated beta (1.41x); Analyst consensus: Sell.\n- MSFT: Risk score 25/100 (MEDIUM). Flags: High concentration (21.04% of portfolio).\n- JNJ: Risk score 15/100 (MEDIUM). Flags: Notable drawdown (-10.62% unrealized loss).\n\n**5. Concentration vs Policy Limits**\n- Sector limit (30.0%): Technology weight is 48.83% (excess 18.83 points, $5,059,683.83).\n- Single-name limit (15.0%): AAPL at 15.43% (excess 0.43 points, $115,542.43); MSFT at 21.04% (excess 6.04 points, $1,622,968.15); UNH at 24.17% (excess 9.17 points, $2,464,009.60).\n\n**6. Macro Bearings**\n- VIX is 16.65 (VIX regime: Low). Federal Funds Rate: 5.22, 10Y Treasury Yield: 4.14, 2Y Treasury Yield: 5.28, 10Y-2Y spread -1.14 percentage points (-114.0 bps) with curve inverted: True. \n- ISM Manufacturing PMI is 48.7 (PMI above 50: False). Rule-based market regime: Risk-Off, with rising CPI trend (CPI YoY: 4.59, Core PCE: 2.86).\n\n*Not investment advice.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 70,
+            "matched": 70,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 4635.6,
+      "error": null,
+      "trace_id": "c12f74143a0b4283"
+    },
+    {
+      "id": "mrm-003-subset4",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset4",
+      "outputs": [
+        "**RISK REPORT**\n\n**1. VaR, CVaR, Tail Ratio & Beta**\n- Weighted beta: 1.241.\n- Parametric VaR: 1-day 95% VaR $579,904.70 (2.45%), 10-day 95% VaR $1,833,819.68; 1-day 99% VaR $819,974.67 (Risk level: HIGH).\n- Monte Carlo CVaR (95%): 1-day VaR $609,446.28, 1-day CVaR $861,748.49 (3.64%), 10-day CVaR $2,725,088.00 (CVaR risk level: CRITICAL).\n- Tail ratio CVaR/VaR: 1.414 (Elevated tail risk).\n\n**2. Historical Risk (Current Positions)**\n- Annualized Sharpe: 0.099.\n- Sortino: 0.101.\n- Annualized volatility: 20.66%.\n- Max drawdown: -16.46%.\n\n**3. Stress Tests & Worst Scenarios**\n- 5 scenarios tested (4 severe or catastrophic). Worst case: 2008 Global Financial Crisis (market shock -40.0%, portfolio P&L -$15,276,111.64, -64.53%, severity CATASTROPHIC) driven by UNH, AAPL, MSFT, TSLA, JNJ.\n- COVID-19 Market Crash: P&L -$11,985,872.21 (-50.63%), severity CATASTROPHIC (driven by UNH, AAPL, MSFT, TSLA, JNJ).\n- Tech Sector Selloff (-30%): P&L -$11,289,183.22 (-47.69%), severity CATASTROPHIC (driven by AAPL, MSFT, UNH, ORCL, AVGO).\n- Sudden Rate Shock +200bps: P&L -$4,847,227.73 (-20.48%), severity SEVERE (driven by UNH, AAPL, MSFT, TSLA, JNJ).\n- Flash Crash (Single Day -10%): P&L -$4,406,570.66 (-18.61%), severity SIGNIFICANT (driven by UNH, AAPL, MSFT, TSLA, JNJ).\n\n**4. Highest-Risk Positions & Flags**\n- **AAPL** (Score 45/100, HIGH): Elevated beta (1.77x); High concentration (17.51%).\n- **UNH** (Score 45/100, HIGH): Elevated beta (1.58x); High concentration (27.43%).\n- **XOM** (Score 40/100, HIGH): Severe drawdown (-29.09%); Analyst consensus: Sell.\n- **TSLA** (Score 35/100, HIGH): Very high beta (2.19x).\n- **MSFT** (Score 25/100, MEDIUM): High concentration (23.88%).\n- **JNJ** (Score 15/100, MEDIUM): Notable drawdown (-10.62%).\n\n**5. Concentration vs. Policy Limits**\n- Sector breaches: Technology 50.24% vs 30.0% limit (excess 20.24 points / $4,791,392.60); Healthcare 32.37% vs 30.0% limit (excess 2.37 points / $561,047.45).\n- Single-name breaches: AAPL 17.51% vs 15.0% limit (excess 2.51 points / $594,189.50); MSFT 23.88% vs 15.0% limit (excess 8.88 points / $2,102,152.48); UNH 27.43% vs 15.0% limit (excess 12.43 points / $2,942,540.02).\n\n**6. Macro Bearings**\n- VIX reads at 16.65 (VIX regime: Low, down -12.37 MoM). \n- Federal Funds Rate is 5.22 (up +0.59 MoM); 10Y Treasury Yield is 4.14; 2Y Treasury Yield is 5.28. \n- 10Y-2Y spread is -1.14 percentage points (-114.0 bps) with curve inverted: True. \n- ISM Manufacturing PMI is 48.7 (PMI above 50: False); CPI YoY is 4.59 (CPI trend: Rising); Core PCE is 2.86. \n- Rule-based market regime: Risk-Off, conflicting with low VIX."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 71,
+            "matched": 71,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 4568.5,
+      "error": null,
+      "trace_id": "54e34488aebe416f"
+    },
+    {
+      "id": "mrm-003-subset6",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset6",
+      "outputs": [
+        "**RISK REPORT**\n\n**1. VaR, CVaR, Tail Ratio & Beta**\n- Weighted portfolio beta: 1.375\n- 1-day 95% VaR: $710,377.66 (2.715% of value)\n- 10-day 95% VaR: $2,246,411.40\n- 1-day 99% VaR: $1,004,461.06\n- 1-day Monte Carlo CVaR (95%): $1,053,301.42 (4.025% of value)\n- 10-day CVaR: $3,330,831.53\n- Tail ratio CVaR/VaR: 1.413 (Elevated tail risk; CVaR risk level: CRITICAL)\n\n**2. Historical Risk**\n- Annualized Sharpe: 0.17\n- Sortino: 0.174\n- Annualized volatility: 22.61%\n- Max drawdown: -17.49%\n\n**3. Stress Tests**\n- Worst scenario: 2008 Global Financial Crisis (-40.0% shock) with portfolio P&L -$18,713,089.43 (-71.52%). Worst positions: UNH -$5,335,551.25, AAPL -$3,815,382.40, CVX -$3,075,406.76, MSFT -$2,381,390.82, NVDA -$1,228,486.46.\n- COVID-19 Market Crash: -$14,682,577.86 (-56.11%).\n- Tech Sector Selloff (-30%): -$13,642,028.97 (-52.14%).\n- Sudden Rate Shock +200bps: -$5,937,807.22 (-22.69%).\n- Flash Crash (-10%): -$5,398,006.57 (-20.63%).\n\n**4. Highest-Risk Positions & Flags**\n- AAPL (HIGH, score 45): Elevated beta (1.77x); High concentration (15.84%).\n- UNH (HIGH, score 45): Elevated beta (1.58x); High concentration (24.82%).\n- CVX (HIGH, score 45): Elevated beta (1.77x); Notable drawdown (-21.66%); Moderate concentration (12.77%).\n- XOM (HIGH, score 40): Severe drawdown (-29.09%); Analyst consensus: Sell.\n- TSLA (HIGH, score 35): Very high beta (2.19x) - amplified market exposure.\n- GOOGL (MEDIUM, score 30): Elevated beta (1.41x); Analyst consensus: Sell.\n- MSFT (MEDIUM, score 25): High concentration (21.61%).\n\n**5. Concentration vs. Policy Limits**\n- Sector breaches: Technology 52.87% vs 30.0% limit, excess 22.87 points ($5,984,273.36).\n- Single-name breaches: AAPL excess 0.84 points ($219,798.41); MSFT excess 6.61 points ($1,729,604.15); UNH excess 9.82 points ($2,569,548.07).\n\n**6. Macro Readings & Regime**\n- VIX: 16.65 (VIX regime: Low).\n- Federal Funds Rate: 5.22; 10Y Treasury Yield: 4.14; 2Y Treasury Yield: 5.28; 10Y-2Y spread -1.14 percentage points (-114.0 bps); curve inverted: True.\n- ISM Manufacturing PMI: 48.7 (PMI above 50: False); CPI YoY: 4.59 (CPI trend: Rising).\n- Rule-based market regime: Risk-Off."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 65,
+            "matched": 65,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 4155.2,
+      "error": null,
+      "trace_id": "020ea51bb4714776"
+    },
+    {
+      "id": "mrm-003-subset8",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset8",
+      "outputs": [
+        "RISK REPORT:\n\n### 1. Portfolio VaR, CVaR, Tail Ratio & Beta\n- **Value-weighted portfolio beta:** 1.196 (Simple average beta: 1.12). Positions with beta above 1.5: CVX, UNH.\n- **Parametric VaR:** 1-day 95% VaR $590,161.17 (2.36% of value), 10-day 95% VaR $1,866,253.48; 1-day 99% VaR $834,477.13. Risk level: HIGH.\n- **Monte Carlo CVaR / Expected Shortfall (95%):** 1-day VaR $620,618.26, 1-day CVaR $876,738.61 (3.506% of value), 10-day CVaR $2,772,490.94. \n- **Tail ratio CVaR/VaR:** 1.413 (Elevated tail risk). CVaR risk level: CRITICAL.\n\n### 2. Historical Risk\n- **Annualized Sharpe:** 0.037 (risk-free = latest Fed funds 5.22%).\n- **Sortino:** 0.039.\n- **Annualized volatility:** 20.09%.\n- **Max drawdown:** -17.22%.\n\n### 3. Stress Tests & Worst Scenarios\nScenarios tested: 5 (Severe or catastrophic: 3).\n- **2008 Global Financial Crisis:** Market shock -40.0%, portfolio P&L -$15,546,292.25 (-62.18%), severity CATASTROPHIC. Driven by: UNH (-$5,335,551.25), CVX (-$3,075,406.76), MSFT (-$2,381,390.82), NVDA (-$1,228,486.46), GOOGL (-$801,469.84).\n- **COVID-19 Market Crash (Feb-Mar 2020):** Market shock -34.0%, portfolio P&L -$12,197,860.07 (-48.78%), severity CATASTROPHIC. Driven by: UNH (-$4,186,355.59), CVX (-$2,413,011.46), MSFT (-$1,868,475.88), NVDA (-$963,889.38), GOOGL (-$628,845.56).\n- **Tech Sector Selloff (-30%):** Market shock -30.0%, portfolio P&L -$9,790,189.91 (-39.16%), severity CATASTROPHIC. Driven by: MSFT (-$2,885,146.58), UNH (-$1,723,793.48), NVDA (-$1,488,358.60), CVX (-$993,592.95), GOOGL (-$971,011.53).\n- **Sudden Rate Shock +200bps:** Market shock -15.0%, portfolio P&L -$4,932,958.12 (-19.73%), severity SIGNIFICANT.\n- **Flash Crash (Single Day -10%):** Market shock -10.0%, portfolio P&L -$4,484,507.38 (-17.94%), severity SIGNIFICANT.\n\n### 4. Highest-Risk Positions & Flags\n- **UNH:** Risk score 45/100, HIGH. Flags: Elevated beta (1.58x); High concentration (25.97% of portfolio). Action: Review position size and add stop-loss.\n- **CVX:** Risk score 45/100, HIGH. Flags: Elevated beta (1.77x); Notable drawdown (-21.66% unrealized loss); Moderate concentration (13.36% of portfolio). Action: Review position size and add stop-loss.\n- **MSFT:** Risk score 25/100, MEDIUM. Flags: High concentration (22.61% of portfolio). Action: Monitor closely.\n- **GOOGL:** Risk score 30/100, MEDIUM. Flags: Elevated beta (1.41x); Analyst consensus: Sell. Action: Monitor closely.\n- **JNJ:** Risk score 15/100, MEDIUM. Flags: Notable drawdown (-10.62% unrealized loss). Action: Monitor closely.\n\n### 5. Concentration vs. Policy Limits\n- **Sectors:** Technology weight 44.27% vs 30.0% limit (excess 14.27 points, $3,567,995.50); Healthcare 30.65% vs 30.0% limit (excess 0.65 points, $162,522.57). Largest sector weight: 44.27%.\n- **Single names:** UNH 25.97% vs 15.0% limit (excess 10.97 points, $2,742,880.91); MSFT 22.61% vs 15.0% limit (excess 7.61 points, $1,902,764.24). Largest single-name weight: 25.97%.\n\n### 6. Macro Readings & Regime Bearings\n- Federal Funds Rate: 5.22, 10Y Treasury Yield: 4.14, 2Y Treasury Yield: 5.28, 10Y-2Y spread: -1.14 percentage points (-114.0 bps), curve inverted: True.\n- VIX: 16.65 (VIX regime: Low, VIX change: -12.37). \n- ISM Manufacturing PMI: 48.7 (PMI above 50: False), CPI YoY: 4.59 (CPI trend: Rising), Core PCE: 2.86.\n- Rule-based market regime: Risk-Off. Fed holds rates steady amid mixed inflation signals.\n\n*Not investment advice.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 90,
+            "matched": 90,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 5509.0,
+      "error": null,
+      "trace_id": "3670942d6bb84458"
+    },
+    {
+      "id": "mrm-003-subset9",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset9",
+      "outputs": [
+        "CRITICAL risk items are highlighted first. Note: Not investment advice.\n\n### 1. VaR, CVaR, Tail Ratio & Beta\n- **Value-at-Risk:** 1-day 95% VaR is $709,233.67 (2.753%); 10-day 95% VaR is $2,242,793.79; 1-day 99% VaR is $1,002,843.48. Risk level: HIGH.\n- **Monte Carlo CVaR / Expected Shortfall (95%):** 1-day VaR $746,771.12; 1-day CVaR $1,051,444.05 (4.081%); 10-day CVaR $3,324,958.02. CVaR risk level: CRITICAL.\n- **Tail Ratio:** 1.408 (Elevated tail risk).\n- **Weighted Beta:** 1.395.\n\n### 2. Historical Risk\n- **Sharpe Ratio:** 0.163.\n- **Sortino Ratio:** 0.167 (risk-free = 5.22%).\n- **Annualized Volatility:** 22.82%.\n- **Maximum Drawdown:** -16.91%.\n\n### 3. Stress Tests & Driving Positions\n- **2008 Global Financial Crisis:** P&L -$18,682,953.85 (-72.52%), severity CATASTROPHIC. Driven by: UNH, AAPL, CVX, MSFT, TSLA.\n- **COVID-19 Market Crash:** P&L -$14,658,933.02 (-56.9%), severity CATASTROPHIC. Driven by: UNH, AAPL, CVX, MSFT, TSLA.\n- **Tech Sector Selloff (-30%):** P&L -$13,101,930.44 (-50.86%), severity CATASTROPHIC. Driven by: AAPL, MSFT, UNH, CVX, GOOGL.\n- **Sudden Rate Shock +200bps:** P&L -$5,928,244.97 (-23.01%), severity SEVERE. Driven by: UNH, AAPL, CVX, MSFT, TSLA.\n- **Flash Crash (-10%):** P&L -$5,389,313.61 (-20.92%), severity SEVERE. Driven by: UNH, AAPL, CVX, MSFT, TSLA.\n\n### 4. Highest-Risk Positions & Flags\n- **AAPL:** Risk score 45/100, HIGH. Flags: Elevated beta (1.77x); High concentration (16.09%).\n- **CVX:** Risk score 45/100, HIGH. Flags: Elevated beta (1.77x); Notable drawdown (-21.66%); Moderate concentration (12.97%).\n- **UNH:** Risk score 45/100, HIGH. Flags: Elevated beta (1.58x); High concentration (25.21%).\n- **TSLA:** Risk score 35/100, HIGH. Flags: Very high beta (2.19x) - amplified market exposure.\n- **GOOGL:** Risk score 30/100, MEDIUM. Flags: Elevated beta (1.41x); Analyst consensus: Sell.\n- **MSFT:** Risk score 25/100, MEDIUM. Flags: High concentration (21.95%).\n- **JNJ:** Risk score 15/100, MEDIUM. Flags: Notable drawdown (-10.62%).\n- **GS:** Risk score 10/100, LOW. Flags: Analyst consensus: Sell.\n\n### 5. Concentration vs. Policy Limits\n- **Sector Policy Limit (30.0%):** Technology sector weight is 50.41% (excess 20.41 points / $5,258,015.53).\n- **Single-Name Policy Limit (15.0%):**\n  - UNH: 25.21% (excess 10.21 points / $2,630,295.86).\n  - MSFT: 21.95% (excess 6.95 points / $1,790,456.05).\n  - AAPL: 16.09% (excess 1.09 points / $280,805.34).\n\n### 6. Macro Bearings\nLatest readings show a Federal Funds Rate of 5.22, CPI YoY at 4.59, 10Y Treasury Yield at 4.14, and VIX at 16.65. The 10Y-2Y spread is -1.14 percentage points (-114.0 bps) with an inverted curve (True). Derived monthly changes indicate a rising CPI trend, ISM Manufacturing PMI below 50 (48.7, False), and a rule-based market regime of Risk-Off, amplifying sensitivity to rate and technology shocks."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 64,
+            "matched": 64,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 4716.2,
+      "error": null,
+      "trace_id": "7a5157c2e9284aab"
+    },
+    {
+      "id": "mrm-004-subset10",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset10",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **AAPL**: reduce position size and add stop-loss due to elevated beta and high concentration.\n- **UNH**: reduce position size and add stop-loss due to elevated beta and high concentration.\n- **XOM**: reduce position size and add stop-loss due to severe drawdown and sell consensus.\n- **TSLA**: reduce position size and add stop-loss due to very high beta.\n\n2. Concentration adjustments:\n- Technology sector weight exceeds the policy limit with an excess of 27.75 points ($6,968,376.55).\n- Single-name AAPL exceeds the policy limit with an excess of 1.51 points ($379,180.13).\n- Single-name MSFT exceeds the policy limit with an excess of 7.52 points ($1,888,367.27).\n- Single-name UNH exceeds the policy limit with an excess of 10.86 points ($2,727,083.58).\n\n3. Tax-loss harvesting candidates:\n- UNH (unrealized loss of -$148,675.36).\n- XOM (unrealized loss of -$297,429.86)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 10,
+            "matched": 10,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 1914.6,
+      "error": null,
+      "trace_id": "13a3b8acc9704f6e"
+    },
+    {
+      "id": "mrm-004-subset11",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset11",
+      "outputs": [
+        "1. **UNH**: reduce ...\n**XOM**: reduce ...\n**TSLA**: hedge ...\n**CVX**: reduce ...\n\n2. Concentration adjustments:\n- Technology sector weight excess: 16.48 points ($3,925,462.02)\n- Healthcare sector weight excess: 2.17 points ($516,884.26)\n- MSFT single-name weight excess: 8.74 points ($2,081,828.77)\n- UNH single-name weight excess: 12.26 points ($2,920,276.97)\n\n3. Tax-loss harvesting candidates:\n- JNJ (Unrealized P&L: -$138,966.61)\n- UNH (Unrealized P&L: -$148,675.36)\n- XOM (Unrealized P&L: -$297,429.86)\n- CVX (Unrealized P&L: -$923,765.75)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 12,
+            "matched": 12,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2164.7,
+      "error": null,
+      "trace_id": "540991254b1244fc"
+    },
+    {
+      "id": "mrm-004-subset12",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset12",
+      "outputs": [
+        "1. Immediate Actions\n- **CVX**: hedge ...\n- **AAPL**: reduce ...\n- **MA**: reduce ...\n- **XOM**: review ...\n- **TSLA**: hold ...\n\n2. Concentration Adjustments\n- Technology sector is above policy limits by 10.41 points ($1,826,051.46).\n- Single-name AAPL is above policy limits by 8.63 points ($1,513,815.95).\n- Single-name CVX is above policy limits by 4.05 points ($710,423.48).\n\n3. Tax-Loss Harvesting Candidates\n- MA (unrealized loss -$587,687.32)\n- JNJ (unrealized loss -$138,966.61)\n- XOM (unrealized loss -$297,429.86)\n- CVX (unrealized loss -$923,765.75)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 10,
+            "matched": 10,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2267.5,
+      "error": null,
+      "trace_id": "c6b2b5d04ca9473d"
+    },
+    {
+      "id": "mrm-004-subset15",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset15",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **AAPL**: reduce position size due to elevated beta and concentration breaches.\n- **UNH**: reduce position size due to high concentration and elevated beta.\n- **XOM**: reduce position size due to severe drawdown and sell rating.\n- **TSLA**: reduce position size due to very high beta and amplified market exposure.\n- **CVX**: reduce position size due to notable drawdown and elevated beta.\n\n2. Concentration adjustments:\n- Technology sector weight of 48.1% exceeds the 30.0% policy limit by 18.1 points ($4,367,722.53).\n- AAPL weight of 17.18% exceeds the 15.0% single-name limit by 2.18 points ($526,057.19).\n- MSFT weight of 23.43% exceeds the 15.0% single-name limit by 8.43 points ($2,034,248.67).\n- UNH weight of 26.91% exceeds the 15.0% single-name limit by 11.91 points ($2,874,009.68).\n\n3. Tax-loss harvesting candidates:\n- UNH (unrealized loss of -$148,675.36).\n- XOM (unrealized loss of -$297,429.86).\n- CVX (unrealized loss of -$923,765.75)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 19,
+            "matched": 19,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2442.5,
+      "error": null,
+      "trace_id": "43135083236a417a"
+    },
+    {
+      "id": "mrm-004-subset18",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset18",
+      "outputs": [
+        "1. Immediate actions:\n- **CVX**: hedge consider immediate exit or hedge\n- **MA**: review review position size and add stop-loss\n- **AAPL**: review review position size and add stop-loss\n\n2. Concentration adjustments:\n- Technology sector weight 68.32% exceeds the 30.0% limit by 38.32 points ($8,133,295.35).\n- AAPL weight 19.53% exceeds the 15.0% limit by 4.53 points ($961,477.76).\n- MSFT weight 26.64% exceeds the 15.0% limit by 11.64 points ($2,470,552.14).\n- CVX weight 15.74% exceeds the 15.0% limit by 0.74 points ($157,062.59).\n\n3. Tax-loss harvesting candidates:\n- CVX (unrealized P&L: -$923,765.75)\n- MA (unrealized P&L: -$587,687.32)\n- JNJ (unrealized P&L: -$138,966.61)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 19,
+            "matched": 19,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2341.0,
+      "error": null,
+      "trace_id": "3f65225dab6a4783"
+    },
+    {
+      "id": "mrm-004-subset19",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset19",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **AAPL**: reduce review position size and add stop-loss.\n- **CVX**: reduce review position size and add stop-loss.\n- **TSLA**: reduce review position size and add stop-loss.\n- **UNH**: reduce review position size and add stop-loss.\n\n2. Concentration adjustments:\n- Sector excess: Technology excess 22.4 points ($5,552,101.57).\n- Single-name excesses: AAPL excess 1.72 points ($426,322.09), MSFT excess 7.81 points ($1,935,799.70), and UNH excess 11.2 points ($2,776,050.79).\n\n3. Tax-loss harvesting candidates:\n- CVX (unrealized P&L: -$923,765.75).\n- UNH (unrealized P&L: -$148,675.36)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 10,
+            "matched": 10,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 4289.5,
+      "error": null,
+      "trace_id": "713f9bda113f4956"
+    },
+    {
+      "id": "mrm-004-subset2",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset2",
+      "outputs": [
+        "1. Immediate Actions for Critical/High Risk Positions:\n- **AAPL**: reduce ...\n- **MA**: reduce ...\n- **XOM**: reduce ...\n\n2. Concentration Adjustments:\n- Sector breaches: Technology weight 77.93% exceeds the 30.0% limit by 47.93 points ($8,918,961.75 excess).\n- Single-name breaches: AAPL weight 22.28% exceeds the 15.0% limit by 7.28 points ($1,354,684.78 excess); MSFT weight 30.38% exceeds the 15.0% limit by 15.38 points ($2,861,957.68 excess).\n\n3. Tax-Loss Harvesting Candidates:\n- Positions with unrealized losses: MA (-$587,687.32), XOM (-$297,429.86), and JNJ (-$138,966.61)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 15,
+            "matched": 15,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 3912.3,
+      "error": null,
+      "trace_id": "dd78f6b24214456e"
+    },
+    {
+      "id": "mrm-004-subset3",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset3",
+      "outputs": [
+        "**AAPL**: reduce ...\n**MA**: hedge ...\n**UNH**: reduce ...\n**XOM**: reduce ...\n**CVX**: review ...\n\n2. Concentration adjustments:\n- Technology sector weight excess: 18.83 points ($5,059,683.83).\n- AAPL single-name weight excess: 0.43 points ($115,542.43).\n- MSFT single-name weight excess: 6.04 points ($1,622,968.15).\n- UNH single-name weight excess: 9.17 points ($2,464,009.60).\n\n3. Tax-loss harvesting candidates:\n- MA (unrealized loss: -$587,687.32)\n- JNJ (unrealized loss: -$138,966.61)\n- UNH (unrealized loss: -$148,675.36)\n- XOM (unrealized loss: -$297,429.86)\n- CVX (unrealized loss: -$923,765.75)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 13,
+            "matched": 13,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 7139.6,
+      "error": null,
+      "trace_id": "c17a03e6ea634f30"
+    },
+    {
+      "id": "mrm-004-subset7",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset7",
+      "outputs": [
+        "1. **AAPL**: reduce ...\n   **MA**: hedge ...\n   **UNH**: reduce ...\n   **XOM**: trim ...\n   **TSLA**: hold ...\n\n2. Concentration adjustments:\n   - Technology sector weight 51.05% exceeds the limit, excess 21.05 points ($5,528,320.69).\n   - AAPL weight 15.78% exceeds the limit, excess 0.78 points ($204,849.89).\n   - MSFT weight 21.53% exceeds the limit, excess 6.53 points ($1,714,961.24).\n   - UNH weight 24.73% exceeds the limit, excess 9.73 points ($2,555,371.04).\n\n3. Tax-loss harvesting candidates with unrealized losses:\n   - MA: -$587,687.32 (-31.65%)\n   - XOM: -$297,429.86 (-29.09%)\n   - UNH: -$148,675.36 (-2.24%)\n   - JNJ: -$138,966.61 (-10.62%)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 20,
+            "matched": 20,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2198.4,
+      "error": null,
+      "trace_id": "ec688957193740c6"
+    },
+    {
+      "id": "mrm-004-subset9",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset9",
+      "outputs": [
+        "1. Immediate Actions for Critical/High Risk Positions:\n- **AAPL**: reduce position size and add stop-loss.\n- **UNH**: reduce position size and add stop-loss.\n- **TSLA**: reduce position size and add stop-loss.\n- **CVX**: reduce position size and add stop-loss.\n\n2. Concentration Adjustments:\n- Sector breach in Technology exceeds the policy limit by 20.41 points ($5,258,015.53).\n- Single-name breaches: AAPL exceeds the limit by 1.09 points ($280,805.34); MSFT exceeds the limit by 6.95 points ($1,790,456.05); UNH exceeds the limit by 10.21 points ($2,630,295.86).\n\n3. Tax-Loss Harvesting Candidates:\n- JNJ: unrealized loss of -$138,966.61 (-10.62%).\n- UNH: unrealized loss of -$148,675.36 (-2.24%).\n- CVX: unrealized loss of -$923,765.75 (-21.66%)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 14,
+            "matched": 14,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2232.2,
+      "error": null,
+      "trace_id": "7dae02e62cfc41dc"
+    }
+  ],
+  "components": {
+    "MRM-003": {
+      "n_items": 10,
+      "passed": 10,
+      "pass_rate": 1.0,
+      "mean_groundedness": 1.0,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED"
+    },
+    "MRM-004": {
+      "n_items": 10,
+      "passed": 10,
+      "pass_rate": 1.0,
+      "mean_groundedness": 1.0,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED"
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "finished_at": "2026-09-30T01:15:41+00:00"
+}

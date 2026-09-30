@@ -1,0 +1,1853 @@
+{
+  "run_id": "heldout-20260929T210703Z",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-09-29T21:07:03+00:00",
+  "provider": "gemini",
+  "models": {
+    "chat": "gemini-3.5-flash-lite",
+    "grader": "gemini-3.1-flash-lite",
+    "hyde": "gemini-3.1-flash-lite",
+    "embedding": "gemini-embedding-001"
+  },
+  "versions": {
+    "MRM-001": {
+      "model_id": "gemini-3.5-flash-lite+hyde:gemini-3.1-flash-lite+emb:gemini-embedding-001",
+      "prompt_versions": [
+        "hyde_passage@1.0.0#abb1a9d5",
+        "rag_answer@1.0.0#b6aacf6d"
+      ],
+      "provider": "gemini"
+    },
+    "MRM-002": {
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "market_analysis@1.0.0#6dd5c302"
+      ],
+      "provider": "gemini"
+    },
+    "MRM-003": {
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "risk_report@1.0.0#d217f5bf"
+      ],
+      "provider": "gemini"
+    },
+    "MRM-004": {
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "portfolio_recommendations@1.0.0#b4253741"
+      ],
+      "provider": "gemini"
+    },
+    "MRM-005": {
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "market_analysis@1.0.0#6dd5c302",
+        "portfolio_recommendations@1.0.0#b4253741",
+        "risk_report@1.0.0#d217f5bf"
+      ],
+      "provider": "gemini"
+    }
+  },
+  "throttle_s": 20.0,
+  "items": [
+    {
+      "id": "rag-aum",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the fund's total AUM?",
+      "variant": null,
+      "outputs": [
+        "The fund's total AUM is $32,355,808.19 [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 24350.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 5.210399627685547
+        },
+        {
+          "source_id": "sector:Financials",
+          "rerank_score": -9.089706420898438
+        },
+        {
+          "source_id": "sector:Energy",
+          "rerank_score": -10.030050277709961
+        },
+        {
+          "source_id": "sector:Healthcare",
+          "rerank_score": -10.15911865234375
+        }
+      ],
+      "hypothetical_passage": "Passage: Portfolio aggregate summary confirms total AUM stands at $4.25B across all active strategies. This valuation aligns with current position market values, risk-adjusted exposure metrics, and liquidity-weighted weightings across sectors.",
+      "trace_id": "d76b0a633d104f8d"
+    },
+    {
+      "id": "rag-beta-GOOGL",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the beta of GOOGL?",
+      "variant": null,
+      "outputs": [
+        "The beta of GOOGL is 1.41 [position:GOOGL] (with the risk score noting an elevated beta of 1.41x [risk:score:GOOGL])."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 8321.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:GOOGL",
+          "rerank_score": 4.3791069984436035
+        },
+        {
+          "source_id": "position:GOOGL",
+          "rerank_score": 2.3581936359405518
+        },
+        {
+          "source_id": "market:GOOGL",
+          "rerank_score": -5.409493446350098
+        },
+        {
+          "source_id": "earnings:GOOGL:Q2 2024",
+          "rerank_score": -5.7163848876953125
+        }
+      ],
+      "hypothetical_passage": "Passage: Portfolio position record for Ticker: GOOGL displays a current Market Value of $450M with a corresponding Weight of 4.2% in the Communication Services sector. The asset maintains a current Beta of 1.08, which aligns with the latest risk score assessment and stress test parameters.",
+      "trace_id": "c56cb8d074634dc7"
+    },
+    {
+      "id": "rag-beta-NVDA",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the beta of NVDA?",
+      "variant": null,
+      "outputs": [
+        "The beta of NVDA is 1.06 [position:NVDA]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 7151.5,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:NVDA",
+          "rerank_score": 2.3453423976898193
+        },
+        {
+          "source_id": "risk:score:NVDA",
+          "rerank_score": -4.2120513916015625
+        },
+        {
+          "source_id": "earnings:NVDA:Q1 2024",
+          "rerank_score": -5.933748722076416
+        },
+        {
+          "source_id": "earnings:NVDA:Q2 2024",
+          "rerank_score": -6.031455039978027
+        }
+      ],
+      "hypothetical_passage": "Passage: Current equity position data for ticker NVDA indicates a market value of $450M with a position weight of 4.2%. The underlying risk metrics for this holding show a 30-day trailing beta of 1.85 and a current VaR of $12M at the 95% confidence level.",
+      "trace_id": "f69d92dec6034252"
+    },
+    {
+      "id": "rag-eps-JPM-Q22024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What EPS did JPM report for Q2 2024?",
+      "variant": null,
+      "outputs": [
+        "For Q2 2024, JPM reported an EPS of $4.81 [earnings:JPM:Q2 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 8958.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:JPM:Q2 2024",
+          "rerank_score": 8.360824584960938
+        },
+        {
+          "source_id": "earnings:JPM:Q1 2024",
+          "rerank_score": 7.910848617553711
+        },
+        {
+          "source_id": "earnings:JNJ:Q2 2024",
+          "rerank_score": 5.71605920791626
+        },
+        {
+          "source_id": "earnings:AAPL:Q2 2024",
+          "rerank_score": 5.569704532623291
+        }
+      ],
+      "hypothetical_passage": "Passage: JPM Q2 2024 earnings call summary indicates revenue of $42.3B with an EPS of $6.12, reflecting a marginal beat against consensus estimates. Current portfolio position holds 150k shares of JPM, currently contributing to a portfolio beta of 1.05 and a 5-day VaR of $4.2M.",
+      "trace_id": "0fd7c5f71c0c4500"
+    },
+    {
+      "id": "rag-eps-NVDA-Q12024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What EPS did NVDA report for Q1 2024?",
+      "variant": null,
+      "outputs": [
+        "NVDA reported an EPS of $1.77 for Q1 2024 (missing the consensus estimate of $1.78) [earnings:NVDA:Q1 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 10454.7,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:NVDA:Q1 2024",
+          "rerank_score": 8.395445823669434
+        },
+        {
+          "source_id": "earnings:NVDA:Q2 2024",
+          "rerank_score": 7.818975448608398
+        },
+        {
+          "source_id": "earnings:AAPL:Q1 2024",
+          "rerank_score": 5.390495300292969
+        },
+        {
+          "source_id": "earnings:TSLA:Q1 2024",
+          "rerank_score": 5.121612071990967
+        }
+      ],
+      "hypothetical_passage": "Passage: Per the Q1 2024 earnings call summary for NVDA (Ticker: NVDA), the company reported an EPS of $6.12, representing a significant beat against analyst consensus. This positive earnings surprise has been integrated into our internal risk models, positively impacting the sector-specific alpha projections for our semiconductor holdings.",
+      "trace_id": "fb984116e294424e"
+    },
+    {
+      "id": "rag-high-beta",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which positions have a beta above 1.5?",
+      "variant": null,
+      "outputs": [
+        "Based on the fund summary, the positions with a beta above 1.5 are AAPL, CVX, MA, TSLA, and UNH [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 10404.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 2.4319541454315186
+        },
+        {
+          "source_id": "risk:score:UNH",
+          "rerank_score": -3.3517367839813232
+        },
+        {
+          "source_id": "risk:score:CVX",
+          "rerank_score": -3.44093656539917
+        },
+        {
+          "source_id": "risk:score:MA",
+          "rerank_score": -3.4745845794677734
+        }
+      ],
+      "hypothetical_passage": "Passage: Filter portfolio position records for all active holdings where the beta metric exceeds 1.5. Aggregate the resulting list by ticker, market value, and current risk score to identify the specific equity exposures contributing to elevated systematic volatility.",
+      "trace_id": "1db0bbbc02fb4074"
+    },
+    {
+      "id": "rag-largest-position",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which position has the largest market value?",
+      "variant": null,
+      "outputs": [
+        "Based on the provided sources, the position with the largest market value is UNH, with a market value of $6,494,098.40 (representing a 20.07% weight) [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 21895.0,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 1.7917591333389282
+        },
+        {
+          "source_id": "sector:Technology",
+          "rerank_score": 0.8818460702896118
+        },
+        {
+          "source_id": "position:GS",
+          "rerank_score": -1.2676985263824463
+        },
+        {
+          "source_id": "position:V",
+          "rerank_score": -1.417231559753418
+        }
+      ],
+      "hypothetical_passage": "Passage: Portfolio analytics indicate that ticker AAPL currently holds the largest market value at $450M, representing a 12.5% portfolio weight. This position maintains a beta of 1.2 and has contributed $12M to year-to-date P&L, outperforming current risk scores and VaR limits.",
+      "trace_id": "e50601bcf1b04ab6"
+    },
+    {
+      "id": "rag-loss-positions",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which positions currently have unrealized losses?",
+      "variant": null,
+      "outputs": [
+        "Based on the provided sources, the positions that currently have unrealized losses are:\n\n* **UNH**: Unrealized P&L of -$148,675.36 (-2.24%) [position:UNH].\n* **MA**: Flagged with a severe drawdown of -31.65% unrealized loss [risk:score:MA].\n* **JNJ**: Flagged with a notable drawdown of -10.62% unrealized loss [risk:score:JNJ]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 4,
+            "matched": 4,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": false,
+        "missing_values": [],
+        "missing_terms": [
+          "CVX",
+          "XOM"
+        ]
+      },
+      "passed": false,
+      "latency_ms": 8285.1,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:MA",
+          "rerank_score": 1.839937448501587
+        },
+        {
+          "source_id": "position:UNH",
+          "rerank_score": -0.6384046077728271
+        },
+        {
+          "source_id": "sector:Technology",
+          "rerank_score": -0.842725396156311
+        },
+        {
+          "source_id": "risk:score:JNJ",
+          "rerank_score": -0.9937955141067505
+        }
+      ],
+      "hypothetical_passage": "Passage: Filter portfolio positions where P&L < 0. Aggregate current market value and weight for all tickers currently exhibiting negative unrealized P&L to assess total drawdowns. Ensure these positions are cross-referenced against latest stress test results and current VaR metrics to identify potential risk exposure.",
+      "trace_id": "f42328b8cc134117"
+    },
+    {
+      "id": "rag-macro-cpi-yoy",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What was the latest CPI YoY inflation reading?",
+      "variant": null,
+      "outputs": [
+        "Based on the provided data, the latest CPI YoY inflation reading is 4.59% (for 2026-02) [macro:2026-02]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 8096.4,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "macro:2025-09",
+          "rerank_score": 1.6334952116012573
+        },
+        {
+          "source_id": "macro:2025-10",
+          "rerank_score": 1.3946908712387085
+        },
+        {
+          "source_id": "macro:2026-01",
+          "rerank_score": 1.3648697137832642
+        },
+        {
+          "source_id": "macro:2026-02",
+          "rerank_score": 0.8799372315406799
+        }
+      ],
+      "hypothetical_passage": "Passage: Monthly macro indicator report confirms the latest CPI YoY inflation reading at 3.2% as of the most recent cycle. This figure aligns with the current Fed funds rate target and informs our updated CVaR projections for the tech sector portfolio.",
+      "trace_id": "5a56c5a56b8b443a"
+    },
+    {
+      "id": "rag-macro-federal-funds-rate",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the latest Federal Funds Rate in the macro data?",
+      "variant": null,
+      "outputs": [
+        "Based on the provided macro data, the latest Federal Funds Rate is recorded in 2026-02 at 5.22 [macro:2026-02]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 7266.9,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "macro:2025-04",
+          "rerank_score": 6.638715744018555
+        },
+        {
+          "source_id": "macro:2026-02",
+          "rerank_score": 6.556557655334473
+        },
+        {
+          "source_id": "macro:2025-12",
+          "rerank_score": 6.547408103942871
+        },
+        {
+          "source_id": "macro:2025-11",
+          "rerank_score": 6.535597801208496
+        }
+      ],
+      "hypothetical_passage": "Passage: According to the latest monthly macro indicator update, the Federal Funds Rate has been set at 5.25%-5.50% following the recent FOMC meeting. This adjustment coincides with current CPI prints and elevated VIX levels as we recalibrate our portfolio risk scores and stress test parameters.",
+      "trace_id": "3c9e406757c44f65"
+    },
+    {
+      "id": "rag-mv-MSFT",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the market value of our MSFT holding?",
+      "variant": null,
+      "outputs": [
+        "The market value of our MSFT holding is $5,653,824.37 [position:MSFT]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 8926.1,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:MSFT",
+          "rerank_score": 6.453688621520996
+        },
+        {
+          "source_id": "market:MSFT",
+          "rerank_score": 4.301861763000488
+        },
+        {
+          "source_id": "earnings:MSFT:Q1 2024",
+          "rerank_score": 1.3808207511901855
+        },
+        {
+          "source_id": "risk:stress:rate_shock_200bps",
+          "rerank_score": 0.4007542133331299
+        }
+      ],
+      "hypothetical_passage": "Passage: Portfolio position record for MSFT updated as of 2024-Q3, reflecting a current market value of $450.2M with a portfolio weight of 4.2%. Risk metrics indicate a localized VaR of 1.8% and a neutral beta of 1.05 against the benchmark.",
+      "trace_id": "d1b7fa861ad64490"
+    },
+    {
+      "id": "rag-mv-UNH",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the market value of our UNH holding?",
+      "variant": null,
+      "outputs": [
+        "The market value of our UNH holding is $6,494,098.40 [position:UNH, fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 16945.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:UNH",
+          "rerank_score": 6.870458602905273
+        },
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 4.1879563331604
+        },
+        {
+          "source_id": "market:UNH",
+          "rerank_score": 4.187812805175781
+        },
+        {
+          "source_id": "sector:Healthcare",
+          "rerank_score": 3.807917594909668
+        }
+      ],
+      "hypothetical_passage": "Passage: As of the latest EOD reconciliation, the position in UNH is classified under the Healthcare sector with a current market value of $42.5M. This holding represents a 2.1% portfolio weight, exhibiting a beta of 0.85 and contributing a positive $1.2M to year-to-date P&L.",
+      "trace_id": "3c1a7a7de9164bfc"
+    },
+    {
+      "id": "rag-n-positions",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "How many positions does the fund hold?",
+      "variant": null,
+      "outputs": [
+        "The Horner Capital Alpha Fund holds 15 positions [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 0,
+            "matched": 0,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 19768.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 1.066064715385437
+        },
+        {
+          "source_id": "sector:Technology",
+          "rerank_score": -5.0987467765808105
+        },
+        {
+          "source_id": "sector:Consumer Discretionary",
+          "rerank_score": -5.6574273109436035
+        },
+        {
+          "source_id": "position:UNH",
+          "rerank_score": -6.569248199462891
+        }
+      ],
+      "hypothetical_passage": "Passage: The current portfolio allocation report indicates a total of 142 active long and short positions across all sectors. Risk monitoring confirms that this count remains within the fund's mandate, with an aggregate VaR of 2.4% and an overall portfolio beta of 0.85.",
+      "trace_id": "7198d342cb3c438b"
+    },
+    {
+      "id": "rag-q-concentration",
+      "component": "MRM-001",
+      "grading": "grounded",
+      "question": "How concentrated is the portfolio?",
+      "variant": null,
+      "outputs": [
+        "The portfolio's largest sector weight is 47.03% (Technology), which breaches the illustrative policy limit of 30.0% [risk:concentration]. The largest single-name weight is 20.07%, breaching the single-name limit of 15.0% [risk:concentration]. Single-name breaches include MSFT at 17.47% and UNH at 20.07% [risk:concentration]. Additionally, AAPL represents a moderate concentration at 12.81% of the portfolio [risk:score:AAPL]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 7,
+            "matched": 7,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 8833.5,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:MSFT",
+          "rerank_score": 2.340885639190674
+        },
+        {
+          "source_id": "risk:score:AAPL",
+          "rerank_score": 0.700063169002533
+        },
+        {
+          "source_id": "risk:score:UNH",
+          "rerank_score": 0.4414837062358856
+        },
+        {
+          "source_id": "risk:concentration",
+          "rerank_score": -3.394341468811035
+        }
+      ],
+      "hypothetical_passage": "Passage: Current portfolio risk metrics indicate a Herfindahl-Hirschman Index (HHI) of 2,450, reflecting significant concentration in the Technology and Energy sectors. Our computed risk report shows that the top five positions now account for 42% of total market value, triggering a warning in our internal VaR and stress test constraints.",
+      "trace_id": "1e7534cbd3604fcd"
+    },
+    {
+      "id": "rag-q-macro",
+      "component": "MRM-001",
+      "grading": "grounded",
+      "question": "Summarize the latest macro environment.",
+      "variant": null,
+      "outputs": [
+        "Based on the latest available macro indicators for 2025-12, the economic environment is characterized by the following:\n\n* **Rates & Yields:** The Federal Funds Rate stands at 4.92, with the 10Y Treasury Yield at 4.88 and the 2Y Treasury Yield at 5.23 [macro:2025-12].\n* **Inflation:** CPI YoY is 3.74 and Core PCE is 2.84 [macro:2025-12].\n* **Growth & Labor:** GDP Growth QoQ is 2.2, and the Unemployment Rate is 3.99 [macro:2025-12].\n* **Sentiment & Activity:** ISM Manufacturing PMI is 51.5, the Consumer Confidence Index is 81.8, and the VIX is 28.01 [macro:2025-12]. \n\nCommentary notes that consumer spending beats expectations despite high rates [macro:2025-12]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 10,
+            "matched": 10,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 7696.3,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "macro:2025-04",
+          "rerank_score": -9.226478576660156
+        },
+        {
+          "source_id": "macro:2025-06",
+          "rerank_score": -9.379401206970215
+        },
+        {
+          "source_id": "macro:2025-07",
+          "rerank_score": -9.449308395385742
+        },
+        {
+          "source_id": "macro:2025-12",
+          "rerank_score": -9.462921142578125
+        }
+      ],
+      "hypothetical_passage": "Passage: The current macro landscape is defined by a Fed funds rate of 5.50% and a sticky CPI print of 3.2%, exerting upward pressure on 10-year Treasury yields. Elevated volatility, evidenced by a VIX reading of 18.5 and a contractionary PMI of 48.2, necessitates a defensive posture in our latest portfolio risk stress tests and a reduction in high-beta equity exposure.",
+      "trace_id": "b6844408bbc24629"
+    },
+    {
+      "id": "rag-revenue-CVX-Q22024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What revenue did CVX report for Q2 2024?",
+      "variant": null,
+      "outputs": [
+        "For Q2 2024, CVX reported revenue of $117.6B [earnings:CVX:Q2 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 9322.2,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:CVX:Q2 2024",
+          "rerank_score": 9.806293487548828
+        },
+        {
+          "source_id": "earnings:CVX:Q1 2024",
+          "rerank_score": 9.1087007522583
+        },
+        {
+          "source_id": "earnings:XOM:Q2 2024",
+          "rerank_score": 7.135506629943848
+        },
+        {
+          "source_id": "earnings:V:Q2 2024",
+          "rerank_score": 7.017647743225098
+        }
+      ],
+      "hypothetical_passage": "Passage: Per the Q2 2024 earnings call summary for CVX, the company reported revenue of $54.1 billion, representing a slight beat against consensus estimates. This performance is currently reflected in our portfolio's energy sector allocation, where CVX maintains a 3.2% weight and a beta of 0.85.",
+      "trace_id": "38761bd4828d4529"
+    },
+    {
+      "id": "rag-revenue-XOM-Q22024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What revenue did XOM report for Q2 2024?",
+      "variant": null,
+      "outputs": [
+        "For Q2 2024, XOM reported revenue of $65.0B, beating analyst estimates of $64.3B [earnings:XOM:Q2 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 18510.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:XOM:Q2 2024",
+          "rerank_score": 9.598089218139648
+        },
+        {
+          "source_id": "earnings:XOM:Q1 2024",
+          "rerank_score": 9.209588050842285
+        },
+        {
+          "source_id": "earnings:CVX:Q2 2024",
+          "rerank_score": 6.841646671295166
+        },
+        {
+          "source_id": "earnings:META:Q2 2024",
+          "rerank_score": 6.702688217163086
+        }
+      ],
+      "hypothetical_passage": "Passage: Q2 2024 earnings call summary for XOM indicates total revenue of $93.1B, representing a 2.4% beat against consensus estimates. Current portfolio weight for XOM is 4.2% with a beta of 0.85, contributing +$1.2M to aggregate monthly P&L.",
+      "trace_id": "31bf863568464fac"
+    },
+    {
+      "id": "rag-rsi-CVX",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the latest RSI-14 for CVX?",
+      "variant": null,
+      "outputs": [
+        "The latest RSI-14 for CVX is 75.9 [market:CVX]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 7893.5,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "market:CVX",
+          "rerank_score": 4.976428031921387
+        },
+        {
+          "source_id": "market:TSLA",
+          "rerank_score": -2.2053308486938477
+        },
+        {
+          "source_id": "market:XOM",
+          "rerank_score": -2.400238037109375
+        },
+        {
+          "source_id": "market:GS",
+          "rerank_score": -2.4990882873535156
+        }
+      ],
+      "hypothetical_passage": "Passage: Updated daily technical screen for Energy sector holdings shows CVX maintains a neutral posture with a current RSI-14 of 48.2. This technical metric is cross-referenced against the latest risk score of 4.2 and a portfolio weight of 2.15% to evaluate potential hedging requirements.",
+      "trace_id": "20b1ea5652bd4109"
+    },
+    {
+      "id": "rag-tail-ratio",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the CVaR to VaR tail ratio?",
+      "variant": null,
+      "outputs": [
+        "The tail ratio CVaR/VaR is 1.34 (Moderate tail risk) [risk:cvar]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 6470.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:cvar",
+          "rerank_score": 5.776294708251953
+        },
+        {
+          "source_id": "risk:var",
+          "rerank_score": -8.384665489196777
+        },
+        {
+          "source_id": "position:CVX",
+          "rerank_score": -9.436651229858398
+        },
+        {
+          "source_id": "risk:score:CVX",
+          "rerank_score": -9.869091987609863
+        }
+      ],
+      "hypothetical_passage": "Passage: Current risk metrics for the TMT portfolio indicate a 99% VaR of $14.2M against a CVaR of $21.9M. Consequently, the calculated CVaR-to-VaR tail ratio stands at 1.54, signaling elevated exposure to systemic volatility during recent stress test simulations.",
+      "trace_id": "3b679efe292b4cfa"
+    },
+    {
+      "id": "rag-top-risk",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which position has the highest risk score, and what is the score?",
+      "variant": null,
+      "outputs": [
+        "MA has the highest risk score, with a score of 50/100 [risk:score:MA]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 0,
+            "matched": 0,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 7395.5,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:XOM",
+          "rerank_score": 2.9693660736083984
+        },
+        {
+          "source_id": "risk:score:TSLA",
+          "rerank_score": 2.8346619606018066
+        },
+        {
+          "source_id": "risk:score:MA",
+          "rerank_score": 2.442166328430176
+        },
+        {
+          "source_id": "risk:score:CVX",
+          "rerank_score": 2.1609063148498535
+        }
+      ],
+      "hypothetical_passage": "Passage: Current risk parity analysis identifies ticker NVDA as the position with the highest risk score, currently holding a quantitative risk score of 9.4/10.0. This elevated metric is primarily driven by recent 1-day VaR excursions and stress test sensitivity to shifting VIX and yield environments.",
+      "trace_id": "e2dffc47360a4db5"
+    },
+    {
+      "id": "rag-var95",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the portfolio's 1-day 95% parametric VaR?",
+      "variant": null,
+      "outputs": [
+        "The portfolio's 1-day 95% parametric VaR is $829,099.56, which represents 2.562% of value [risk:var]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 3,
+            "matched": 3,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 6477.7,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:var",
+          "rerank_score": 8.573012351989746
+        },
+        {
+          "source_id": "risk:cvar",
+          "rerank_score": 4.477097511291504
+        },
+        {
+          "source_id": "risk:stress:flash_crash",
+          "rerank_score": -7.177605628967285
+        },
+        {
+          "source_id": "risk:score:AAPL",
+          "rerank_score": -7.927636623382568
+        }
+      ],
+      "hypothetical_passage": "Passage: As of the latest close, the aggregate portfolio risk metrics indicate a 1-day 95% parametric VaR of $4.2M, reflecting increased sensitivity to the current high-yield environment. This VaR reading remains within the firm's defined risk score threshold despite elevated volatility in the tech sector.",
+      "trace_id": "b7110a7a58b94f75"
+    },
+    {
+      "id": "rag-var99",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the portfolio's 1-day 99% VaR?",
+      "variant": null,
+      "outputs": [
+        "The portfolio's 1-day 99% VaR is $1,172,331.66 [risk:var]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 22330.1,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:var",
+          "rerank_score": 7.2048211097717285
+        },
+        {
+          "source_id": "risk:cvar",
+          "rerank_score": 4.341711044311523
+        },
+        {
+          "source_id": "risk:stress:flash_crash",
+          "rerank_score": -4.680037498474121
+        },
+        {
+          "source_id": "risk:stress:covid_crash",
+          "rerank_score": -7.749560356140137
+        }
+      ],
+      "hypothetical_passage": "Passage: Current risk assessment for the aggregate portfolio indicates a 1-day 99% VaR of $4.2M, consistent with the latest stress test results. This figure accounts for the current sector weightings and elevated VIX levels observed in our most recent macro indicator update.",
+      "trace_id": "49f17dff42c64d35"
+    },
+    {
+      "id": "rag-weighted-beta",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the portfolio's value-weighted beta?",
+      "variant": null,
+      "outputs": [
+        "The portfolio's value-weighted beta is 1.298 [risk:var, fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 8961.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:var",
+          "rerank_score": 4.939711570739746
+        },
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 4.719372749328613
+        },
+        {
+          "source_id": "position:V",
+          "rerank_score": -1.1764135360717773
+        },
+        {
+          "source_id": "position:AAPL",
+          "rerank_score": -1.6333420276641846
+        }
+      ],
+      "hypothetical_passage": "Passage: As of the latest EOD reconciliation, the aggregate portfolio beta is calculated at 1.14 on a value-weighted basis. This figure integrates current sector exposures and risk-adjusted volatility metrics across all long-only equity holdings, confirming alignment with the mandate's target risk score and stress test parameters.",
+      "trace_id": "a5a7fc63e03b4749"
+    },
+    {
+      "id": "mrm-002-subset1",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset1",
+      "outputs": [
+        "### Market Analysis Report\n\n**1. Sector Exposure and Performance**\n*   **Technology:** Weight 40.8%, Average P&L 47.29%\n*   **Healthcare:** Weight 27.97%, Average P&L -6.43%\n*   **Financials:** Weight 15.32%, Average P&L 14.87%\n*   **Energy:** Weight 12.19%, Average P&L -21.66%\n*   **Consumer Discretionary:** Weight 3.72%, Average P&L 5.8%\n\n**2. Technical Signals per Position**\n*   **AAPL:** RSI 29.4 (oversold), SMA-50 (464.01) below SMA-200 (508.46), MACD -0.301. **Status: ALERT**\n*   **CVX:** RSI 75.9 (overbought), SMA-50 (87.88) below SMA-200 (104.16), MACD 4.571. **Status: ALERT**\n*   **GS:** RSI 23.0 (oversold), SMA-50 (435.22) above SMA-200 (371.82), MACD -1.081. **Status: WATCH**\n*   **JNJ:** RSI 37.3, SMA-50 (795.93) above SMA-200 (795.17), MACD -2.679. **Status: OK**\n*   **JPM:** RSI 65.9, SMA-50 (48.45) below SMA-200 (53.57), MACD 1.084. **Status: WATCH**\n*   **MA:** RSI 64.0, SMA-50 (85.19) below SMA-200 (92.83), MACD 2.005. **Status: WATCH**\n*   **MSFT:** RSI 36.5, SMA-50 (65.21) below SMA-200 (71.77), MACD -1.896. **Status: WATCH**\n*   **ORCL:** RSI 66.3, SMA-50 (555.32) above SMA-200 (496.68), MACD 3.073. **Status: OK**\n*   **TSLA:** RSI 25.0 (oversold), SMA-50 (223.87) above SMA-200 (223.39), MACD -2.422. **Status: WATCH**\n*   **UNH:** RSI 74.1 (overbought), SMA-50 (150.02) below SMA-200 (169.7), MACD 0.88. **Status: ALERT**\n\n*Concerning flags include overbought/oversold RSI extremes on AAPL, CVX, GS, TSLA, and UNH, alongside multiple death crosses where the SMA-50 trades below the SMA-200.*\n\n**3. Earnings Beat/Miss Pattern (Latest Quarter)**\n*   **Beats (Revenue & EPS):** GS, MSFT\n*   **Misses:** AAPL, CVX, JNJ, JPM, MA, ORCL, TSLA, UNH *(Note: mixed results featuring revenue beats with EPS misses or vice versa across several positions).*\n\n**4. Macro Backdrop**\n*   **Federal Funds Rate:** 5.22\n*   **CPI YoY:** 4.59\n*   **10Y-2Y Treasury Yield:** 10Y Yield 4.14, 2Y Yield 5.28\n*   **VIX:** 16.65\n*   **ISM Manufacturing PMI:** 48.7"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 56,
+            "matched": 56,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 16804.5,
+      "error": null,
+      "trace_id": "8cdb93002fb14320"
+    },
+    {
+      "id": "mrm-002-subset4",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "outputs": [],
+      "graders": [],
+      "exact_fact": null,
+      "passed": false,
+      "error": "GoogleAPIError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try aga..."
+    },
+    {
+      "id": "mrm-002-subset5",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset5",
+      "outputs": [
+        "### 1. Sector Exposure and Performance\n* **Technology:** Portfolio weight 37.0% ($8,841,411.46 Market Value); Average P&L: 34.29%; Unrealized P&L: $2,652,415.97. (Positions: GOOGL, MSFT, AVGO, ORCL)\n* **Healthcare:** Portfolio weight 27.18% ($6,494,098.40 Market Value); Average P&L: -2.24%; Unrealized P&L: -$148,675.36. (Positions: UNH)\n* **Financials:** Portfolio weight 17.57% ($4,197,569.22 Market Value); Average P&L: 14.87%; Unrealized P&L: $353,887.30. (Positions: GS, JPM, MA)\n* **Energy:** Portfolio weight 13.98% ($3,341,380.66 Market Value); Average P&L: -21.66%; Unrealized P&L: -$923,765.75. (Positions: CVX)\n* **Consumer Discretionary:** Portfolio weight 4.27% ($1,019,773.01 Market Value); Average P&L: 5.8%; Unrealized P&L: $55,869.86. (Positions: TSLA)\n\n### 2. Technical Signals per Position\n* **AVGO:** RSI-14 40.3 | SMA-50 (411.47) < SMA-200 (439.76) | MACD -1.383 (Negative) | Status: WATCH\n* **CVX:** RSI-14 75.9 (**Overbought**) | SMA-50 (87.88) < SMA-200 (104.16) | MACD 4.571 | Status: **ALERT** (Concerning)\n* **GOOGL:** RSI-14 40.6 | SMA-50 (575.14) > SMA-200 (548.79) | MACD -1.517 (Negative) | Status: OK\n* **GS:** RSI-14 23.0 (**Oversold**) | SMA-50 (435.22) > SMA-200 (371.82) | MACD -1.081 (Negative) | Status: WATCH\n* **JPM:** RSI-14 65.9 | SMA-50 (48.45) < SMA-200 (53.57) | MACD 1.084 | Status: WATCH\n* **MA:** RSI-14 64.0 | SMA-50 (85.19) < SMA-200 (92.83) | MACD 2.005 | Status: WATCH\n* **MSFT:** RSI-14 36.5 | SMA-50 (65.21) < SMA-200 (71.77) | MACD -1.896 (Negative) | Status: WATCH\n* **ORCL:** RSI-14 66.3 | SMA-50 (555.32) > SMA-200 (496.68) | MACD 3.073 | Status: OK\n* **TSLA:** RSI-14 25.0 (**Oversold**) | SMA-50 (223.87) > SMA-200 (223.39) | MACD -2.422 (Negative) | Status: WATCH\n* **UNH:** RSI-14 74.1 (**Overbought**) | SMA-50 (150.02) < SMA-200 (169.7) | MACD 0.88 | Status: **ALERT** (Concerning)\n\n### 3. Earnings Beat/Miss Pattern (Latest Quarter)\n* **Beats (Revenue or EPS beat):** GS (Beat revenue & EPS), MSFT (Beat revenue & EPS). \n* **Mixed / Misses:** AVGO (Missed revenue, beat EPS), CVX (Missed revenue, beat EPS), GOOGL (Missed revenue, beat EPS), JPM (Missed revenue, beat EPS), MA (Missed revenue, beat EPS), ORCL (Missed revenue & EPS), TSLA (Beat revenue, missed EPS), UNH (Beat revenue, missed EPS).\n\n### 4. Macro Backdrop (2026-02)\n* **Federal Funds Rate:** 5.22\n* **CPI YoY:** 4.59\n* **10Y-2Y Treasury Yield:** 10Y Yield at 4.14, 2Y Yield at 5.28\n* **VIX:** 16.65\n* **ISM Manufacturing PMI:** 48.7"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 66,
+            "matched": 66,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 17397.2,
+      "error": null,
+      "trace_id": "c6a067a60c74489d"
+    },
+    {
+      "id": "mrm-003-subset1",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset1",
+      "outputs": [
+        "**RISK REPORT** (Fund: Horner Capital Alpha Fund, HF-ALPHA-001 | As of: 2026-03-19)\n*Not investment advice.*\n\n**1. VaR, CVaR, Tail Ratio & Beta**\n* **Portfolio Beta:** Weighted beta 1.349 (Simple average 1.341).\n* **Parametric VaR:** 1-day 95% VaR $729,581.11 (2.663%); 10-day 95% VaR $2,307,138.05; 1-day 99% VaR $1,031,614.39. Risk level: HIGH.\n* **Monte Carlo CVaR/Expected Shortfall (95%):** 1-day VaR $766,634.56; 1-day CVaR $1,080,791.92 (3.944%); 10-day CVaR $3,417,764.14. \n* **Tail Ratio (CVaR/VaR):** 1.41 (Elevated tail risk). CVaR risk level: CRITICAL.\n\n**2. Stress Tests & Driving Positions**\n5 scenarios tested (all severe/catastrophic):\n* **2008 Global Financial Crisis:** P&L -$19,218,955.35 (-70.14%). Drivers: UNH (-$5.34M), AAPL (-$3.82M), CVX (-$3.08M), MSFT (-$2.38M), TSLA (-$1.16M).\n* **COVID-19 Market Crash:** P&L -$15,079,488.05 (-55.03%). Drivers: UNH (-$4.19M), AAPL (-$2.99M), CVX (-$2.41M), MSFT (-$1.87M), TSLA (-$911.19K).\n* **Tech Sector Selloff (-30%):** P&L -$12,275,896.18 (-44.8%). Drivers: AAPL (-$4.62M), MSFT (-$2.89M), UNH (-$1.72M), CVX (-$993.59K), ORCL (-$765.14K).\n* **Sudden Rate Shock (+200bps):** P&L -$6,098,322.37 (-22.26%). Drivers: UNH (-$1.69M), AAPL (-$1.21M), CVX (-$975.85K), MSFT (-$755.63K), TSLA (-$368.49K).\n* **Flash Crash (-10%):** P&L -$5,543,929.43 (-20.23%). Drivers: UNH (-$1.54M), AAPL (-$1.10M), CVX (-$887.14K), MSFT (-$686.94K), TSLA (-$335.00K).\n\n**3. Highest-Risk Positions & Flags**\n* **MA:** Score 50/100 (HIGH). Flags: Elevated beta (1.59x); Severe drawdown (-31.65%).\n* **AAPL:** Score 45/100 (HIGH). Flags: Elevated beta (1.77x); High concentration (15.13%).\n* **CVX:** Score 45/100 (HIGH). Flags: Elevated beta (1.77x); Notable drawdown (-21.66%); Moderate concentration (12.19%).\n* **UNH:** Score 45/100 (HIGH). Flags: Elevated beta (1.58x); High concentration (23.7%).\n* **TSLA:** Score 35/100 (HIGH). Flags: Very high beta (2.19x).\n* **MSFT:** Score 25/100 (MEDIUM). Flags: High concentration (20.63%).\n* **JNJ:** Score 15/100 (MEDIUM). Flags: Notable drawdown (-10.62%).\n* **GS:** Score 10/100 (LOW). Flags: Analyst consensus: Sell.\n\n**4. Concentration vs. Policy Limits**\nLimits: Sector 30.0%, Single-name 15.0%.\n* **Sector Breaches:** Technology weight 40.8% (Limit: 30.0%).\n* **Single-Name Breaches:** UNH 23.7%, MSFT 20.63%, AAPL 15.13% (Limit: 15.0%).\n\n**5. Macro Bearings (2026-02)**\nVIX sits at 16.65, while the Federal Funds Rate holds steady at 5.22, 10Y Treasury Yield at 4.14, and 2Y Treasury Yield at 5.28 amid mixed inflation signals (CPI YoY 4.59, Core PCE 2.86). These elevated rates and yield curve pressures directly amplify vulnerability to sudden rate shocks (+200bps stress test driving $6.1M in losses) and penalize high-beta, concentrated tech holdings (40.8% sector weight)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 82,
+            "matched": 82,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 6754.6,
+      "error": null,
+      "trace_id": "721e575fb3684a01"
+    },
+    {
+      "id": "mrm-003-subset4",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset4",
+      "outputs": [
+        "### RISK REPORT\n\n**1. VaR, CVaR, Tail Ratio & Beta**\n* **Portfolio Beta:** Weighted beta: 1.241 (Simple average beta: 1.122).\n* **Parametric VaR (95%):** 1-day $579,904.70 (2.45%); 10-day $1,833,819.68. 1-day 99% VaR: $819,974.67. Risk level: HIGH.\n* **Monte Carlo CVaR / Expected Shortfall (95%):** 1-day VaR $609,446.28; 1-day CVaR $861,748.49 (3.64%); 10-day CVaR $2,725,088.00. \n* **Tail Ratio (CVaR/VaR):** 1.414 (Elevated tail risk). CVaR risk level: CRITICAL.\n\n**2. Stress Tests & Driving Positions**\n* **2008 Global Financial Crisis (-40.0% shock):** P&L -$15,276,111.64 (-64.53%), CATASTROPHIC. Drivers: UNH (-$5,335,551.25), AAPL (-$3,815,382.40), MSFT (-$2,381,390.82), TSLA (-$1,161,317.50), JNJ (-$747,772.47).\n* **COVID-19 Market Crash (-34.0% shock):** P&L -$11,985,872.21 (-50.63%), CATASTROPHIC. Drivers: UNH, AAPL, MSFT, TSLA, JNJ.\n* **Tech Sector Selloff (-30% shock):** P&L -$11,289,183.22 (-47.69%), CATASTROPHIC. Drivers: AAPL (-$4,622,482.53), MSFT (-$2,885,146.58), UNH (-$1,723,793.48), ORCL (-$765,137.11), AVGO (-$391,539.34).\n* **Sudden Rate Shock +200bps (-15.0% shock):** P&L -$4,847,227.73 (-20.48%), SEVERE. \n* **Flash Crash (-10% shock):** P&L -$4,406,570.66 (-18.61%), SIGNIFICANT.\n\n**3. Highest-Risk Positions & Flags**\n* **AAPL:** Score 45/100 (HIGH). Flags: Elevated beta (1.77x); High concentration (17.51%).\n* **UNH:** Score 45/100 (HIGH). Flags: Elevated beta (1.58x); High concentration (27.43%).\n* **XOM:** Score 40/100 (HIGH). Flags: Severe drawdown (-29.09%); Analyst consensus: Sell.\n* **TSLA:** Score 35/100 (HIGH). Flags: Very high beta (2.19x).\n* **MSFT:** Score 25/100 (MEDIUM). Flags: High concentration (23.88%).\n* **JNJ:** Score 15/100 (MEDIUM). Flags: Notable drawdown (-10.62%).\n\n**4. Concentration vs. Policy Limits**\n* **Limits:** Sector 30.0%, Single name 15.0%.\n* **Sector Breaches:** Technology (50.24%), Healthcare (32.37%).\n* **Single-Name Breaches:** UNH (27.43%), MSFT (23.88%), AAPL (17.51%).\n\n**5. Macro Readings Impact**\n* **2026-02 Readings:** VIX at 16.65, Federal Funds Rate at 5.22, 10Y Treasury Yield at 4.14, 2Y Treasury Yield at 5.28, CPI YoY at 4.59. \n* **Impact:** Elevated interest rates and persistent inflation signals (CPI 4.59) heighten sensitivity to rate shocks (evidenced by the +200bps stress test loss of -$4.85M). A moderate VIX of 16.65 contrasts with fat-tail mixture simulations showing critical CVaR risk (1.414 tail ratio), indicating latent downside risks in concentrated tech and healthcare holdings.\n\n*Note: Not investment advice.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 65,
+            "matched": 65,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 9700.5,
+      "error": null,
+      "trace_id": "935c3b25dbd84080"
+    },
+    {
+      "id": "mrm-003-subset5",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset5",
+      "outputs": [
+        "**RISK REPORT** (As of 2026-03-19 | Fund: HF-ALPHA-001)  \n*Not investment advice.*\n\n### 1. Portfolio VaR, CVaR, & Beta\n* **Weighted Beta:** 1.27\n* **Parametric VaR (95%):** 1-day $599,049.99 (2.507%); 10-day $1,894,362.40; 1-day 99% VaR $847,045.77 (Risk Level: HIGH).\n* **Monte Carlo CVaR/Expected Shortfall (95%, 10,000 simulations):** 1-day VaR $631,154.21; 1-day CVaR $888,932.93 (3.72%); 10-day CVaR $2,811,052.74. \n* **Tail Ratio (CVaR/VaR):** 1.408 (Elevated tail risk; CVaR Risk Level: CRITICAL).\n\n### 2. Stress Tests & Driving Positions\n5 scenarios tested; 4 severe/catastrophic.\n* **2008 Global Financial Crisis (-40% shock):** -$15,780,445.64 (-66.04%, CATASTROPHIC). Drivers: UNH (-$5.34M), CVX (-$3.08M), MSFT (-$2.38M), TSLA (-$1.16M), MA (-$1.05M).\n* **COVID-19 Crash (-34%):** -$12,381,580.43 (-51.82%, CATASTROPHIC). Drivers: UNH (-$4.19M), CVX (-$2.41M), MSFT (-$1.87M), TSLA (-$911.2K), MA (-$823.1K).\n* **Tech Sector Selloff (-30%):** -$8,774,376.50 (-36.72%, CATASTROPHIC). Drivers: MSFT (-$2.89M), UNH (-$1.72M), CVX (-$993.6K), GOOGL (-$971.0K), ORCL (-$765.1K).\n* **Sudden Rate Shock +200bps (-15%):** -$5,007,256.79 (-20.96%, SEVERE). Drivers: UNH (-$1.69M), CVX (-$975.9K), MSFT (-$755.6K), TSLA (-$368.5K), MA (-$332.9K).\n* **Flash Crash (-10%):** -$4,552,051.63 (-19.05%, SIGNIFICANT). Drivers: UNH (-$1.54M), CVX (-$887.1K), MSFT (-$686.9K), TSLA (-$335.0K), MA (-$302.6K).\n\n### 3. Highest-Risk Positions & Flags\n* **MA:** Risk Score 50/100 (HIGH). Flags: Elevated beta (1.59x); Severe drawdown (-31.65%).\n* **UNH:** Risk Score 45/100 (HIGH). Flags: Elevated beta (1.58x); High concentration (27.18%).\n* **CVX:** Risk Score 45/100 (HIGH). Flags: Elevated beta (1.77x); Notable drawdown (-21.66%); Moderate concentration (13.98%).\n* **TSLA:** Risk Score 35/100 (HIGH). Flag: Very high beta (2.19x).\n* **GOOGL:** Score 30/100 (MEDIUM). Flags: Elevated beta (1.41x); Sell consensus.\n* **MSFT:** Score 25/100 (MEDIUM). Flag: High concentration (23.66%).\n\n### 4. Concentration vs. Policy Limits\n* **Policy Limits:** Sector 30.0%, Single Name 15.0%.\n* **Actuals:** Largest sector weight 37.0% (Technology breach); Largest single-name weight 27.18%.\n* **Single-Name Breaches:** UNH (27.18%) and MSFT (23.66%).\n\n### 5. Macro Readings Bearings\nFeb 2026 macro indicators show a VIX at 16.65, Federal Funds Rate at 5.22, 10Y Treasury Yield at 4.14, and 2Y Treasury Yield at 5.28, with the Fed holding rates steady amid mixed inflation (CPI 4.59). Elevated yields and rate levels compound vulnerability to rate shocks (+200bps stress loss of -20.96%), while a moderate VIX sits against high portfolio betas (weighted 1.27) and concentrated tech/growth exposures."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 79,
+            "matched": 79,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 7468.9,
+      "error": null,
+      "trace_id": "895c9140da4e4956"
+    },
+    {
+      "id": "mrm-004-subset1",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset1",
+      "outputs": [
+        "Here are the proposed portfolio review actions for Horner Capital Alpha Fund (HF-ALPHA-001) as of 2026-03-19, based strictly on the provided DATA:\n\n**1. Immediate Actions for HIGH Risk Positions**\nReview position sizes and add stop-losses for all HIGH risk positions (AAPL, MA, UNH, TSLA, CVX). \n* **AAPL:** Risk score 45/100 (Beta: 1.77, Weight: 15.13%).\n* **MA:** Risk score 50/100 (Beta: 1.59, Unrealized loss: -$587,687.32 / -31.65%).\n* **UNH:** Risk score 45/100 (Beta: 1.58, Weight: 23.7%, Unrealized loss: -$148,675.36 / -2.24%).\n* **TSLA:** Risk score 35/100 (Beta: 2.19).\n* **CVX:** Risk score 45/100 (Beta: 1.77, Weight: 12.19%, Unrealized loss: -$923,765.75 / -21.66%).\n\n**2. Concentration Adjustments (Policy Limits: Sector 30.0%, Single Name 15.0%)**\n* **Sector Adjustments:** Technology is in breach with a weight of 40.8% (Market Value: $11,179,294.27). Reduce exposure to bring it within the 30.0% limit.\n* **Single-Name Adjustments:** Reduce positions exceeding the 15.0% limit:\n  * UNH: 23.7% weight ($6,494,098.40)\n  * MSFT: 20.63% weight\n  * AAPL: 15.13% weight ($4,145,352.46)\n\n**3. Tax-Loss Harvesting Candidates**\nReview positions currently carrying unrealized losses:\n* **CVX:** -$923,765.75 (-21.66%)\n* **MA:** -$587,687.32 (-31.65%)\n* **UNH:** -$148,675.36 (-2.24%)\n* **JNJ:** -$138,966.61 (-10.62%)\n\n*Disclaimer: These are suggestions for human review, not investment advice and not orders.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 33,
+            "matched": 33,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 5622.9,
+      "error": null,
+      "trace_id": "23877fb46df74d01"
+    },
+    {
+      "id": "mrm-004-subset2",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset2",
+      "outputs": [
+        "For portfolio manager review (synthetic demo portfolio HF-ALPHA-001, total AUM $18,608,307.43):\n\n**1. Immediate Actions for HIGH Risk Positions**\n*   **AAPL:** Risk score 45/100 (HIGH). Beta 1.77. Review position size and add stop-loss.\n*   **MA:** Risk score 50/100 (HIGH). Beta 1.59, severe unrealized loss of -$587,687.32 (-31.65%). Review position size and add stop-loss.\n*   **XOM:** Risk score 40/100 (HIGH). Severe unrealized loss of -$297,429.86 (-29.09%); analyst consensus is Sell. Review position size and add stop-loss.\n\n**2. Concentration Adjustments (Policy Limits: Sector 30.0%, Single Name 15.0%)**\n*   **Sector Adjustment:** Technology sector weight is 77.93% ($14,501,155.45 market value), breaching the 30.0% limit. Reduce exposure.\n*   **Single-Name Adjustments:** \n    *   MSFT weight is 30.38% ($5,653,824.37 market value), breaching the 15.0% limit. Reduce exposure.\n    *   AAPL weight is 22.28% ($4,145,352.46 market value), breaching the 15.0% limit. Reduce exposure.\n\n**3. Tax-Loss Harvesting Candidates**\nReview positions with unrealized losses for harvesting:\n*   **MA:** Unrealized P&L -$587,687.32 (-31.65%)\n*   **XOM:** Unrealized P&L -$297,429.86 (-29.09%)\n*   **JNJ:** Unrealized P&L -$138,966.61 (-10.62%, market value $1,169,125.19)\n\n*Disclaimer: These are suggestions for human review, not investment advice and not orders.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 25,
+            "matched": 25,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 6551.3,
+      "error": null,
+      "trace_id": "90ef4b926c0844f2"
+    },
+    {
+      "id": "mrm-004-subset5",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset5",
+      "outputs": [
+        "**Portfolio Management Actions for Review (Synthetic Demo HF-ALPHA-001):**\n\n1. **Immediate Actions for HIGH Risk Positions:**\n   - **MA:** Review position size and add stop-loss (HIGH risk, beta 1.59, unrealized loss -$587,687.32 / -31.65%).\n   - **UNH:** Review position size and add stop-loss (HIGH risk, beta 1.58, concentration 27.18%).\n   - **TSLA:** Review position size and add stop-loss (HIGH risk, very high beta 2.19).\n   - **CVX:** Review position size and add stop-loss (HIGH risk, beta 1.77, unrealized loss -$923,765.75 / -21.66%).\n\n2. **Concentration Adjustments (Policy Limits: Sector 30.0%, Single Name 15.0%):**\n   - **Sectors:** Reduce Technology sector weight from 37.0% (Market value $8,841,411.46) to comply with the 30.0% policy limit.\n   - **Single Names:** Reduce UNH weight from 27.18% ($6,494,098.40) and MSFT weight from 23.66% to comply with the 15.0% policy limit.\n\n3. **Tax-Loss Harvesting Candidates:**\n   - **CVX:** Unrealized loss of -$923,765.75 (-21.66%).\n   - **MA:** Unrealized loss of -$587,687.32 (-31.65%).\n   - **UNH:** Unrealized loss of -$148,675.36 (-2.24%).\n\n*Note: These are suggestions for human review, not investment advice and not orders.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 24,
+            "matched": 24,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 3799.9,
+      "error": null,
+      "trace_id": "0d545e23204244fe"
+    },
+    {
+      "id": "mrm-005-full",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "full",
+      "outputs": [
+        "### 1. Sector Exposure and Performance\n*   **Technology**: 47.03% portfolio weight, average P&L: 39.63% (Unrealized P&L: $4,868,339.93)\n*   **Healthcare**: 23.68% portfolio weight, average P&L: -6.43% (Unrealized P&L: -$287,641.97)\n*   **Financials**: 13.57% portfolio weight, average P&L: 27.43% (Unrealized P&L: $430,122.61)\n*   **Energy**: 12.57% portfolio weight, average P&L: -25.38% (Unrealized P&L: -$1,221,195.61)\n*   **Consumer Discretionary**: 3.15% portfolio weight, average P&L: 5.8% (Unrealized P&L: $55,869.86)\n\n### 2. Technical Signals per Position\n*   **AAPL**: RSI 29.4 (Oversold), SMA-50 (464.01) below SMA-200 (508.46), MACD -0.301. Status: ALERT.\n*   **AVGO**: RSI 40.3, SMA-50 (411.47) below SMA-200 (439.76), MACD -1.383. Status: WATCH.\n*   **CVX**: RSI 75.9 (Overbought), SMA-50 (87.88) below SMA-200 (104.16), MACD 4.571. Status: ALERT.\n*   **GOOGL**: RSI 40.6, SMA-50 (575.14) above SMA-200 (548.79), MACD -1.517. Status: OK.\n*   **GS**: RSI 23.0 (Oversold), SMA-50 (435.22) above SMA-200 (371.82), MACD -1.081. Status: WATCH.\n*   **JNJ**: RSI 37.3, SMA-50 (795.93) above SMA-200 (795.17), MACD -2.679. Status: OK.\n*   **JPM**: RSI 65.9, SMA-50 (48.45) below SMA-200 (53.57), MACD 1.084. Status: WATCH.\n*   **MA**: RSI 64.0, SMA-50 (85.19) below SMA-200 (92.83), MACD 2.005. Status: WATCH.\n*   **MSFT**: RSI 36.5, SMA-50 (65.21) below SMA-200 (71.77), MACD -1.896. Status: WATCH.\n*   **NVDA**: RSI 36.3, SMA-50 (435.97) above SMA-200 (391.29), MACD -3.908. Status: OK.\n*   **ORCL**: RSI 66.3, SMA-50 (555.32) above SMA-200 (496.68), MACD 3.073. Status: OK.\n*   **TSLA**: RSI 25.0 (Oversold), SMA-50 (223.87) above SMA-200 (223.39), MACD -2.422. Status: WATCH.\n*   **UNH**: RSI 74.1 (Overbought), SMA-50 (150.02) below SMA-200 (169.7), MACD 0.88. Status: ALERT.\n*   **V**: RSI 37.7, SMA-50 (296.96) below SMA-200 (334.98), MACD -1.466. Status: WATCH.\n*   **XOM**: RSI 39.7, SMA-50 (183.83) above SMA-200 (164.74), MACD 0.952. Status: OK.\n\n### 3. Earnings Beat/Miss Pattern (Latest Quarter)\n*   **Beats (3)**: GS, MSFT, XOM.\n*   **Misses (12)**: AAPL, AVGO, CVX, GOOGL, JNJ, JPM, MA, NVDA, ORCL, TSLA, UNH, V.\n\n### 4. Macro Backdrop\n*   Federal Funds Rate: 5.22\n*   CPI YoY: 4.59\n*   10Y-2Y Treasury Yield Spread: 10Y (4.14) minus 2Y (5.28)\n*   VIX: 16.65\n*   ISM Manufacturing PMI: 48.7",
+        "*Not investment advice.*\n\n### 1. Portfolio VaR, CVaR, Tail Ratio & Beta\n* **Weighted Beta:** 1.298 (Simple average: 1.207)\n* **Parametric VaR:** 1-day 95% $829,099.56 (2.562%); 10-day 95% $2,621,843.02; 1-day 99% $1,172,331.66 (Risk level: HIGH).\n* **Monte Carlo CVaR/Expected Shortfall (95%):** 1-day VaR $890,636.15; 1-day CVaR $1,193,699.22 (3.689%); 10-day CVaR $3,774,808.38. \n* **Tail Ratio (CVaR/VaR):** 1.34 (Moderate tail risk). CVaR Risk Level: CRITICAL.\n\n### 2. Stress Tests & Worst Drivers\n* **2008 Global Financial Crisis:** P&L -$21,840,515.25 (-67.5%), CATASTROPHIC. Drivers: UNH (-$5.34M), AAPL (-$3.82M), CVX (-$3.08M), MSFT (-$2.38M), NVDA (-$1.23M).\n* **COVID-19 Crash:** P&L -$17,136,404.27 (-52.96%), CATASTROPHIC. Drivers: UNH (-$4.19M), AAPL (-$2.99M), CVX (-$2.41M), MSFT (-$1.87M), NVDA (-$963.9K).\n* **Tech Sector Selloff (-30%):** P&L -$15,213,528.63 (-47.02%), CATASTROPHIC. Drivers: AAPL (-$4.62M), MSFT (-$2.89M), UNH (-$1.72M), NVDA (-$1.49M), CVX (-$993.6K).\n* **Sudden Rate Shock (+200bps):** P&L -$6,930,163.49 (-21.42%), SEVERE. Drivers: UNH (-$1.69M), AAPL (-$1.21M), CVX (-$975.9K), MSFT (-$755.6K), NVDA (-$389.8K).\n* **Flash Crash (-10%):** P&L -$6,300,148.63 (-19.47%), SIGNIFICANT. Drivers: UNH (-$1.54M), AAPL (-$1.10M), CVX (-$887.1K), MSFT (-$686.9K), NVDA (-$354.4K).\n\n### 3. Highest-Risk Positions & Flags\n* **MA:** 50/100 (HIGH) \u2014 Elevated beta (1.59x); Severe drawdown (-31.65%).\n* **UNH:** 45/100 (HIGH) \u2014 Elevated beta (1.58x); High concentration (20.07%).\n* **CVX:** 45/100 (HIGH) \u2014 Elevated beta (1.77x); Notable drawdown (-21.66%); Moderate concentration (10.33%).\n* **XOM:** 40/100 (HIGH) \u2014 Severe drawdown (-29.09%); Analyst consensus: Sell.\n* **TSLA:** 35/100 (HIGH) \u2014 Very high beta (2.19x) - amplified market exposure.\n* **GOOGL:** 30/100 (MEDIUM) \u2014 Elevated beta (1.41x); Analyst consensus: Sell.\n* **AAPL:** 30/100 (MEDIUM) \u2014 Elevated beta (1.77x); Moderate concentration (12.81%).\n* **MSFT:** 25/100 (MEDIUM) \u2014 High concentration (17.47%).\n\n### 4. Concentration vs. Policy Limits\n* **Stated Limits:** Sector 30.0%, Single Name 15.0%.\n* **Sector Breaches:** Technology at 47.03% (Limit 30.0%).\n* **Single-Name Breaches:** UNH at 20.07% (Limit 15.0%), MSFT at 17.47% (Limit 15.0%).\n\n### 5. Macro Readings Impact\n* **VIX (16.65):** Moderate volatility backdrop keeps baseline parametric VaR contained, but fat-tail mixture drives CRITICAL CVaR ($1.19M 1-day).\n* **Fed Funds Rate (5.22) / 10Y Yield (4.14) / Rates:** The +200bps rate shock stress test projects a SEVERE loss of -$6,930,163.49 (-21.42%), directly threatening high-beta and concentrated holdings like UNH, AAPL, and MSFT under tight rate conditions.",
+        "Here are the proposed actions for review for Horner Capital Alpha Fund (portfolio HF-ALPHA-001, AUM: $32,355,808.19) based strictly on the provided DATA:\n\n**1. Immediate Actions for HIGH Risk Positions**\nReview position sizes and add stop-losses for all HIGH risk positions:\n*   **MA**: Risk score 50/100. Beta 1.59, unrealized loss -$587,687.32 (-31.65%). \n*   **UNH**: Risk score 45/100. Beta 1.58, portfolio concentration 20.07%, unrealized loss -$148,675.36 (-2.24%).\n*   **XOM**: Risk score 40/100. Severe drawdown of -$297,429.86 (-29.09%), analyst consensus Sell.\n*   **TSLA**: Risk score 35/100. Very high beta 2.19.\n*   **CVX**: Risk score 45/100. Beta 1.77, unrealized loss -$923,765.75 (-21.66%), concentration 10.33%.\n\n**2. Concentration Adjustments (Policy Limits: Sector 30.0%, Single Name 15.0%)**\n*   **Sector Adjustment**: Reduce Technology sector exposure (current weight 47.03%, market value $15,215,512.94) to bring it below the 30.0% policy limit.\n*   **Single-Name Adjustments**: Reduce positions breaching the 15.0% single-name limit:\n    *   **UNH**: Current weight 20.07% ($6,494,098.40 market value).\n    *   **MSFT**: Current weight 17.47% (Technology sector).\n\n**3. Tax-Loss Harvesting Candidates (Unrealized Losses)**\nReview positions with unrealized losses listed in the data for potential tax-loss harvesting:\n*   **MA**: -$587,687.32 (-31.65%)\n*   **JNJ**: -$138,966.61 (-10.62%)\n*   **UNH**: -$148,675.36 (-2.24%)\n*   **XOM**: -$297,429.86 (-29.09%)\n*   **CVX**: -$923,765.75 (-21.66%)\n*   *(Note: Healthcare sector unrealized P&L is -$287,641.97; Energy sector unrealized P&L is -$1,221,195.61)*\n\n*Disclaimer: These are suggestions for human review, not investment advice and not orders.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 81,
+            "matched": 81,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 81,
+            "matched": 81,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 36,
+            "matched": 36,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 18580.9,
+      "error": null,
+      "trace_id": "ad3a64c334c448d4"
+    },
+    {
+      "id": "mrm-005-subset2",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset2",
+      "outputs": [
+        "MARKET ANALYSIS REPORT\n\n### 1. Sector Exposure and Performance\n* **Technology:** Portfolio weight 77.93%, average P&L 42.08% (Unrealized P&L: $4,714,855.83). Positions: GOOGL, AAPL, NVDA, MSFT, ORCL.\n* **Financials:** Portfolio weight 11.89%, average P&L 13.01% (Unrealized P&L: -$471,704.89). Positions: GS, MA, V.\n* **Healthcare:** Portfolio weight 6.28%, average P&L -10.62% (Unrealized P&L: -$138,966.61). Position: JNJ.\n* **Energy:** Portfolio weight 3.9%, average P&L -29.09% (Unrealized P&L: -$297,429.86). Position: XOM.\n\n### 2. Technical Signals Per Position\n* **AAPL:** RSI-14 29.4 (Oversold), SMA-50 (464.01) below SMA-200 (508.46), MACD signal -0.301. Status: ALERT.\n* **GOOGL:** RSI-14 40.6, SMA-50 (575.14) above SMA-200 (548.79), MACD signal -1.517. Status: OK.\n* **GS:** RSI-14 23.0 (Oversold), SMA-50 (435.22) above SMA-200 (371.82), MACD signal -1.081. Status: WATCH.\n* **JNJ:** RSI-14 37.3, SMA-50 (795.93) above SMA-200 (795.17), MACD signal -2.679. Status: OK.\n* **MA:** RSI-14 64.0, SMA-50 (85.19) below SMA-200 (92.83), MACD signal 2.005. Status: WATCH.\n* **MSFT:** RSI-14 36.5, SMA-50 (65.21) below SMA-200 (71.77), MACD signal -1.896. Status: WATCH.\n* **NVDA:** RSI-14 36.3, SMA-50 (435.97) above SMA-200 (391.29), MACD signal -3.908. Status: OK.\n* **ORCL:** RSI-14 66.3, SMA-50 (555.32) above SMA-200 (496.68), MACD signal 3.073. Status: OK.\n* **V:** RSI-14 37.7, SMA-50 (296.96) below SMA-200 (334.98), MACD signal -1.466. Status: WATCH.\n* **XOM:** RSI-14 39.7, SMA-50 (183.83) above SMA-200 (164.74), MACD signal 0.952. Status: OK.\n\n### 3. Earnings Beat/Miss Pattern (Latest Quarter)\n* **Beats:** GS, MSFT, XOM.\n* **Misses:** AAPL, GOOGL, JNJ, MA, NVDA, ORCL, V.\n\n### 4. Macro Backdrop (2026-02)\n* **Federal Funds Rate:** 5.22\n* **CPI YoY:** 4.59\n* **10Y-2Y Spread:** 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28 (-1.14 spread inversion)\n* **VIX:** 16.65\n* **ISM Manufacturing PMI:** 48.7",
+        "### RISK REPORT: Horner Capital Alpha Fund (HF-ALPHA-001)\n\n#### 1. VaR, CVaR, and Beta\n* **Weighted Beta:** 1.171 (Simple average beta: 1.115).\n* **Parametric VaR:** 1-day 95% VaR: $430,237.57 (2.312% of value); 10-day 95% VaR: $1,360,530.66; 1-day 99% VaR: $608,348.08 (Risk level: HIGH).\n* **Monte Carlo CVaR / Expected Shortfall (95%):** 1-day VaR $456,223.84; 1-day CVaR $641,533.83 (3.448% of value); 10-day CVaR $2,028,708.09.\n* **Tail Ratio:** CVaR/VaR: 1.406 (Elevated tail risk). CVaR risk level: **CRITICAL**.\n\n#### 2. Stress Tests and Worst Scenarios\n* **Tech Sector Selloff (-30%):** Portfolio P&L -$11,531,829.68 (-61.97%), severity CATASTROPHIC. Driving positions: AAPL (-$4,622,482.53), MSFT (-$2,885,146.58), NVDA (-$1,488,358.60), GOOGL (-$971,011.53), ORCL (-$765,137.11).\n* **2008 GFC (-40%):** Portfolio P&L -$11,333,512.56 (-60.91%), severity CATASTROPHIC. Driving positions: AAPL (-$3,815,382.40), MSFT (-$2,381,390.82), NVDA (-$1,228,486.46), MA (-$1,049,094.82), GOOGL (-$801,469.84).\n* **COVID-19 Crash (-34%):** Portfolio P&L -$8,892,448.32 (-47.79%), severity CATASTROPHIC. Driving positions: AAPL (-$2,993,607.73), MSFT (-$1,868,475.88), NVDA (-$963,889.38), MA (-$823,135.94), GOOGL (-$628,845.56).\n* **Rate Shock +200bps (-15%):** Portfolio P&L -$3,596,210.72 (-19.33%), severity SIGNIFICANT.\n* **Flash Crash (-10%):** Portfolio P&L -$3,269,282.47 (-17.57%), severity SIGNIFICANT.\n\n#### 3. Highest-Risk Positions & Flags\n* **MA:** Risk score 50/100 (HIGH). Flags: Elevated beta (1.59x); Severe drawdown (-31.65% unrealized loss).\n* **AAPL:** Risk score 45/100 (HIGH). Flags: Elevated beta (1.77x); High concentration (22.28% of portfolio).\n* **XOM:** Risk score 40/100 (HIGH). Flags: Severe drawdown (-29.09% unrealized loss); Analyst consensus: Sell.\n* **GOOGL:** Risk score 30/100 (MEDIUM). Flags: Elevated beta (1.41x); Analyst consensus: Sell.\n* **MSFT:** Risk score 25/100 (MEDIUM). Flags: High concentration (30.38% of portfolio).\n* **JNJ:** Risk score 15/100 (MEDIUM). Flags: Notable drawdown (-10.62% unrealized loss).\n\n#### 4. Concentration vs. Policy Limits\n* **Sector Limit (30.0%):** Breached by Technology at **77.93%**.\n* **Single-Name Limit (15.0%):** Breached by MSFT at **30.38%** and AAPL at **22.28%**.\n\n#### 5. Macro Readings Impact\nLatest macro data shows VIX at 16.65, Federal Funds Rate at 5.22, 10Y Treasury Yield at 4.14, and 2Y Treasury Yield at 5.28 with the Fed holding rates steady amid mixed inflation (CPI YoY 4.59). Elevated yields and a tight rate environment exacerbate the sensitivity of high-beta tech holdings, amplifying portfolio downside during rate shocks and extreme drawdowns. \n\n*Not investment advice.*",
+        "**PROPOSED ACTIONS FOR PORTFOLIO MANAGER REVIEW**\n\n*These are suggestions for human review, not investment advice and not orders.*\n\n**1. Immediate Actions for Critical/High Risk Positions**\n* **AAPL:** HIGH risk (score 45/100). Elevated beta (1.77) and high concentration (22.28% weight, market value $4,145,352.46). Review position size and add stop-loss.\n* **MA:** HIGH risk (score 50/100). Elevated beta (1.59) and severe unrealized loss of -$587,687.32 (-31.65%). Review position size and add stop-loss.\n* **XOM:** HIGH risk (score 40/100). Severe unrealized loss of -$297,429.86 (-29.09%) and Sell analyst rating. Review position size and add stop-loss.\n\n**2. Concentration Adjustments**\n* **Technology Sector:** Weight is 77.93% ($14,501,155.45), breaching the 30.0% sector policy limit. Reduce exposure.\n* **MSFT:** Single-name weight is 30.38% ($5,653,824.37), breaching the 15.0% single-name policy limit. Reduce exposure.\n* **AAPL:** Single-name weight is 22.28% ($4,145,352.46), breaching the 15.0% policy limit. Reduce exposure.\n\n**3. Tax-Loss Harvesting Candidates**\n* **MA:** Unrealized loss of -$587,687.32 (-31.65%).\n* **XOM:** Unrealized loss of -$297,429.86 (-29.09%).\n* **GS:** Unrealized P&L component of Financials sector total (-$471,704.89 total unrealized loss across Financials).\n* **JNJ:** Unrealized loss of -$138,966.61 (-10.62%)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "FLAG",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 59,
+            "matched": 58,
+            "mismatches": [
+              "-1.14"
+            ],
+            "score": 0.9831
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 64,
+            "matched": 64,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 24,
+            "matched": 24,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": false,
+      "latency_ms": 19595.4,
+      "error": null,
+      "trace_id": "f702eac0ed194eba"
+    }
+  ],
+  "components": {
+    "MRM-001": {
+      "n_items": 23,
+      "passed": 22,
+      "pass_rate": 0.9565,
+      "mean_groundedness": 1.0,
+      "exact_fact_accuracy": 0.9524,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED"
+    },
+    "MRM-002": {
+      "n_items": 3,
+      "passed": 2,
+      "pass_rate": 0.6667,
+      "mean_groundedness": 0.6667,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 0.6667,
+      "errors": 1,
+      "status": "FAILED"
+    },
+    "MRM-003": {
+      "n_items": 3,
+      "passed": 3,
+      "pass_rate": 1.0,
+      "mean_groundedness": 1.0,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED"
+    },
+    "MRM-004": {
+      "n_items": 3,
+      "passed": 3,
+      "pass_rate": 1.0,
+      "mean_groundedness": 1.0,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED"
+    },
+    "MRM-005": {
+      "n_items": 2,
+      "passed": 1,
+      "pass_rate": 0.5,
+      "mean_groundedness": 1.0,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 0.5,
+      "errors": 0,
+      "status": "FAILED"
+    },
+    "MRM-006": {
+      "status": "APPROVED",
+      "basel_zone": "GREEN",
+      "methods": {
+        "historical_rolling": {
+          "test_observations": 254,
+          "exceptions": 3,
+          "exception_rate": 0.01181,
+          "expected_rate": 0.01,
+          "exceptions_last_250": 3,
+          "basel_zone": "GREEN",
+          "kupiec_lr": 0.0795,
+          "kupiec_p_value": 0.7779,
+          "kupiec_reject_95": false,
+          "mean_var": 912217.28,
+          "last_var": 886543.61
+        },
+        "parametric_rolling": {
+          "test_observations": 254,
+          "exceptions": 2,
+          "exception_rate": 0.00787,
+          "expected_rate": 0.01,
+          "exceptions_last_250": 2,
+          "basel_zone": "GREEN",
+          "kupiec_lr": 0.1251,
+          "kupiec_p_value": 0.7236,
+          "kupiec_reject_95": false,
+          "mean_var": 973606.12,
+          "last_var": 1059346.97
+        },
+        "beta_proxy_engine": {
+          "test_observations": 254,
+          "exceptions": 2,
+          "exception_rate": 0.00787,
+          "expected_rate": 0.01,
+          "exceptions_last_250": 2,
+          "basel_zone": "GREEN",
+          "kupiec_lr": 0.1251,
+          "kupiec_p_value": 0.7236,
+          "kupiec_reject_95": false,
+          "mean_var": 1172331.66,
+          "last_var": 1172331.66
+        }
+      },
+      "period": "2024-04-15 to 2026-03-19",
+      "window": 250,
+      "confidence": 0.99
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "finished_at": "2026-09-29T21:25:10+00:00"
+}

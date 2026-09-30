@@ -1,0 +1,13 @@
+{
+  "embedding_model": "gemini-embedding-001",
+  "dim": 3072,
+  "n_docs": 117,
+  "n_chunks": 117,
+  "data_sha256": "1e25e25c2d2a5c7049c217666b60f33ac8cdf9cbff51cad72999c904643c89c9",
+  "corpus_sha256": "47d7fd41c97cad55b13110cc7bf15708e68235d7cf4ac515aa8a48ea720cf680",
+  "chunk_size": 1000,
+  "chunk_overlap": 200,
+  "tokenizer": "regex \\w+|[^\\w\\s] (word/punctuation approximation)",
+  "similarity": "cosine (IndexFlatIP on L2-normalised vectors)",
+  "built_at": "2026-09-29T20:49:32+00:00"
+}

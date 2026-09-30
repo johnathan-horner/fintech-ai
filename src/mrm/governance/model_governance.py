@@ -18,8 +18,9 @@ from datetime import datetime
 from typing import List, Optional
 from enum import Enum
 
-GOVERNANCE_LOG_PATH = os.path.join(os.path.dirname(__file__), "../../../logs/mrm_governance_log.json")
-os.makedirs(os.path.dirname(GOVERNANCE_LOG_PATH), exist_ok=True)
+GOVERNANCE_LOG_PATH = os.environ.get("FINTECH_GOVERNANCE_LOG") or os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "../../../logs/mrm_governance_log.json")
+)
 
 
 #  Enums 
@@ -101,7 +102,7 @@ MODEL_USE_POLICY = {
             "Any use in client-facing regulatory documents",
         ],
         "conditions": [
-            "PENDING VALIDATION - use is conditional and informational only",
+            "Live use requires a current APPROVED/CONDITIONAL approval record (enforced by require_approved)",
             "VaR outputs labeled 'simplified estimate - not for regulatory reporting'",
             "Independent validation must be completed before Tier 1 promotion",
             "CRO sign-off required for any expansion of use cases",
@@ -135,7 +136,7 @@ MODEL_USE_POLICY = {
         "approved_users": ["portfolio_manager", "risk_manager"],
         "approved_uses": ["Internal comprehensive analysis pipeline"],
         "prohibited_uses": ["Production use until all component models validated"],
-        "conditions": ["STATUS: STAGING - requires validation of MRM-002, MRM-003, MRM-004, and MRM-005 itself"],
+        "conditions": ["STATUS: STAGING - each agent is gated by its own approval record in addition to MRM-005"],
         "approval_required_for": ["Any production use"],
     },
     "MRM-006": {
@@ -150,7 +151,7 @@ MODEL_USE_POLICY = {
             "Automated stop-loss triggering",
         ],
         "conditions": [
-            "PENDING VALIDATION - quant methodology under independent review",
+            "Approval is earned from the out-of-sample VaR backtest (Basel traffic light)",
             "All outputs must include 'simplified estimate' disclaimer",
         ],
         "approval_required_for": ["Any regulatory use", "Automated risk decisions"],
@@ -183,6 +184,13 @@ class ModelChangeRequest:
         self.approved_at: Optional[str] = None
         self.rejection_reason: Optional[str] = None
         self.requires_revalidation = materiality in ["Moderate", "Major"]
+        log_governance_action(
+            action="CHANGE_SUBMITTED",
+            model_id=self.model_id,
+            actor=self.requestor,
+            details={"change_id": self.change_id, "change_type": getattr(self.change_type, "value", self.change_type),
+                     "description": self.description, "materiality": self.materiality},
+        )
 
     def approve(self, approver: str):
         self.status = ApprovalStatus.APPROVED
@@ -192,7 +200,8 @@ class ModelChangeRequest:
             action="CHANGE_APPROVED",
             model_id=self.model_id,
             actor=approver,
-            details={"change_id": self.change_id, "change_type": self.change_type, "description": self.description},
+            details={"change_id": self.change_id, "change_type": getattr(self.change_type, "value", self.change_type),
+                     "description": self.description},
         )
         if self.requires_revalidation:
             log_governance_action(
@@ -255,16 +264,23 @@ def log_governance_action(action: str, model_id: str, actor: str, details: dict)
 
     log.append(entry)
 
-    with open(GOVERNANCE_LOG_PATH, "w") as f:
-        json.dump(log, f, indent=2)
+    try:
+        os.makedirs(os.path.dirname(GOVERNANCE_LOG_PATH), exist_ok=True)
+        with open(GOVERNANCE_LOG_PATH, "w") as f:
+            json.dump(log, f, indent=2, default=str)
+    except OSError:
+        pass  # read-only filesystem: the action is still returned to the caller
 
 
 def get_audit_log(model_id: Optional[str] = None) -> List[dict]:
     """Retrieve the audit log, optionally filtered by model."""
     if not os.path.exists(GOVERNANCE_LOG_PATH):
         return []
-    with open(GOVERNANCE_LOG_PATH) as f:
-        log = json.load(f)
+    try:
+        with open(GOVERNANCE_LOG_PATH) as f:
+            log = json.load(f)
+    except (OSError, ValueError):
+        return []
     if model_id:
         log = [e for e in log if e.get("model_id") == model_id]
     return log
@@ -372,6 +388,14 @@ def check_use_policy(model_id: str, user_role: str, use_case: str) -> dict:
     }
 
 
+def pending_change_requests() -> int:
+    """Change requests submitted in the audit log with no approval/rejection yet."""
+    log = get_audit_log()
+    submitted = {e["details"].get("change_id") for e in log if e.get("action") == "CHANGE_SUBMITTED"}
+    decided = {e["details"].get("change_id") for e in log if e.get("action") in ("CHANGE_APPROVED", "CHANGE_REJECTED")}
+    return len(submitted - decided)
+
+
 def get_governance_summary() -> dict:
     """Return a summary of governance status across all models."""
     from src.mrm.model_inventory import get_inventory, ValidationStatus, ModelTier
@@ -397,7 +421,7 @@ def get_governance_summary() -> dict:
             }
             for m in tier1_in_prod_without_approval
         ],
-        "pending_change_requests": 0,  # Would query change request store in prod
+        "pending_change_requests": pending_change_requests(),
         "audit_log_entries": len(get_audit_log()),
         "escalation_procedures": list(ESCALATION_PROCEDURES.keys()),
     }

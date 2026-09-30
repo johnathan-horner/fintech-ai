@@ -1,17 +1,23 @@
 """
-FinTech AI - Demo Pages
-Professional dark-theme analyst dashboard.
-Runs on synthetic data with no AWS credentials required.
+FinTech AI - Dashboard pages.
+
+Every KPI is computed from the bundled (synthetic) data by src/utils/metrics.py.
+AI outputs come from the live Gemini pipeline when available (with a
+"Live AI" badge, grader score and trace) and otherwise from deterministic
+templates filled with computed values (with a "Demo mode" badge + reason).
 """
 
-import streamlit as st
-import json
 import os
 import sys
 
+import pandas as pd
+import streamlit as st
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-DATA_DIR = os.path.join(os.path.dirname(__file__), "../data")
+from src.utils import metrics  # noqa: E402
+from src.utils.data import load_portfolio as _load_portfolio  # noqa: E402
+from streamlit_app.formatting import md_escape, md_money  # noqa: E402
 
 # -- Global CSS ----------------------------------------------------------------
 
@@ -61,415 +67,441 @@ div[data-testid="stAlert"] { border-radius: 8px; }
 </style>
 """
 
+
 def inject_css():
     st.markdown(CSS, unsafe_allow_html=True)
 
-# -- Data ----------------------------------------------------------------------
+
+# -- Data (all computed) ------------------------------------------------------------
 
 @st.cache_data
 def load_portfolio():
-    path = os.path.join(DATA_DIR, "portfolio.json")
-    if os.path.exists(path):
-        with open(path) as f:
-            return json.load(f)
+    return _load_portfolio()
+
+
+@st.cache_data
+def load_kpis():
+    return metrics.portfolio_kpis(load_portfolio())
+
+
+@st.cache_data
+def load_risk_metrics():
+    pos = load_portfolio()["positions"]
     return {
-        "fund_name": "Horner Capital Alpha Fund",
-        "aum": 5_420_000,
-        "as_of_date": "2025-03-15",
-        "positions": [
-            {"ticker": "AAPL",  "sector": "Technology",             "shares": 2500, "avg_cost": 162.40, "current_price": 189.30, "market_value": 473250,  "unrealized_pnl":  67250, "pnl_pct":  16.6, "weight_pct":  8.73, "beta": 1.21, "52w_high": 199.62, "52w_low": 143.90, "pe_ratio": 29.4, "analyst_rating": "Buy"},
-            {"ticker": "NVDA",  "sector": "Technology",             "shares":  800, "avg_cost": 495.20, "current_price": 875.40, "market_value": 700320,  "unrealized_pnl": 304160, "pnl_pct":  76.8, "weight_pct": 12.92, "beta": 1.94, "52w_high": 974.00, "52w_low": 402.18, "pe_ratio": 68.2, "analyst_rating": "Strong Buy"},
-            {"ticker": "JPM",   "sector": "Financials",             "shares": 3200, "avg_cost": 148.60, "current_price": 198.70, "market_value": 635840,  "unrealized_pnl": 160320, "pnl_pct":  33.7, "weight_pct": 11.73, "beta": 1.12, "52w_high": 207.46, "52w_low": 135.19, "pe_ratio": 11.8, "analyst_rating": "Buy"},
-            {"ticker": "TSLA",  "sector": "Consumer Disc",          "shares": 1500, "avg_cost": 248.90, "current_price": 177.80, "market_value": 266700,  "unrealized_pnl":-106650, "pnl_pct": -28.6, "weight_pct":  4.92, "beta": 2.18, "52w_high": 299.29, "52w_low": 138.80, "pe_ratio": 47.1, "analyst_rating": "Hold"},
-            {"ticker": "MSFT",  "sector": "Technology",             "shares": 1800, "avg_cost": 310.20, "current_price": 415.50, "market_value": 747900,  "unrealized_pnl": 189540, "pnl_pct":  33.9, "weight_pct": 13.80, "beta": 0.92, "52w_high": 430.82, "52w_low": 309.45, "pe_ratio": 36.8, "analyst_rating": "Strong Buy"},
-            {"ticker": "XOM",   "sector": "Energy",                 "shares": 4000, "avg_cost":  96.40, "current_price": 112.30, "market_value": 449200,  "unrealized_pnl":  63600, "pnl_pct":  16.5, "weight_pct":  8.29, "beta": 0.78, "52w_high": 123.75, "52w_low":  94.10, "pe_ratio": 13.2, "analyst_rating": "Hold"},
-            {"ticker": "META",  "sector": "Technology",             "shares":  900, "avg_cost": 298.50, "current_price": 485.20, "market_value": 436680,  "unrealized_pnl": 168030, "pnl_pct":  62.6, "weight_pct":  8.06, "beta": 1.38, "52w_high": 531.49, "52w_low": 274.38, "pe_ratio": 25.3, "analyst_rating": "Buy"},
-            {"ticker": "GS",    "sector": "Financials",             "shares": 1100, "avg_cost": 342.80, "current_price": 448.60, "market_value": 493460,  "unrealized_pnl": 116380, "pnl_pct":  30.9, "weight_pct":  9.10, "beta": 1.35, "52w_high": 471.45, "52w_low": 312.77, "pe_ratio": 14.6, "analyst_rating": "Buy"},
-        ]
+        "var": metrics.calculate_portfolio_var(pos, 0.95),
+        "cvar": metrics.calculate_portfolio_cvar(pos, 0.95),
+        "stress": metrics.run_stress_tests(pos),
+        "scored": sorted((metrics.score_position_risk(p) for p in pos), key=lambda x: x["risk_score"], reverse=True),
+        "concentration": metrics.concentration_check(load_portfolio()),
     }
 
-MOCK_CHAT = {
-    "risk":    "Highest-risk positions: TSLA (score 72/100, beta 2.18, down 28.6%) rated CRITICAL, and NVDA (score 55/100, beta 1.94, 12.9% weight) rated HIGH. Portfolio 1-day CVaR is $156,200 at 95% confidence -- tail ratio 1.44x indicates fat-tail exposure beyond what VaR captures alone.",
-    "tech":    "Technology represents 43.5% of portfolio across AAPL, NVDA, MSFT, META. NVDA leads with +76.8% PnL on strong AI infrastructure demand, though P/E 68x is stretched. MSFT is highest quality -- beta 0.92, consistent earnings beats. META recovered +62.6%. Concentration above prudent limits -- recommend trimming to 30-35%.",
-    "tsla":    "TSLA is rated CRITICAL. Down 28.6% from avg cost of $248.90, currently $177.80. Beta of 2.18 amplifies every market move. RSI at 31, death cross pattern on technicals. Recommend exit or reduce to max 1.5% weight with stop-loss at $165.",
-    "cvar":    "CVaR (Conditional Value at Risk) is $156,200 versus VaR of $108,400 -- a tail ratio of 1.44x. This means on the days that breach your VaR threshold, average losses are 44% worse than VaR alone would suggest. Basel III uses CVaR as the primary risk measure for exactly this reason. Your tail risk is elevated, driven by TSLA and NVDA.",
-    "default": "Portfolio summary: 8 positions, $5.42M AUM, weighted beta 1.31. Technology is 43.5% -- above prudent limits. Most urgent concern is TSLA: down 28.6%, beta 2.18, rated CRITICAL. Ask me about any specific position, sector, or risk metric.",
-}
 
-def get_mock_response(q):
-    q = q.lower()
-    if any(w in q for w in ["cvar", "expected shortfall", "tail", "var"]):
-        return MOCK_CHAT["cvar"]
-    if any(w in q for w in ["tsla", "tesla"]):
-        return MOCK_CHAT["tsla"]
-    if any(w in q for w in ["risk", "danger", "worst", "loss", "score"]):
-        return MOCK_CHAT["risk"]
-    if any(w in q for w in ["tech", "nvda", "aapl", "msft", "meta", "sector"]):
-        return MOCK_CHAT["tech"]
-    return MOCK_CHAT["default"]
+@st.cache_data
+def load_signals():
+    from src.utils.data import load_market_data
+
+    held = sorted(p["ticker"] for p in load_portfolio()["positions"])
+    return metrics.technical_signals(load_market_data(), held)
+
+
+@st.cache_data
+def load_history_metrics():
+    from src.utils.data import load_macro, load_price_history
+
+    rf = sorted(load_macro(), key=lambda m: m["date"])[-1]["Federal Funds Rate"] / 100
+    return metrics.history_metrics(load_price_history(), load_portfolio()["positions"], rf)
+
+
+@st.cache_data
+def load_backtest():
+    from src.mrm.validation.model_validator import portfolio_backtest
+
+    return portfolio_backtest()
+
+
+def _m(x: float) -> str:
+    """Compact currency for st.metric values (plain text, not markdown)."""
+    a = abs(x)
+    s = f"${a / 1e6:.2f}M" if a >= 1e6 else f"${a / 1e3:.0f}K" if a >= 1e3 else f"${a:,.0f}"
+    return f"-{s}" if x < 0 else s
+
+
+# -- Multi-agent run shared by Market / Risk / Portfolio Management -------------
+
+def _orchestrator_result():
+    return st.session_state.get("orchestrator_result")
+
+
+def _run_orchestrator():
+    from src.agents.orchestrator import demo_full_analysis, run_full_analysis
+    from streamlit_app.live_ai import run_ai_request
+
+    portfolio = load_portfolio()
+    with st.spinner("Running LangGraph pipeline: market -> risk -> portfolio (3 model calls + 3 grader calls)..."):
+        st.session_state["orchestrator_result"] = run_ai_request(
+            "MRM-005",
+            lambda: run_full_analysis(portfolio),
+            lambda reason: demo_full_analysis(portfolio, reason),
+        )
+
+
+def _orchestrator_controls(key: str):
+    from streamlit_app.live_ai import MAX_LIVE_REQUESTS_PER_SESSION, requests_used
+
+    c1, c2 = st.columns([1, 2])
+    with c1:
+        if st.button("Run multi-agent analysis", key=key):
+            _run_orchestrator()
+    with c2:
+        st.caption(
+            f"One run = 1 live AI request ({requests_used()}/{MAX_LIVE_REQUESTS_PER_SESSION} used this session). "
+            "Result is shared by Market Analysis, Risk Assessment and Portfolio Management."
+        )
+
+
+def _render_section(section_key: str, placeholder_demo):
+    from streamlit_app.live_ai import render_output
+
+    res = _orchestrator_result()
+    if res is None:
+        demo = placeholder_demo()
+        from src.mrm.grader import deterministic_grade
+
+        render_output(demo["text"], "demo", "multi-agent analysis not run yet in this session",
+                      deterministic_grade(demo["text"], demo["sources"]), None)
+        return
+    out = res["output"]
+    section = out.get(section_key, {})
+    if res["mode"] == "live":
+        mode, reason = section.get("mode", "live"), section.get("reason")
+    else:
+        mode, reason = ("blocked" if res.get("blocked") else "demo"), res.get("reason")
+    render_output(section.get("text", ""), mode, reason, section.get("grader"), section.get("trace"))
+    if res["mode"] == "live" and out.get("trace"):
+        with st.expander(f"Orchestrator trace {out['trace']['trace_id']} · MRM-005"):
+            st.json(out["trace"])
+
 
 # -- Pages ---------------------------------------------------------------------
 
 def page_portfolio():
     inject_css()
     portfolio = load_portfolio()
+    k = load_kpis()
+    conc = load_risk_metrics()["concentration"]
     positions = portfolio.get("positions", [])
-    total_aum = portfolio.get("aum", 0)
-    total_pnl = sum(p.get("unrealized_pnl", 0) for p in positions)
-    avg_beta  = sum(p.get("beta", 1) for p in positions) / len(positions) if positions else 0
 
-    st.title("Horner Capital Alpha Fund")
-    st.caption(f"Portfolio Overview  --  As of {portfolio.get('as_of_date', 'N/A')}  --  Demo Mode")
+    st.title(k["fund_name"])
+    st.caption(f"Portfolio Overview  --  As of {k['as_of_date']}  --  synthetic data")
 
-    # KPI row using st.metric
     col1, col2, col3, col4, col5 = st.columns(5)
-    with col1:
-        st.metric("Total AUM", f"${total_aum/1_000_000:.2f}M")
-    with col2:
-        pnl_delta = f"+${total_pnl:,.0f}" if total_pnl >= 0 else f"${total_pnl:,.0f}"
-        st.metric("Unrealized P&L", f"${total_pnl/1_000:.0f}K", delta=pnl_delta)
-    with col3:
-        st.metric("Positions", str(len(positions)))
-    with col4:
-        st.metric("Portfolio Beta", f"{avg_beta:.2f}x", delta="Above market")
-    with col5:
-        st.metric("Tech Weight", "43.5%", delta="Concentration risk")
+    col1.metric("Total AUM", _m(k["aum"]))
+    col2.metric("Unrealized P&L", _m(k["total_unrealized_pnl"]), delta=f"{k['total_unrealized_pnl']:+,.0f}")
+    col3.metric("Positions", str(k["n_positions"]))
+    col4.metric("Weighted Beta", f"{k['weighted_beta']:.2f}x",
+                delta="Above market (beta > 1)" if k["weighted_beta"] > 1 else "At/below market (beta <= 1)",
+                delta_color="off")
+    tech_breach = k["tech_weight_pct"] > conc["sector_limit_pct"]
+    col5.metric("Tech Weight", f"{k['tech_weight_pct']:.1f}%",
+                delta=f"{'Above' if tech_breach else 'Within'} {conc['sector_limit_pct']:.0f}% sector limit",
+                delta_color="inverse" if tech_breach else "off")
 
-    # Sector summary
     st.divider()
     st.subheader("Sector Allocation")
-    sector_map = {}
-    for p in positions:
-        s = p.get("sector", "Other")
-        sector_map.setdefault(s, {"value": 0, "pnl": []})
-        sector_map[s]["value"] += p.get("market_value", 0)
-        sector_map[s]["pnl"].append(p.get("pnl_pct", 0))
+    cols = st.columns(len(k["sector_weights"]))
+    for i, (sector, info) in enumerate(k["sector_weights"].items()):
+        cols[i].metric(sector, f"{info['weight_pct']:.1f}%", delta=f"{info['avg_pnl_pct']:+.1f}% avg P&L")
 
-    cols = st.columns(len(sector_map))
-    for i, (sector, info) in enumerate(sector_map.items()):
-        avg_pnl = sum(info["pnl"]) / len(info["pnl"])
-        weight  = info["value"] / total_aum * 100
-        cols[i].metric(sector, f"{weight:.1f}%", delta=f"{avg_pnl:+.1f}% avg P&L")
-
-    # Positions table
     st.divider()
     st.subheader("Positions")
-
     sorted_pos = sorted(positions, key=lambda x: x.get("market_value", 0), reverse=True)
+    st.dataframe(pd.DataFrame([{
+        "Ticker": p["ticker"],
+        "Sector": p["sector"],
+        "Price": f"${p['current_price']:,.2f}",
+        "Market Value": f"${p['market_value']:,.0f}",
+        "P&L %": f"{p.get('pnl_pct', 0):+.1f}%",
+        "Weight %": f"{p.get('weight_pct', 0):.1f}%",
+        "Beta": f"{p['beta']:.2f}",
+        "Rating": p.get("analyst_rating", ""),
+    } for p in sorted_pos]), width="stretch", hide_index=True)
 
-    # Create dataframe for positions
-    pos_data = []
-    for p in sorted_pos:
-        pos_data.append({
-            "Ticker": p['ticker'],
-            "Sector": p['sector'],
-            "Price": f"${p['current_price']:.2f}",
-            "Market Value": f"${p['market_value']:,.0f}",
-            "P&L %": f"{p.get('pnl_pct', 0):+.1f}%",
-            "Weight %": f"{p.get('weight_pct', 0):.1f}%",
-            "Beta": f"{p['beta']:.2f}",
-            "Rating": p.get('analyst_rating', 'Hold')
-        })
-
-    st.dataframe(pos_data, use_container_width=True)
-
-    # Position details in expanders
     for p in sorted_pos:
         pnl = p.get("pnl_pct", 0)
-        pnl_str = f"+{pnl:.1f}%" if pnl >= 0 else f"{pnl:.1f}%"
         weight = p.get("weight_pct", 0)
-
-        with st.expander(f"{p['ticker']} - {p['sector']} - {pnl_str}"):
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric("Current Price", f"${p['current_price']:.2f}")
-                st.metric("Market Value", f"${p['market_value']:,.0f}")
-            with col2:
-                st.metric("Weight", f"{weight:.1f}%")
-                st.metric("Beta", f"{p['beta']:.2f}")
-            with col3:
-                st.metric("P&L %", pnl_str)
-                st.metric("Rating", p.get('analyst_rating', 'Hold'))
-
-            # Weight progress bar
-            st.caption("Portfolio Weight:")
-            progress_value = min(weight / 20.0, 1.0)  # Normalize to 0-1 range, cap at 1.0
-            st.progress(progress_value)
+        with st.expander(f"{p['ticker']} - {p['sector']} - {pnl:+.1f}%"):
+            c1, c2, c3 = st.columns(3)
+            c1.metric("Current Price", f"${p['current_price']:,.2f}")
+            c1.metric("Market Value", f"${p['market_value']:,.0f}")
+            c2.metric("Weight", f"{weight:.1f}%")
+            c2.metric("Beta", f"{p['beta']:.2f}")
+            c3.metric("P&L %", f"{pnl:+.1f}%")
+            c3.metric("Rating", p.get("analyst_rating", ""))
+            st.caption(f"Portfolio weight vs {metrics.SINGLE_NAME_LIMIT_PCT:.0f}% single-name limit:")
+            st.progress(min(weight / metrics.SINGLE_NAME_LIMIT_PCT, 1.0))
 
 
 def page_market():
     inject_css()
+    from src.demo.templates import demo_market_report
+
     st.title("Market Analysis")
-    st.caption("AI-powered trend analysis using RAG over earnings transcripts and market data  --  Demo Mode")
+    st.caption("Sector performance and technicals computed from the bundled synthetic data; "
+               "report written by the LangGraph market agent (MRM-002)")
 
-    portfolio = load_portfolio()
-    positions = portfolio.get("positions", [])
-
-    # Sector breakdown
+    k = load_kpis()
     st.subheader("Sector Performance")
-    sector_map = {}
-    for p in positions:
-        s = p.get("sector", "Other")
-        sector_map.setdefault(s, {"value": 0, "pnl": []})
-        sector_map[s]["value"] += p.get("market_value", 0)
-        sector_map[s]["pnl"].append(p.get("pnl_pct", 0))
-
-    cols = st.columns(len(sector_map))
-    for i, (sector, info) in enumerate(sector_map.items()):
-        avg_pnl = sum(info["pnl"]) / len(info["pnl"])
-        cols[i].metric(sector, f"${info['value']/1000:.0f}K", delta=f"{avg_pnl:+.1f}%")
+    cols = st.columns(len(k["sector_weights"]))
+    for i, (sector, info) in enumerate(k["sector_weights"].items()):
+        cols[i].metric(sector, _m(info["value"]), delta=f"{info['avg_pnl_pct']:+.1f}% avg P&L")
 
     st.divider()
     st.subheader("Technical Alerts")
-
-    # Use native Streamlit alerts
-    st.error("""
-    **TSLA -- CRITICAL SIGNAL**
-    RSI 31 approaching oversold. SMA-50 crossed below SMA-200 (death cross). Bearish trend intact. Recommend review.
-    """)
-
-    st.warning("""
-    **NVDA -- MONITOR**
-    RSI 72 approaching overbought. Strong uptrend but P/E 68x is stretched. Watch for reversal signal.
-    """)
-
-    st.success("""
-    **MSFT -- HEALTHY**
-    RSI 58, trading above both SMA-50 and SMA-200. No technical concerns. Hold.
-    """)
+    sig = load_signals()
+    st.caption(f"Latest row per held ticker in market_data.json (as of {max(s['date'] for s in sig.values())}). "
+               "ALERT = RSI extreme and SMA-50 below SMA-200; WATCH = one of those.")
+    ok = []
+    for t, s in sorted(sig.items(), key=lambda kv: {"ALERT": 0, "WATCH": 1, "OK": 2}[kv[1]["status"]]):
+        line = md_money(f"**{t} -- {s['status']}**  \n" + "; ".join(s["signals"]) +
+                        f"; close ${s['close']:,.2f} on {s['date']}")
+        if s["status"] == "ALERT":
+            st.error(line)
+        elif s["status"] == "WATCH":
+            st.warning(line)
+        else:
+            ok.append(t)
+    if ok:
+        st.success(f"No RSI extreme and SMA-50 above SMA-200: {', '.join(ok)}")
 
     st.divider()
-    st.subheader("Analysis Report  --  Bedrock Claude 3 Sonnet")
-
-    st.markdown("""
-**Technology (43.5% weight):** Strong momentum across NVDA, MSFT, and META.
-NVDA benefits from AI infrastructure demand with revenue guidance ahead of consensus.
-MSFT Azure growth re-accelerating. META ad recovery intact. Concentration risk is elevated.
-
-**Financials (20.8% weight):** JPM and GS benefiting from elevated rates and M&A reactivation.
-Net interest margin expansion supporting earnings beats. Rate cut expectations reducing near-term tailwind.
-
-**Energy (8.3% weight):** XOM trading below 52-week high on demand concerns.
-OPEC+ discipline supporting price floor but China demand remains uncertain.
-
-**Consumer Discretionary (4.9% weight):** TSLA is the critical concern -- down 28.6% from cost.
-Margin compression, aggressive price cuts, and BYD competition creating sustained pressure.
-
-**Key Risk -- Technology Concentration:** 43.5% in a single sector creates significant single-factor exposure.
-A tech sector rotation or valuation multiple compression from a rate shock would disproportionately impact this portfolio.
-Recommend reducing technology exposure toward 30-35% through selective trimming of NVDA and META.
-    """)
+    st.subheader("Analysis Report  --  multi-agent orchestrator (market agent section)")
+    _orchestrator_controls("run_orch_market")
+    _render_section("market", lambda: demo_market_report(load_portfolio()))
 
 
 def page_risk():
     inject_css()
+    from src.demo.templates import demo_risk_report
+
     st.title("Risk Assessment")
-    st.caption("VaR, CVaR/Expected Shortfall, Monte Carlo stress tests, position-level risk scoring  --  Demo Mode")
+    st.caption("VaR, Monte Carlo CVaR/Expected Shortfall, stress tests and position risk scores "
+               "computed by src/utils/metrics.py (MRM-006)")
 
-    portfolio = load_portfolio()
-    positions = portfolio.get("positions", [])
+    rm = load_risk_metrics()
+    var, cvar, stress, scored = rm["var"], rm["cvar"], rm["stress"], rm["scored"]
 
-    try:
-        from src.utils.metrics import calculate_portfolio_var, calculate_portfolio_cvar, run_stress_tests, score_position_risk
-        var    = calculate_portfolio_var(positions)
-        cvar   = calculate_portfolio_cvar(positions, n_simulations=5000)
-        stress = run_stress_tests(positions)
-        scored = sorted([score_position_risk(p) for p in positions], key=lambda x: x["risk_score"], reverse=True)
-    except Exception:
-        var    = {"portfolio_var_1d": -108400, "weighted_beta": 1.31}
-        cvar   = {"cvar_1d": -156200, "cvar_10d": -494000, "cvar_1d_pct": 2.88, "tail_ratio": 1.44, "tail_ratio_interpretation": "Elevated tail risk", "risk_level": "HIGH"}
-        stress = {"summary": {"worst_case_scenario": "2008 Global Financial Crisis", "worst_case_pnl": -1724000, "worst_case_pnl_pct": -31.8, "catastrophic_scenarios": 2}, "scenarios": {
-            "2008_gfc":        {"scenario_name": "2008 GFC",          "portfolio_pnl_pct": -31.8, "portfolio_pnl": -1724000, "severity": "CATASTROPHIC"},
-            "covid_crash":     {"scenario_name": "COVID Crash",       "portfolio_pnl_pct": -27.0, "portfolio_pnl": -1461000, "severity": "SEVERE"},
-            "rate_shock":      {"scenario_name": "Rate Shock +200bps","portfolio_pnl_pct": -11.3, "portfolio_pnl":  -614000, "severity": "SIGNIFICANT"},
-            "tech_selloff":    {"scenario_name": "Tech Selloff -30%", "portfolio_pnl_pct": -16.4, "portfolio_pnl":  -892000, "severity": "SEVERE"},
-            "flash_crash":     {"scenario_name": "Flash Crash",       "portfolio_pnl_pct":  -4.2, "portfolio_pnl":  -228000, "severity": "MODERATE"},
-        }}
-        scored = []
-
-    # VaR / CVaR KPIs using st.metric
     st.subheader("Portfolio Risk Metrics")
     col1, col2, col3, col4, col5 = st.columns(5)
-    with col1:
-        st.metric("1-Day VaR (95%)", f"${abs(var.get('portfolio_var_1d',0)):,.0f}", delta="Parametric estimate")
-    with col2:
-        st.metric("1-Day CVaR / ES", f"${abs(cvar.get('cvar_1d',0)):,.0f}", delta="Basel III preferred")
-    with col3:
-        st.metric("10-Day CVaR", f"${abs(cvar.get('cvar_10d',0)):,.0f}", delta="Sqrt-of-time scaled")
-    with col4:
-        st.metric("Tail Ratio", f"{cvar.get('tail_ratio','N/A')}x", delta=cvar.get('tail_ratio_interpretation',''))
-    with col5:
-        st.metric("Risk Level", cvar.get("risk_level","N/A"), delta="Weighted beta 1.31x")
+    col1.metric("1-Day VaR (95%)", _m(abs(var["portfolio_var_1d"])), delta="Parametric: beta x 1.2% vol", delta_color="off")
+    col2.metric("1-Day CVaR / ES (95%)", _m(abs(cvar["cvar_1d"])),
+                delta=f"Monte Carlo, {cvar['n_simulations']:,} paths", delta_color="off")
+    col3.metric("10-Day CVaR", _m(abs(cvar["cvar_10d"])), delta="Sqrt-of-time scaled", delta_color="off")
+    col4.metric("Tail Ratio (CVaR/VaR)", f"{cvar['tail_ratio']}x", delta=cvar["tail_ratio_interpretation"], delta_color="off")
+    col5.metric("Risk Level (CVaR)", cvar["risk_level"], delta=f"Weighted beta {var['weighted_beta']}x", delta_color="off")
 
-    st.warning(f"""
-    **CVaR vs VaR -- Basel III Alignment**
-    CVaR of ${abs(cvar.get('cvar_1d',0)):,.0f} is {cvar.get('tail_ratio','N/A')}x the VaR of ${abs(var.get('portfolio_var_1d',0)):,.0f}.
-    On days that breach VaR, average losses are materially higher.
-    Basel III FRTB uses Expected Shortfall as the primary measure for this reason.
-    Tail risk is driven primarily by TSLA (beta 2.18) and NVDA (beta 1.94).
-    """)
+    try:
+        hm = load_history_metrics()
+        h1, h2, h3, h4 = st.columns(4)
+        h1.metric("Sharpe Ratio (ann.)", f"{hm['sharpe']:.2f}", delta=f"rf = latest Fed Funds {hm['risk_free_rate']:.2%}",
+                  delta_color="off")
+        h2.metric("Sortino Ratio (ann.)", f"{hm['sortino']:.2f}")
+        h3.metric("Annualized Volatility", f"{hm['annualized_vol_pct']:.1f}%")
+        h4.metric("Max Drawdown", f"{hm['max_drawdown_pct']:.1f}%")
+        st.caption(f"Current positions held over the synthetic price history {hm['period']} ({hm['n_days']} days).")
+    except Exception as exc:
+        st.info(f"History metrics unavailable: {type(exc).__name__}")
+
+    positions = load_portfolio()["positions"]
+    total = sum(p["market_value"] for p in positions)
+    contrib = sorted(positions, key=lambda p: -p["market_value"] * p["beta"])[:2]
+    drivers = ", ".join(
+        f"{p['ticker']} (beta {p['beta']}, {p['market_value'] * p['beta'] / sum(q['market_value'] * q['beta'] for q in positions) * 100:.1f}% of beta-weighted exposure)"
+        for p in contrib
+    )
+    st.warning(md_money(
+        f"**CVaR vs VaR -- Basel III alignment**  \n"
+        f"Monte Carlo CVaR of ${abs(cvar['cvar_1d']):,.0f} is {cvar['tail_ratio']}x the Monte Carlo VaR of "
+        f"${abs(cvar['var_1d']):,.0f} (parametric VaR: ${abs(var['portfolio_var_1d']):,.0f}). "
+        f"On days that breach VaR, average losses are higher; Basel III FRTB uses Expected Shortfall for this reason.  \n"
+        f"Largest beta-weighted exposures: {drivers}. Portfolio value ${total:,.0f}."
+    ))
 
     st.divider()
-    st.subheader("Stress Test Scenarios  --  5 Historical Events")
+    st.subheader("Out-of-sample VaR Backtest (99%, rolling 250-day window)")
+    try:
+        bt = load_backtest()
+        st.caption(md_money(f"Synthetic price history {bt['period']}; {bt['n_pnl_days']} daily P&L observations of the "
+                            f"current positions. Overall Basel zone: **{bt['overall_zone']}** ({bt['zone_rule']})."))
+        st.dataframe(pd.DataFrame([{
+            "Method": name,
+            "Test days": r["test_observations"],
+            "Exceptions": r["exceptions"],
+            "Exceptions (last 250)": r["exceptions_last_250"],
+            "Basel zone": r["basel_zone"],
+            "Kupiec LR": r["kupiec_lr"],
+            "Kupiec p-value": r["kupiec_p_value"],
+            "Mean VaR": f"${r['mean_var']:,.0f}",
+        } for name, r in bt["methods"].items()]), width="stretch", hide_index=True)
+    except Exception as exc:  # e.g. price_history.json missing
+        st.info(f"Backtest unavailable: {type(exc).__name__}")
 
+    st.divider()
+    st.subheader(f"Stress Test Scenarios  --  {len(stress['scenarios'])} Historical Events")
     scenarios = stress.get("scenarios", {})
-
     cols = st.columns(len(scenarios))
     for i, (key, s) in enumerate(scenarios.items()):
-        pnl = s.get("portfolio_pnl_pct", 0)
-        sev = s.get("severity","MODERATE")
-        cols[i].metric(
-            s['scenario_name'],
-            f"{pnl:.1f}%",
-            delta=f"${s.get('portfolio_pnl',0):,.0f}"
-        )
-        if sev == "CATASTROPHIC":
-            cols[i].error(f"Severity: {sev}")
-        elif sev == "SEVERE":
-            cols[i].warning(f"Severity: {sev}")
-        else:
-            cols[i].info(f"Severity: {sev}")
+        cols[i].metric(s["scenario_name"], f"{s['portfolio_pnl_pct']:.1f}%", delta=_m(s["portfolio_pnl"]))
+        sev = s.get("severity", "MODERATE")
+        (cols[i].error if sev == "CATASTROPHIC" else cols[i].warning if sev == "SEVERE" else cols[i].info)(f"Severity: {sev}")
 
     st.divider()
     st.subheader("Position Risk Scores")
-
-    if not scored:
-        scored = [
-            {"ticker": "TSLA", "risk_score": 72, "risk_level": "CRITICAL", "recommended_action": "Consider immediate exit or hedge", "flags": ["Very high beta (2.18x)", "Severe drawdown (-28.6%)", "Moderate concentration (4.9%)"]},
-            {"ticker": "NVDA", "risk_score": 55, "risk_level": "HIGH",     "recommended_action": "Review position size and add stop-loss", "flags": ["Elevated beta (1.94x)", "High concentration (12.9%)"]},
-            {"ticker": "GS",   "risk_score": 28, "risk_level": "MEDIUM",   "recommended_action": "Monitor closely", "flags": ["Elevated beta (1.35x)"]},
-            {"ticker": "META", "risk_score": 20, "risk_level": "MEDIUM",   "recommended_action": "Monitor closely", "flags": ["Elevated beta (1.38x)"]},
-            {"ticker": "MSFT", "risk_score":  8, "risk_level": "LOW",      "recommended_action": "Hold -- within risk tolerance", "flags": []},
-            {"ticker": "AAPL", "risk_score":  7, "risk_level": "LOW",      "recommended_action": "Hold -- within risk tolerance", "flags": []},
-        ]
-
     for s in scored[:6]:
-        lvl = s.get("risk_level", "LOW")
-        score = s.get("risk_score", 0)
-
+        lvl, score = s["risk_level"], s["risk_score"]
         with st.expander(f"{s['ticker']}  --  Score: {score}/100  --  {lvl}"):
-            col1, col2 = st.columns(2)
-            with col1:
-                st.metric("Risk Score", f"{score}/100")
-                if lvl == "CRITICAL":
-                    st.error(f"Level: {lvl}")
-                elif lvl == "HIGH":
-                    st.warning(f"Level: {lvl}")
-                elif lvl == "MEDIUM":
-                    st.info(f"Level: {lvl}")
-                else:
-                    st.success(f"Level: {lvl}")
-            with col2:
-                st.caption("Recommended Action:")
-                st.write(s['recommended_action'])
-
+            c1, c2 = st.columns(2)
+            c1.metric("Risk Score", f"{score}/100")
+            {"CRITICAL": c1.error, "HIGH": c1.warning, "MEDIUM": c1.info}.get(lvl, c1.success)(f"Level: {lvl}")
+            c2.caption("Recommended Action:")
+            c2.write(s["recommended_action"])
             st.progress(score / 100.0)
+            for flag in s.get("flags", []):
+                st.write(md_money(f"- {flag}"))
 
-            if s.get("flags"):
-                st.caption("Risk Flags:")
-                for flag in s.get("flags", []):
-                    st.write(f"• {flag}")
+    st.divider()
+    st.subheader("AI Risk Narrative  --  risk agent (MRM-003)")
+    _orchestrator_controls("run_orch_risk")
+    _render_section("risk", lambda: demo_risk_report(load_portfolio()))
 
 
 def page_portfolio_management():
     inject_css()
+    from src.agents.context import action_items
+    from src.demo.templates import demo_portfolio_recommendations
+
     st.title("Portfolio Management")
-    st.caption("AI-generated rebalancing, hedges, and action items  --  Demo Mode")
+    st.caption("Action items and concentration checks computed from the data; recommendation memo written by the "
+               "portfolio agent (MRM-004) for human review")
 
-    st.subheader("Immediate Action Items")
+    portfolio = load_portfolio()
+    k = load_kpis()
+    conc = load_risk_metrics()["concentration"]
 
-    st.error("""
-    **EXIT / REDUCE TSLA  --  CRITICAL**
-    Current: $266,700 / 4.9% weight. Target: exit entirely or reduce to max 1.5% ($82,000).
-    Rationale: -28.6% drawdown, beta 2.18, deteriorating analyst consensus. Stop-loss if holding: $165.
-    """)
-
-    st.warning("""
-    **TRIM NVDA  --  HIGH PRIORITY**
-    Current: $700,320 / 12.9% weight -> Target: 8% ($435,000). Sell approx. $265,000.
-    Lock in +76.8% gain on trimmed shares. P/E 68x, RSI approaching overbought, concentration risk.
-    """)
-
-    st.warning("""
-    **HEDGE TECH EXPOSURE**
-    Buy SPY put options (5% OTM, 90-day expiry). Cost: approx. 1.2% of AUM (~$65,000 premium).
-    Protects against GFC/COVID-style scenario (-$1.7M unhedged).
-    """)
+    st.subheader("Immediate Action Items (from position risk scores)")
+    items = action_items(portfolio)
+    by_ticker = {p["ticker"]: p for p in portfolio["positions"]}
+    if not items:
+        st.success("No CRITICAL or HIGH risk positions.")
+    for it in items:
+        p = by_ticker[it["ticker"]]
+        body = md_money(
+            f"**{it['action'].upper()}: {it['ticker']}  --  {it['risk_level']} (score {it['risk_score']}/100)**  \n"
+            f"Current: ${p['market_value']:,.0f} / {p['weight_pct']}% weight, beta {p['beta']}, P&L {p['pnl_pct']}%.  \n"
+            f"Flags: {'; '.join(it['flags'])}"
+        )
+        (st.error if it["risk_level"] == "CRITICAL" else st.warning)(body)
 
     st.divider()
-    st.subheader("Rebalancing Plan  --  1-2 Week Horizon")
-
     col1, col2 = st.columns(2)
     with col1:
-        st.caption("**Target Sector Weights**")
-        import pandas as pd
-        targets_data = pd.DataFrame([
-            ["Technology", "43.5%", "30%", "Reduce"],
-            ["Financials", "20.8%", "20.8%", "Hold"],
-            ["Healthcare", "0%", "8%", "Add"],
-            ["Energy", "8.3%", "8%", "Hold"],
-            ["Consumer Disc", "4.9%", "2%", "Reduce"],
-            ["Cash", "0%", "5%", "Add"],
-        ], columns=["Sector", "Current", "Target", "Action"])
-
-        st.dataframe(
-            targets_data,
-            use_container_width=True
-        )
-
+        st.caption(f"**Sector weights vs {conc['sector_limit_pct']:.0f}% policy limit (illustrative)**")
+        st.dataframe(pd.DataFrame([
+            [s, f"{v['weight_pct']:.2f}%", f"{conc['sector_limit_pct']:.0f}%",
+             "Reduce" if v["weight_pct"] > conc["sector_limit_pct"] else "Within limit"]
+            for s, v in k["sector_weights"].items()
+        ], columns=["Sector", "Current", "Limit", "Status"]), width="stretch", hide_index=True)
     with col2:
-        st.caption("**Macro Positioning  --  1-3 Month View**")
-        st.markdown("""
-        **Rate sensitivity:** Portfolio net short duration. Rate cuts benefit growth names. Hold current positioning.
+        st.caption("**Tax-loss harvesting candidates (unrealized losses)**")
+        st.dataframe(pd.DataFrame([
+            [x["ticker"], f"${x['unrealized_pnl']:,.0f}", f"{x['pnl_pct']:.2f}%"] for x in k["loss_positions"]
+        ], columns=["Ticker", "Unrealized P&L", "P&L %"]), width="stretch", hide_index=True)
 
-        **Defensive add:** Consider UNH or JNJ to reduce weighted beta from 1.31 toward 1.10.
-
-        **Cash target:** 5% cash from TSLA/NVDA proceeds. Dry powder for re-entry opportunities.
-
-        **Tax-loss harvesting:** TSLA unrealized loss of $106,650 available. Coordinate with CPA before year-end.
-        """)
+    st.divider()
+    st.subheader("AI Recommendations  --  portfolio agent (MRM-004)")
+    _orchestrator_controls("run_orch_pm")
+    _render_section("portfolio", lambda: demo_portfolio_recommendations(portfolio))
 
 
 def page_chat():
     inject_css()
+    from src.demo.templates import demo_chat_answer
+    from src.guardrails.bedrock_guardrails import check_compliance
+    from src.llm import config
+    from src.rag.rag_chain import answer_question
+    from src.utils.data import data_sha256
+    from streamlit_app.live_ai import (
+        MAX_LIVE_REQUESTS_PER_SESSION, cached_index, cached_reranker, render_output, requests_used, run_ai_request,
+    )
+
     st.title("AI Chat")
-    st.caption("Natural language Q&A -- portfolio, risk, markets, macro  --  Demo Mode")
+    st.caption("RAG over the bundled data: HyDE retrieval (FAISS) -> cross-encoder re-rank -> "
+               f"{config.model_id('chat')} answer -> independent grader ({config.model_id('grader')})")
+
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+    def ask(question: str):
+        history = [{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
+        st.session_state.messages.append({"role": "user", "content": question})
+        compliance = check_compliance(question)
+        if not compliance["compliant"]:
+            st.session_state.messages.append({"role": "assistant", "content": compliance["reason"],
+                                              "mode": "demo", "reason": "Blocked by compliance guardrail"})
+            return
+
+        def live():
+            index = cached_index(config.model_id("embedding"), data_sha256())
+            return answer_question(question, history, index=index, reranker=cached_reranker())
+
+        with st.spinner("Retrieving (HyDE) and re-ranking..."):
+            res = run_ai_request("MRM-001", live, lambda reason: demo_chat_answer(question))
+        out = res["output"]
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": out.get("answer") or out.get("text", ""),
+            "mode": res["mode"] if not res.get("blocked") else "blocked",
+            "reason": res["reason"],
+            "grader": out.get("grader"),
+            "trace": out.get("trace"),
+            "sources": out.get("sources", []),
+        })
 
     st.subheader("Suggested Queries")
     examples = [
         "What are my highest risk positions?",
-        "How is the tech sector performing?",
+        "What is the portfolio's technology weight?",
         "Should I be worried about TSLA?",
         "What does my CVaR tell me?",
     ]
     cols = st.columns(4)
     for i, ex in enumerate(examples):
         if cols[i].button(ex, key=f"ex_{i}"):
-            if "messages" not in st.session_state:
-                st.session_state.messages = []
-            st.session_state.messages.append({"role": "user", "content": ex})
-            st.session_state.messages.append({"role": "assistant", "content": get_mock_response(ex)})
-
+            ask(ex)
+    st.caption(f"Live AI requests this session: {requests_used()}/{MAX_LIVE_REQUESTS_PER_SESSION}")
     st.divider()
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+    if prompt := st.chat_input("Ask about your portfolio or markets..."):
+        ask(prompt)
 
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
-
-    if prompt := st.chat_input("Ask about your portfolio or markets..."):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-        response = get_mock_response(prompt)
-        with st.chat_message("assistant"):
-            st.markdown(response)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+            if msg["role"] == "user":
+                st.markdown(md_escape(msg["content"]))
+                continue
+            render_output(msg["content"], msg.get("mode", "demo"), msg.get("reason"), msg.get("grader"), msg.get("trace"))
+            if msg.get("sources"):
+                with st.expander(f"Sources ({len(msg['sources'])})"):
+                    for s in msg["sources"]:
+                        score = s.get("rerank_score")
+                        head = f"`{s['source_id']}`" + (f" · rerank {score:.3f}" if isinstance(score, (int, float)) else "")
+                        if isinstance(s.get("faiss_score"), (int, float)):
+                            head += f" · faiss {s['faiss_score']:.3f} ({s.get('retrieved_by')})"
+                        st.markdown(md_money(head))
+                        st.caption(md_money(s["text"][:400]))
 
 
 def page_mrm():
     inject_css()
     from streamlit_app.mrm_dashboard import render_mrm_page
+
     render_mrm_page()

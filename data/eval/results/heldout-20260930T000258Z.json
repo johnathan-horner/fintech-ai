@@ -1,0 +1,373 @@
+{
+  "run_id": "heldout-20260930T000258Z",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-09-30T00:02:58+00:00",
+  "provider": "gemini",
+  "models": {
+    "chat": "gemini-3.5-flash-lite",
+    "grader": "gemini-3.1-flash-lite",
+    "hyde": "gemini-3.1-flash-lite",
+    "embedding": "gemini-embedding-001"
+  },
+  "versions": {
+    "MRM-004": {
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "portfolio_recommendations@1.2.0#c5fa95b1"
+      ],
+      "provider": "gemini"
+    }
+  },
+  "throttle_s": 20.0,
+  "items": [
+    {
+      "id": "mrm-004-subset10",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset10",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **AAPL**: reduce position size and add stop-loss.\n- **UNH**: reduce position size and add stop-loss.\n- **XOM**: reduce position size and add stop-loss.\n- **TSLA**: reduce position size and add stop-loss.\n\n2. Concentration adjustments:\n- Technology sector exceeds the limit by 27.75 points ($6,968,376.55).\n- Single-name breaches: AAPL exceeds the limit by 1.51 points ($379,180.13), MSFT exceeds the limit by 7.52 points ($1,888,367.27), and UNH exceeds the limit by 10.86 points ($2,727,083.58).\n\n3. Tax-loss harvesting candidates:\n- UNH (unrealized loss of -$148,675.36).\n- XOM (unrealized loss of -$297,429.86)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 10,
+            "matched": 10,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 3281.3,
+      "error": null,
+      "trace_id": "0ceae856d395465e"
+    },
+    {
+      "id": "mrm-004-subset11",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset11",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **UNH**: reduce ...\n- **XOM**: reduce ...\n- **TSLA**: reduce ...\n- **CVX**: reduce ...\n\n2. Concentration adjustments:\n- Technology sector excess: 16.48 points ($3,925,462.02).\n- Healthcare sector excess: 2.17 points ($516,884.26).\n- MSFT single-name excess: 8.74 points ($2,081,828.77).\n- UNH single-name excess: 12.26 points ($2,920,276.97).\n\n3. Tax-loss harvesting candidates:\n- JNJ (Unrealized P&L: -$138,966.61)\n- UNH (Unrealized P&L: -$148,675.36)\n- XOM (Unrealized P&L: -$297,429.86)\n- CVX (Unrealized P&L: -$923,765.75)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 12,
+            "matched": 12,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2116.2,
+      "error": null,
+      "trace_id": "2389fb2062144dd6"
+    },
+    {
+      "id": "mrm-004-subset12",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset12",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **AAPL**: reduce ...\n- **MA**: reduce ...\n- **XOM**: reduce ...\n- **TSLA**: reduce ...\n- **CVX**: hedge ...\n\n2. Concentration adjustments:\n- Technology sector is above the policy limit with an excess of 10.41 points ($1,826,051.46).\n- AAPL is above the single-name policy limit with an excess of 8.63 points ($1,513,815.95).\n- CVX is above the single-name policy limit with an excess of 4.05 points ($710,423.48).\n\n3. Tax-loss harvesting candidates:\n- MA (unrealized loss: -$587,687.32)\n- JNJ (unrealized loss: -$138,966.61)\n- XOM (unrealized loss: -$297,429.86)\n- CVX (unrealized loss: -$923,765.75)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 10,
+            "matched": 10,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2344.7,
+      "error": null,
+      "trace_id": "e2741b5edde048b2"
+    },
+    {
+      "id": "mrm-004-subset15",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset15",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n**AAPL**: reduce ...\n**UNH**: reduce ...\n**XOM**: reduce ...\n**TSLA**: hedge ...\n**CVX**: reduce ...\n\n2. Concentration adjustments:\nTechnology sector weight exceeds the limit by 18.1 points ($4,367,722.53).\nSingle-name AAPL exceeds the limit by 2.18 points ($526,057.19).\nSingle-name MSFT exceeds the limit by 8.43 points ($2,034,248.67).\nSingle-name UNH exceeds the limit by 11.91 points ($2,874,009.68).\n\n3. Tax-loss harvesting candidates:\nUNH (unrealized P&L: -$148,675.36)\nXOM (unrealized P&L: -$297,429.86)\nCVX (unrealized P&L: -$923,765.75)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 11,
+            "matched": 11,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2424.6,
+      "error": null,
+      "trace_id": "29938c8c32df4182"
+    },
+    {
+      "id": "mrm-004-subset18",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset18",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **CVX**: hedge ...\n- **MA**: reduce ...\n- **AAPL**: trim ...\n\n2. Concentration adjustments:\n- Technology sector weight 68.32% exceeds the 30.0% limit by 38.32 points ($8,133,295.35 excess).\n- MSFT single-name weight 26.64% exceeds the 15.0% limit by 11.64 points ($2,470,552.14 excess).\n- AAPL single-name weight 19.53% exceeds the 15.0% limit by 4.53 points ($961,477.76 excess).\n- CVX single-name weight 15.74% exceeds the 15.0% limit by 0.74 points ($157,062.59 excess).\n\n3. Tax-loss harvesting candidates:\n- CVX (unrealized P&L: -$923,765.75)\n- MA (unrealized P&L: -$587,687.32)\n- JNJ (unrealized P&L: -$138,966.61)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 19,
+            "matched": 19,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2822.7,
+      "error": null,
+      "trace_id": "1a3f06eac1674b05"
+    },
+    {
+      "id": "mrm-004-subset19",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset19",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **AAPL**: review ...\n- **UNH**: review ...\n- **TSLA**: review ...\n- **CVX**: review ...\n\n2. Concentration adjustments for sectors or names above policy limits:\n- Technology sector weight 52.4% exceeds the 30.0% limit by 22.4 points ($5,552,101.57).\n- AAPL single-name weight 16.72% exceeds the 15.0% limit by 1.72 points ($426,322.09).\n- MSFT single-name weight 22.81% exceeds the 15.0% limit by 7.81 points ($1,935,799.70).\n- UNH single-name weight 26.2% exceeds the 15.0% limit by 11.2 points ($2,776,050.79).\n\n3. Tax-loss harvesting candidates:\n- UNH (unrealized P&L -$148,675.36)\n- CVX (unrealized P&L -$923,765.75)\n\nSuggestions for human review, not investment advice and not orders."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 18,
+            "matched": 18,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2433.3,
+      "error": null,
+      "trace_id": "465d011a73194e5a"
+    },
+    {
+      "id": "mrm-004-subset2",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset2",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **AAPL**: reduce ...\n- **MA**: review ...\n- **XOM**: review ...\n\n2. Concentration adjustments:\n- Technology sector weight 77.93% exceeds the 30.0% policy limit by 47.93 points ($8,918,961.75 excess).\n- AAPL single-name weight 22.28% exceeds the 15.0% policy limit by 7.28 points ($1,354,684.78 excess).\n- MSFT single-name weight 30.38% exceeds the 15.0% policy limit by 15.38 points ($2,861,957.68 excess).\n\n3. Tax-loss harvesting candidates:\n- MA (unrealized P&L -$587,687.32)\n- XOM (unrealized P&L -$297,429.86)\n- JNJ (unrealized P&L -$138,966.61)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 15,
+            "matched": 15,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2417.0,
+      "error": null,
+      "trace_id": "ec670df1a2a14629"
+    },
+    {
+      "id": "mrm-004-subset3",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset3",
+      "outputs": [
+        "**AAPL**: reduce ...\n**MA**: reduce ...\n**UNH**: reduce ...\n**XOM**: reduce ...\n**CVX**: reduce ...\n\nConcentration adjustments: Technology sector weight 48.83% exceeds the limit with excess points 18.83 ($5,059,683.83). Single-name weights exceeding limits: AAPL excess 0.43 points ($115,542.43), MSFT excess 6.04 points ($1,622,968.15), and UNH excess 9.17 points ($2,464,009.60).\n\nTax-loss harvesting candidates with unrealized losses: MA (-$587,687.32), JNJ (-$138,966.61), UNH (-$148,675.36), XOM (-$297,429.86), and CVX (-$923,765.75). Total unrealized loss for these positions is -$2,096,524.90."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 15,
+            "matched": 15,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 3441.7,
+      "error": null,
+      "trace_id": "f58c81ccb3db4f8c"
+    },
+    {
+      "id": "mrm-004-subset7",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset7",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **AAPL**: reduce position size and add stop-loss.\n- **MA**: hedge position size and add stop-loss.\n- **UNH**: reduce position size and add stop-loss.\n- **XOM**: reduce position size and add stop-loss.\n- **TSLA**: hold position size and add stop-loss.\n\n2. Concentration adjustments:\n- Technology sector exceeds the limit with an excess of 21.05 points ($5,528,320.69).\n- AAPL exceeds the single-name limit with an excess of 0.78 points ($204,849.89).\n- MSFT exceeds the single-name limit with an excess of 6.53 points ($1,714,961.24).\n- UNH exceeds the single-name limit with an excess of 9.73 points ($2,555,371.04).\n\n3. Tax-loss harvesting candidates:\n- MA (unrealized P&L: -$587,687.32)\n- XOM (unrealized P&L: -$297,429.86)\n- UNH (unrealized P&L: -$148,675.36)\n- JNJ (unrealized P&L: -$138,966.61)"
+      ],
+      "graders": [
+        {
+          "groundedness": 0.96,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [
+            "MA: hedge position size and add stop-loss.",
+            "TSLA: hold position size and add stop-loss."
+          ],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 12,
+            "matched": 12,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 4336.4,
+      "error": null,
+      "trace_id": "3ef160b07aa142cb"
+    },
+    {
+      "id": "mrm-004-subset9",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset9",
+      "outputs": [
+        "1. Immediate actions for CRITICAL/HIGH risk positions:\n- **AAPL**: reduce position size and add stop-loss.\n- **UNH**: reduce position size and add stop-loss.\n- **TSLA**: reduce position size and add stop-loss.\n- **CVX**: reduce position size and add stop-loss.\n\n2. Concentration adjustments:\n- Technology sector is above policy limit by 20.41 points ($5,258,015.53).\n- AAPL single name is above policy limit by 1.09 points ($280,805.34).\n- MSFT single name is above policy limit by 6.95 points ($1,790,456.05).\n- UNH single name is above policy limit by 10.21 points ($2,630,295.86).\n\n3. Tax-loss harvesting candidates:\n- JNJ\n- UNH\n- CVX"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 8,
+            "matched": 8,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 2105.9,
+      "error": null,
+      "trace_id": "57e614bc23a7418b"
+    }
+  ],
+  "components": {
+    "MRM-004": {
+      "n_items": 10,
+      "passed": 10,
+      "pass_rate": 1.0,
+      "mean_groundedness": 0.996,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED"
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "finished_at": "2026-09-30T00:06:29+00:00"
+}

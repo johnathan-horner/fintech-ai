@@ -542,3 +542,246 @@ def score_position_risk(position: Dict) -> Dict:
             else "Hold - within risk tolerance"
         ),
     }
+
+
+# -- Portfolio KPIs (everything shown in the UI is computed here) ------------
+
+# Illustrative internal policy limits used for concentration checks.
+# These are stated policy parameters, not measured values.
+SECTOR_LIMIT_PCT = 30.0
+SINGLE_NAME_LIMIT_PCT = 15.0
+
+
+def portfolio_kpis(portfolio: Dict) -> Dict:
+    """Headline KPIs computed from the bundled portfolio positions."""
+    positions = portfolio.get("positions", [])
+    total_value = sum(p.get("market_value", 0) for p in positions)
+    sectors: Dict[str, Dict] = {}
+    for p in positions:
+        s = sectors.setdefault(p.get("sector", "Other"), {"value": 0.0, "pnl_pcts": [], "tickers": [], "unrealized_pnl": 0.0})
+        s["value"] += p.get("market_value", 0)
+        s["pnl_pcts"].append(p.get("pnl_pct", 0))
+        s["tickers"].append(p["ticker"])
+        s["unrealized_pnl"] += p.get("unrealized_pnl", 0)
+    sector_weights = {
+        name: {
+            "value": round(s["value"], 2),
+            "weight_pct": round(s["value"] / total_value * 100, 2) if total_value else 0.0,
+            "avg_pnl_pct": round(sum(s["pnl_pcts"]) / len(s["pnl_pcts"]), 2),
+            "unrealized_pnl": round(s["unrealized_pnl"], 2),
+            "tickers": s["tickers"],
+        }
+        for name, s in sorted(sectors.items(), key=lambda kv: -kv[1]["value"])
+    }
+    weighted_beta = (
+        sum(p.get("market_value", 0) * p.get("beta", 1.0) for p in positions) / total_value if total_value else 0.0
+    )
+    largest = max(positions, key=lambda p: p.get("market_value", 0)) if positions else {}
+    return {
+        "fund_name": portfolio.get("fund_name"),
+        "as_of_date": portfolio.get("as_of_date"),
+        "aum": portfolio.get("aum", total_value),
+        "total_market_value": round(total_value, 2),
+        "n_positions": len(positions),
+        "total_unrealized_pnl": round(sum(p.get("unrealized_pnl", 0) for p in positions), 2),
+        "avg_beta": round(sum(p.get("beta", 1.0) for p in positions) / len(positions), 3) if positions else 0.0,
+        "weighted_beta": round(weighted_beta, 3),
+        "sector_weights": sector_weights,
+        "tech_weight_pct": sector_weights.get("Technology", {}).get("weight_pct", 0.0),
+        "largest_position": {
+            "ticker": largest.get("ticker"),
+            "market_value": largest.get("market_value"),
+            "weight_pct": largest.get("weight_pct"),
+        },
+        "high_beta_positions": sorted(
+            [p["ticker"] for p in positions if p.get("beta", 0) > 1.5]
+        ),
+        "loss_positions": sorted(
+            [
+                {"ticker": p["ticker"], "unrealized_pnl": p["unrealized_pnl"], "pnl_pct": p["pnl_pct"]}
+                for p in positions if p.get("unrealized_pnl", 0) < 0
+            ],
+            key=lambda x: x["unrealized_pnl"],
+        ),
+    }
+
+
+def concentration_check(portfolio: Dict) -> Dict:
+    """Compare sector and single-name weights with the policy limits above."""
+    kpis = portfolio_kpis(portfolio)
+    sector_breaches = [
+        {"sector": s, "weight_pct": v["weight_pct"], "limit_pct": SECTOR_LIMIT_PCT}
+        for s, v in kpis["sector_weights"].items() if v["weight_pct"] > SECTOR_LIMIT_PCT
+    ]
+    name_breaches = [
+        {"ticker": p["ticker"], "weight_pct": p["weight_pct"], "limit_pct": SINGLE_NAME_LIMIT_PCT}
+        for p in portfolio.get("positions", []) if p.get("weight_pct", 0) > SINGLE_NAME_LIMIT_PCT
+    ]
+    return {
+        "sector_limit_pct": SECTOR_LIMIT_PCT,
+        "single_name_limit_pct": SINGLE_NAME_LIMIT_PCT,
+        "sector_breaches": sector_breaches,
+        "single_name_breaches": name_breaches,
+        "max_sector_weight_pct": max((v["weight_pct"] for v in kpis["sector_weights"].values()), default=0.0),
+        "max_single_name_weight_pct": max((p.get("weight_pct", 0) for p in portfolio.get("positions", [])), default=0.0),
+    }
+
+
+def technical_signals(market_data: List[Dict], tickers: Optional[List[str]] = None) -> Dict[str, Dict]:
+    """Latest technical indicators per ticker from market_data.json rows."""
+    by_ticker: Dict[str, List[Dict]] = {}
+    for row in market_data:
+        if tickers is None or row["ticker"] in tickers:
+            by_ticker.setdefault(row["ticker"], []).append(row)
+    out = {}
+    for t, rows in by_ticker.items():
+        rows = sorted(rows, key=lambda r: r["date"])
+        last = rows[-1]
+        first = rows[0]
+        signals = []
+        if last["rsi_14"] >= 70:
+            signals.append(f"RSI {last['rsi_14']} overbought (>=70)")
+        elif last["rsi_14"] <= 30:
+            signals.append(f"RSI {last['rsi_14']} oversold (<=30)")
+        if last["sma_50"] < last["sma_200"]:
+            signals.append(f"SMA-50 {last['sma_50']} below SMA-200 {last['sma_200']}")
+        else:
+            signals.append(f"SMA-50 {last['sma_50']} above SMA-200 {last['sma_200']}")
+        if last["macd_signal"] < 0:
+            signals.append(f"MACD signal {last['macd_signal']} negative")
+        out[t] = {
+            "date": last["date"],
+            "close": last["close"],
+            "rsi_14": last["rsi_14"],
+            "sma_50": last["sma_50"],
+            "sma_200": last["sma_200"],
+            "macd_signal": last["macd_signal"],
+            "period_start": first["date"],
+            "period_return_pct": round((last["close"] / first["close"] - 1) * 100, 2),
+            "signals": signals,
+            "status": (
+                "ALERT" if (last["rsi_14"] <= 30 or last["rsi_14"] >= 70) and last["sma_50"] < last["sma_200"]
+                else "WATCH" if (last["rsi_14"] <= 30 or last["rsi_14"] >= 70 or last["sma_50"] < last["sma_200"])
+                else "OK"
+            ),
+        }
+    return out
+
+
+# -- VaR estimators used by the out-of-sample backtest -----------------------
+
+def historical_var(values: List[float], confidence: float = 0.99) -> float:
+    """
+    Historical-simulation VaR of a P&L series, returned as a positive loss.
+    Uses the linear-interpolated (1 - confidence) empirical quantile.
+    """
+    if not values:
+        return 0.0
+    xs = sorted(values)
+    q = (1 - confidence) * (len(xs) - 1)
+    lo = int(math.floor(q))
+    hi = min(lo + 1, len(xs) - 1)
+    quantile = xs[lo] + (xs[hi] - xs[lo]) * (q - lo)
+    return -quantile
+
+
+def parametric_var(values: List[float], confidence: float = 0.99) -> float:
+    """Gaussian (variance-covariance) VaR of a P&L series, positive loss."""
+    if len(values) < 2:
+        return 0.0
+    mu = statistics.mean(values)
+    sd = statistics.stdev(values)
+    z = statistics.NormalDist().inv_cdf(1 - confidence)  # negative
+    return -(mu + z * sd)
+
+
+def portfolio_pnl_series(price_history: Dict, positions: List[Dict]) -> Dict:
+    """
+    Daily P&L of the CURRENT positions (static shares) over the price history:
+        pnl_t = sum_i shares_i * (P_i,t - P_i,t-1)
+    Also returns the daily portfolio return (pnl_t / value_{t-1}).
+    """
+    tickers = price_history["tickers"]
+    n = len(price_history["dates"]) - 1
+    pnl = [0.0] * n
+    value_prev = [0.0] * n
+    for p in positions:
+        series = tickers.get(p["ticker"])
+        if not series:
+            continue
+        prices = series["prices"]
+        for t in range(n):
+            pnl[t] += p["shares"] * (prices[t + 1] - prices[t])
+            value_prev[t] += p["shares"] * prices[t]
+    returns = [pnl[t] / value_prev[t] if value_prev[t] else 0.0 for t in range(n)]
+    return {"dates": price_history["dates"][1:], "pnl": pnl, "returns": returns}
+
+
+def history_metrics(price_history: Dict, positions: List[Dict], risk_free_rate: float) -> Dict:
+    """
+    Sharpe, Sortino, annualized volatility and max drawdown of the CURRENT
+    positions held over the (synthetic) price history.
+    """
+    series = portfolio_pnl_series(price_history, positions)
+    rets = series["returns"]
+    values = []
+    tickers = price_history["tickers"]
+    for t in range(len(price_history["dates"])):
+        values.append(sum(p["shares"] * tickers[p["ticker"]]["prices"][t] for p in positions if p["ticker"] in tickers))
+    return {
+        "period": f"{series['dates'][0]} to {series['dates'][-1]}",
+        "n_days": len(rets),
+        "risk_free_rate": risk_free_rate,
+        "sharpe": calculate_sharpe(rets, risk_free_rate),
+        "sortino": calculate_sortino(rets, risk_free_rate),
+        "annualized_vol_pct": round(statistics.stdev(rets) * math.sqrt(252) * 100, 2),
+        "max_drawdown_pct": round(calculate_max_drawdown(values) * 100, 2),
+    }
+
+
+# -- Volume ---------------------------------------------------------------------
+
+def volume_stats(market_data: List[Dict], tickers: Optional[List[str]] = None, window: int = 20) -> Dict[str, Dict]:
+    """Latest volume, trailing average volume and their ratio per ticker."""
+    by_t: Dict[str, List[Dict]] = {}
+    for r in market_data:
+        if tickers is None or r["ticker"] in tickers:
+            by_t.setdefault(r["ticker"], []).append(r)
+    out = {}
+    for t, rows in by_t.items():
+        rows = sorted(rows, key=lambda r: r["date"])
+        recent = rows[-window:]
+        avg = statistics.mean(r["volume"] for r in recent)
+        out[t] = {
+            "date": rows[-1]["date"],
+            "latest_volume": rows[-1]["volume"],
+            "avg_volume_20d": round(avg),
+            "volume_ratio_vs_20d": round(rows[-1]["volume"] / avg, 2) if avg else None,
+        }
+    return out
+
+
+# -- Concentration excess (precomputed so agents never subtract) ----------------
+
+def concentration_excess(portfolio: Dict) -> Dict:
+    kpis = portfolio_kpis(portfolio)
+    total = kpis["total_market_value"]
+    sectors = [
+        {"sector": s, "weight_pct": v["weight_pct"], "limit_pct": SECTOR_LIMIT_PCT,
+         "excess_pct_points": round(v["weight_pct"] - SECTOR_LIMIT_PCT, 2),
+         "excess_value": round((v["weight_pct"] - SECTOR_LIMIT_PCT) / 100 * total, 2)}
+        for s, v in kpis["sector_weights"].items() if v["weight_pct"] > SECTOR_LIMIT_PCT
+    ]
+    names = [
+        {"ticker": p["ticker"], "weight_pct": p["weight_pct"], "limit_pct": SINGLE_NAME_LIMIT_PCT,
+         "excess_pct_points": round(p["weight_pct"] - SINGLE_NAME_LIMIT_PCT, 2),
+         "excess_value": round((p["weight_pct"] - SINGLE_NAME_LIMIT_PCT) / 100 * total, 2)}
+        for p in portfolio.get("positions", []) if p.get("weight_pct", 0) > SINGLE_NAME_LIMIT_PCT
+    ]
+    losses = [p for p in portfolio.get("positions", []) if p.get("unrealized_pnl", 0) < 0]
+    return {
+        "sector_excess": sectors,
+        "single_name_excess": names,
+        "total_unrealized_loss": round(sum(p["unrealized_pnl"] for p in losses), 2),
+        "n_loss_positions": len(losses),
+    }

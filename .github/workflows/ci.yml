@@ -9,29 +9,49 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install app + API + dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-api.txt -r requirements-dev.txt
+      - name: Lint (syntax errors / undefined names only)
+        run: |
+          pip install flake8
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=.venv,infra/cdk.out
+          flake8 . --count --exit-zero --max-line-length=120 --ignore=E501,W503 --statistics --exclude=.venv,infra/cdk.out
+      - name: Tests (no network key; Gemini calls are faked)
+        run: pytest -q
 
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+  mcp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install MCP dependencies (separate env)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-mcp.txt
+      - name: Import MCP server
+        run: python -c "import mcp_server; print('mcp_server imports successfully')"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 120 chars wide
-        flake8 . --count --exit-zero --max-line-length=120 --ignore=E501,W503 --statistics
-
-    - name: Test imports
-      run: |
-        python -c "import streamlit_app.app as app; print('Main app imports successfully')"
-        python -c "import mcp_server; print('mcp_server.py imports successfully')" || echo "mcp_server.py not found, skipping"
+  cdk-synth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Synthesize (no AWS credentials, never deploys)
+        working-directory: infra
+        run: |
+          pip install -r requirements.txt
+          npx -y aws-cdk@2 synth --no-notices -q

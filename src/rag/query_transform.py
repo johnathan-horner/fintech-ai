@@ -1,49 +1,62 @@
 """
-FinTech AI - Query Transformer
-Rewrites vague analyst questions into targeted financial search queries.
-Mirrors EduAI's query_transform.py using HyDE (Hypothetical Document Embeddings).
+FinTech AI - HyDE (Hypothetical Document Embeddings) retrieval.
+
+1. ``generate_hypothetical_answer(question)``: an LLM (config role "hyde")
+   writes a short, plausible *answer passage* in the style of the indexed records.
+2. That passage is embedded as a document (RETRIEVAL_DOCUMENT) and used to
+   search FAISS for the top k=12 chunks.
+3. Additionally the raw question is embedded (RETRIEVAL_QUERY) and its top-12
+   hits are merged in (deduplicated). This hybrid step is optional
+   (``merge_raw_query``, default True) and improves recall for exact ticker /
+   metric lookups; the cross-encoder re-ranker then orders the union.
 """
 
-import boto3
-import json
-from langchain_aws import ChatBedrock
+from __future__ import annotations
 
-REGION = "us-east-1"
-MODEL_ID = "anthropic.claude-3-sonnet-20240229-v1:0"
+from typing import List, Optional
 
-TRANSFORM_PROMPT = """You are a financial research assistant. 
-Given a vague or natural-language question from a hedge fund analyst, 
-rewrite it into a precise search query optimized for retrieving relevant 
-financial documents (earnings transcripts, portfolio positions, macro data).
+from src.llm.guard import call_llm, call_with_retry
+from src.llm.provider import message_text
+from src.prompts import registry
 
-Rules:
-- Include relevant ticker symbols if mentioned
-- Include relevant financial terms (e.g., "EPS beat", "beta", "drawdown", "VaR")
-- Keep the query under 30 words
-- Return ONLY the rewritten query, nothing else
-
-Original question: {question}
-Rewritten query:"""
+HYDE_TOP_K = 12
 
 
-def get_llm():
-    bedrock_client = boto3.client("bedrock-runtime", region_name=REGION)
-    return ChatBedrock(
-        client=bedrock_client,
-        model_id=MODEL_ID,
-        model_kwargs={"max_tokens": 100, "temperature": 0.0},
-    )
+def generate_hypothetical_answer(question: str, llm=None) -> str:
+    """LLM writes a short hypothetical answer passage for ``question``."""
+    if llm is None:
+        from src.llm.provider import get_chat_model
+
+        llm = get_chat_model("hyde")
+    prompt = registry.get("hyde_passage").format(question=question)
+    return message_text(call_llm(llm, prompt)).strip()
 
 
-def transform_query(question: str) -> str:
-    """Rewrite a natural language question into a financial search query."""
-    try:
-        llm = get_llm()
-        prompt = TRANSFORM_PROMPT.format(question=question)
-        response = llm.invoke(prompt)
-        transformed = response.content.strip()
-        print(f"Query transform: '{question}' -> '{transformed}'")
-        return transformed
-    except Exception as e:
-        print(f"Query transform failed, using original: {e}")
-        return question
+def hyde_retrieve(
+    question: str,
+    index,
+    embedder,
+    llm=None,
+    k: int = HYDE_TOP_K,
+    merge_raw_query: bool = True,
+    passage: Optional[str] = None,
+) -> dict:
+    """
+    Returns {"passage", "candidates": [doc + faiss_score + retrieved_by]}.
+    The HyDE search uses the *passage* embedding.
+    """
+    passage = passage if passage is not None else generate_hypothetical_answer(question, llm)
+    passage_vec = call_with_retry(lambda: embedder.embed_passage(passage))
+    hits = index.search_by_vector(passage_vec, k=k)
+    candidates: List[dict] = []
+    seen = set()
+    for doc, score in hits:
+        seen.add(doc["source_id"])
+        candidates.append({**doc, "faiss_score": score, "retrieved_by": "hyde"})
+    if merge_raw_query:
+        q_vec = call_with_retry(lambda: embedder.embed_query(question))
+        for doc, score in index.search_by_vector(q_vec, k=k):
+            if doc["source_id"] not in seen:
+                seen.add(doc["source_id"])
+                candidates.append({**doc, "faiss_score": score, "retrieved_by": "query"})
+    return {"passage": passage, "candidates": candidates}

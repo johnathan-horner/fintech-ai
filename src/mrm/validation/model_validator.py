@@ -1,18 +1,18 @@
 """
 FinTech AI - Model Validation Engine
 SR 11-7 requires independent validation of all models.
-This module runs conceptual soundness, outcome analysis, and benchmarking tests.
+This module runs conceptual soundness, data quality, outcome analysis and
+sensitivity tests, and reads held-out eval evidence for LLM components.
 
 Validation covers:
   1. Conceptual Soundness - is the model design appropriate for its intended use?
   2. Data Quality - are inputs clean, complete, and representative?
-  3. Outcome Analysis - do outputs meet quality thresholds?
-  4. Sensitivity Analysis - how do outputs change with input perturbations?
-  5. Benchmarking - does the model outperform a simpler alternative?
+  3. Outcome Analysis - out-of-sample 99% VaR backtest (MRM-006)
+  4. Sensitivity Analysis - how do outputs change with input perturbations? (MRM-006)
+  5. Held-out Eval Evidence - measured by scripts/run_eval.py (LLM components)
 """
 
 import json
-import random
 import statistics
 import math
 from datetime import datetime
@@ -31,6 +31,7 @@ class ValidationResult:
         self.findings: List[str] = []
         self.recommendations: List[str] = []
         self.timestamp = datetime.today().isoformat()
+        self.details: dict = {}
 
     def to_dict(self) -> dict:
         return {
@@ -40,6 +41,7 @@ class ValidationResult:
             "score": round(self.score, 4),
             "findings": self.findings,
             "recommendations": self.recommendations,
+            "details": self.details,
             "timestamp": self.timestamp,
         }
 
@@ -207,101 +209,182 @@ def test_data_quality(model_id: str, portfolio_data: Optional[dict] = None) -> V
     return result
 
 
-#  Test 3: Outcome Analysis - VaR Backtesting 
+#  Test 3: Outcome Analysis - out-of-sample VaR Backtesting
 
-def test_var_backtesting(model_id: str = "MRM-006", n_simulations: int = 252) -> ValidationResult:
+BACKTEST_WINDOW = 250
+BACKTEST_CONFIDENCE = 0.99
+BASEL_ZONE_RANK = {"GREEN": 0, "YELLOW": 1, "RED": 2}
+
+
+def kupiec_pof(T: int, x: int, p: float) -> dict:
     """
-    Backtest VaR model by simulating returns and checking exceedance rate.
-    SR 11-7: Quantitative models must demonstrate predictive accuracy.
-    At 95% confidence, VaR should be exceeded ~5% of the time (Basel traffic light test).
+    Kupiec proportion-of-failures likelihood-ratio test.
+
+        LR = -2 ln[(1-p)^(T-x) p^x] + 2 ln[(1-x/T)^(T-x) (x/T)^x]
+
+    Edge cases: x = 0 and x = T use 0*ln(0) = 0. LR >= 0.
+    p-value from chi-square(df=1): P(chi2 > LR) = erfc(sqrt(LR/2)).
     """
-    result = ValidationResult(model_id, "VaR Backtesting")
-    findings = []
-    recommendations = []
+    if T <= 0 or not 0 < p < 1 or x < 0 or x > T:
+        raise ValueError("require T > 0, 0 < p < 1 and 0 <= x <= T")
 
-    # Simulate synthetic daily returns (normal distribution as approximation)
-    random.seed(42)
-    daily_returns = [random.gauss(0.0003, 0.012) for _ in range(n_simulations)]
+    def xlogy(a: float, b: float) -> float:
+        return 0.0 if a == 0 else a * math.log(b)
 
-    # Calculate VaR at 95% confidence
-    sorted_returns = sorted(daily_returns)
-    var_index = int(0.05 * len(sorted_returns))
-    var_95 = sorted_returns[var_index]
+    phat = x / T
+    ll_null = xlogy(T - x, 1 - p) + xlogy(x, p)
+    ll_alt = xlogy(T - x, 1 - phat) + xlogy(x, phat)
+    lr = max(0.0, -2.0 * ll_null + 2.0 * ll_alt)
+    return {"T": T, "x": x, "p": p, "lr": lr, "p_value": math.erfc(math.sqrt(lr / 2.0))}
 
-    # Count exceedances
-    exceedances = sum(1 for r in daily_returns if r < var_95)
-    exceedance_rate = exceedances / n_simulations
-    expected_rate = 0.05
 
-    findings.append(f"Backtest period: {n_simulations} trading days")
-    findings.append(f"VaR (95%): {var_95*100:.3f}% daily loss threshold")
-    findings.append(f"Actual exceedance rate: {exceedance_rate*100:.2f}% (expected ~5.00%)")
+def basel_zone(exceptions_250: int) -> str:
+    """Basel traffic light for 250 observations at 99%: green 0-4, yellow 5-9, red >= 10."""
+    if exceptions_250 <= 4:
+        return "GREEN"
+    if exceptions_250 <= 9:
+        return "YELLOW"
+    return "RED"
 
-    # Basel traffic light test
-    # Green: <=4 exceedances per 250 days (~1.6%) -> no concern
-    # Yellow: 5-9 exceedances -> increased scrutiny
-    # Red: >=10 exceedances -> model failure
-    scaled_exceedances = int(exceedance_rate * 250)
+
+def run_var_backtest(
+    pnl: List[float],
+    dates: Optional[List[str]] = None,
+    window: int = BACKTEST_WINDOW,
+    confidence: float = BACKTEST_CONFIDENCE,
+    beta_proxy_var: Optional[float] = None,
+) -> dict:
+    """
+    Out-of-sample backtest: for each day t >= window, estimate VaR from the
+    previous ``window`` P&L observations only and compare with the realised
+    P&L on day t. An exception is a loss larger than the VaR.
+    Kupiec uses every test day; the Basel light uses the most recent 250.
+    """
+    from src.utils.metrics import historical_var, parametric_var
+
+    n = len(pnl)
+    if n <= window:
+        raise ValueError(f"need more than {window} P&L observations, got {n}")
+    p = 1 - confidence
+    methods = {
+        "historical_rolling": lambda hist: historical_var(hist, confidence),
+        "parametric_rolling": lambda hist: parametric_var(hist, confidence),
+    }
+    if beta_proxy_var is not None:
+        methods["beta_proxy_engine"] = lambda hist: beta_proxy_var
+
+    results = {}
+    for name, fn in methods.items():
+        flags, vars_ = [], []
+        for t in range(window, n):
+            var_t = fn(pnl[t - window:t])
+            vars_.append(var_t)
+            flags.append(pnl[t] < -var_t)
+        T = len(flags)
+        x = sum(flags)
+        last250 = flags[-250:]
+        kup = kupiec_pof(T, x, p)
+        zone = basel_zone(sum(last250)) if len(last250) == 250 else "N/A"
+        exception_dates = [dates[window + i] for i, f in enumerate(flags) if f] if dates else []
+        results[name] = {
+            "test_observations": T,
+            "exceptions": x,
+            "exception_rate": round(x / T, 5),
+            "expected_rate": round(p, 6),
+            "exceptions_last_250": sum(last250),
+            "basel_zone": zone,
+            "kupiec_lr": round(kup["lr"], 4),
+            "kupiec_p_value": round(kup["p_value"], 4),
+            "kupiec_reject_95": kup["lr"] > 3.841,
+            "mean_var": round(statistics.mean(vars_), 2),
+            "last_var": round(vars_[-1], 2),
+            "exception_dates": exception_dates,
+        }
+    worst = max((r["basel_zone"] for r in results.values() if r["basel_zone"] in BASEL_ZONE_RANK),
+                key=lambda z: BASEL_ZONE_RANK[z], default="N/A")
+    return {
+        "window": window,
+        "confidence": confidence,
+        "n_pnl_days": n,
+        "methods": results,
+        "overall_zone": worst,
+        "zone_rule": "overall zone = worst Basel zone across all tested VaR methods",
+    }
+
+
+def portfolio_backtest(portfolio_data: Optional[dict] = None) -> dict:
+    """Backtest the current positions on data/price_history.json (synthetic)."""
+    from src.utils.data import load_portfolio, load_price_history
+    from src.utils.metrics import calculate_portfolio_var, portfolio_pnl_series
+
+    portfolio_data = portfolio_data or load_portfolio()
+    positions = portfolio_data["positions"]
+    ph = load_price_history()
+    series = portfolio_pnl_series(ph, positions)
+    engine = calculate_portfolio_var(positions, confidence=0.99)
+    result = run_var_backtest(series["pnl"], series["dates"], beta_proxy_var=abs(engine["portfolio_var_1d"]))
+    result["data"] = "data/price_history.json (SYNTHETIC, seeded)"
+    result["positions"] = len(positions)
+    result["period"] = f"{series['dates'][0]} to {series['dates'][-1]}"
+    return result
+
+
+def test_var_backtesting(model_id: str = "MRM-006", portfolio_data: Optional[dict] = None) -> ValidationResult:
+    """
+    SR 11-7 outcome analysis: out-of-sample 99% VaR backtest (rolling
+    250-day window) with Kupiec POF and the Basel traffic light.
+    """
+    result = ValidationResult(model_id, "VaR Backtesting (out-of-sample, 99%)")
+    findings, recommendations = [], []
+    try:
+        bt = portfolio_backtest(portfolio_data)
+    except Exception as e:
+        result.findings = [f"FAIL: backtest could not run - {e}"]
+        return result
 
     score = 1.0
-    if scaled_exceedances <= 4:
-        findings.append("PASS: Basel Traffic Light - GREEN zone (<=4 exceedances per 250 days).")
-    elif scaled_exceedances <= 9:
+    findings.append(f"Data: {bt['data']}; period {bt['period']}; window {bt['window']} days; confidence 99%.")
+    for name, r in bt["methods"].items():
+        verdict = {"GREEN": "PASS", "YELLOW": "WARN", "RED": "FAIL"}.get(r["basel_zone"], "WARN")
+        findings.append(
+            f"{verdict}: {name} - {r['exceptions']} exceptions in {r['test_observations']} test days "
+            f"({r['exceptions_last_250']} in last 250 -> {r['basel_zone']}); Kupiec LR={r['kupiec_lr']:.3f}, "
+            f"p={r['kupiec_p_value']:.3f}{' (reject at 95%)' if r['kupiec_reject_95'] else ''}."
+        )
+    zone = bt["overall_zone"]
+    if zone == "YELLOW":
         score -= 0.3
-        findings.append(f"WARN: Basel Traffic Light - YELLOW zone ({scaled_exceedances} exceedances per 250 days).")
-        recommendations.append("Investigate VaR model calibration. Consider fat-tail adjustments.")
-    else:
+        recommendations.append("Investigate VaR calibration (fat tails): at least one method is in the Basel yellow zone.")
+    elif zone == "RED":
         score -= 0.6
-        findings.append(f"FAIL: Basel Traffic Light - RED zone ({scaled_exceedances} exceedances per 250 days).")
-        recommendations.append("VaR model requires recalibration. Consider CVaR/Expected Shortfall.")
+        recommendations.append("At least one VaR method is in the Basel red zone - recalibrate before use.")
+    if any(r["kupiec_reject_95"] for r in bt["methods"].values()):
+        score -= 0.2
+        recommendations.append("Kupiec POF rejects at least one method at the 95% level.")
 
-    # Kupiec POF test (simplified)
-    # Tests whether exceedance rate is statistically consistent with 5%
-    p = expected_rate
-    n = n_simulations
-    x = exceedances
-    if x > 0 and x < n:
-        log_likelihood = (x * math.log(x / n) + (n - x) * math.log((n - x) / n)
-                         - x * math.log(p) - (n - x) * math.log(1 - p))
-        kupiec_stat = -2 * log_likelihood
-        # Chi-squared critical value at 95% = 3.841
-        if kupiec_stat < 3.841:
-            findings.append(f"PASS: Kupiec POF test - stat={kupiec_stat:.3f} < 3.841 (cannot reject model at 95%).")
-        else:
-            score -= 0.2
-            findings.append(f"FAIL: Kupiec POF test - stat={kupiec_stat:.3f} > 3.841 (reject VaR model).")
-            recommendations.append("VaR model rejected by Kupiec test. Recalibrate or switch methods.")
-
-    # CVaR/ES implementation check - closes MRM outstanding item #1
+    # CVaR/ES sanity check on the real portfolio (seeded Monte Carlo)
     try:
+        from src.utils.data import load_portfolio
         from src.utils.metrics import calculate_portfolio_cvar
-        test_positions = [
-            {"market_value": 100000, "beta": 1.2},
-            {"market_value": 80000,  "beta": 0.9},
-        ]
-        cvar_result = calculate_portfolio_cvar(test_positions, confidence=0.95, n_simulations=1000)
-        cvar = cvar_result.get("cvar_1d", 0)
-        var = cvar_result.get("var_1d", 0)
+        cvar_result = calculate_portfolio_cvar((portfolio_data or load_portfolio())["positions"], confidence=0.95)
+        cvar, var = cvar_result.get("cvar_1d", 0), cvar_result.get("var_1d", 0)
         if cvar != 0 and abs(cvar) >= abs(var):
             findings.append(
-                f"PASS: CVaR/ES implemented and validated - "
-                f"CVaR (${abs(cvar):,.0f}) >= VaR (${abs(var):,.0f}) as expected. "
-                f"Tail ratio: {cvar_result.get('tail_ratio', 'N/A')}x. "
-                f"Basel III FRTB alignment confirmed."
+                f"PASS: Monte Carlo CVaR (${abs(cvar):,.0f}) >= VaR (${abs(var):,.0f}) at 95%; "
+                f"tail ratio {cvar_result.get('tail_ratio')}x."
             )
         else:
             score -= 0.15
-            findings.append("FAIL: CVaR <= VaR - implementation error in tail calculation.")
-            recommendations.append("Review CVaR calculation - CVaR must always be >= VaR.")
+            findings.append("FAIL: CVaR < VaR - implementation error in tail calculation.")
     except Exception as e:
         score -= 0.1
-        findings.append(f"NOTE: CVaR/ES implementation check failed - {e}.")
-        recommendations.append("Implement Expected Shortfall (CVaR) alongside VaR for regulatory compliance.")
+        findings.append(f"WARN: CVaR check failed - {e}.")
 
     result.score = max(0.0, score)
-    result.passed = result.score >= 0.7
+    result.passed = zone == "GREEN" and result.score >= 0.7
     result.findings = findings
     result.recommendations = recommendations
+    result.details = bt
     return result
 
 
@@ -379,24 +462,58 @@ def test_sensitivity_analysis(model_id: str = "MRM-006") -> ValidationResult:
     return result
 
 
-#  Full Validation Suite 
+#  Test 5: Held-out eval evidence (LLM components)
+
+def test_eval_evidence(model_id: str) -> ValidationResult:
+    """
+    LLM components are validated by the held-out eval harness
+    (scripts/run_eval.py). This test reads the approval record it wrote and
+    checks it covers the version that is configured right now.
+    """
+    from src.mrm.approvals import load_approvals
+    from src.mrm.model_inventory import check_approval, current_version
+
+    result = ValidationResult(model_id, "Held-out Eval Evidence")
+    rec = load_approvals().get(model_id)
+    cur = current_version(model_id)
+    if not rec:
+        result.findings = [
+            "FAIL: No held-out eval run recorded for this component (data/mrm/approvals.json has no entry).",
+            f"Running version: {cur['model_id']} with prompts {cur['prompt_versions']}.",
+        ]
+        result.recommendations = ["Run: python scripts/run_eval.py --split heldout"]
+        return result
+    metrics = rec.get("metrics") or {}
+    gate = check_approval(model_id, cur["model_id"], cur["prompt_versions"])
+    result.findings.append(
+        f"{'PASS' if rec['status'] != 'FAILED' else 'FAIL'}: eval run {rec.get('evidence')} -> {rec['status']} "
+        f"(pass rate {metrics.get('pass_rate')}, mean groundedness {metrics.get('mean_groundedness')}, "
+        f"n={metrics.get('n_items')})."
+    )
+    result.findings.append(("PASS: " if gate["allowed"] else "FAIL: ") + gate["reason"])
+    result.score = float(metrics.get("pass_rate") or 0.0) if gate["allowed"] else 0.0
+    result.passed = gate["allowed"] and rec["status"] == "APPROVED"
+    result.details = {"approval": rec, "current_version": cur}
+    return result
+
+
+#  Full Validation Suite
 
 def run_validation_suite(model_id: str, portfolio_data: Optional[dict] = None) -> dict:
     """
     Run the full SR 11-7 validation suite for a given model.
     Returns a validation report with overall pass/fail and all test results.
     """
-    print(f"\n[SEARCH] Running validation suite for {model_id}...")
-
     tests = [
         test_conceptual_soundness(model_id),
         test_data_quality(model_id, portfolio_data),
     ]
 
-    # Additional quant tests for MRM-006
     if model_id == "MRM-006":
-        tests.append(test_var_backtesting(model_id))
+        tests.append(test_var_backtesting(model_id, portfolio_data))
         tests.append(test_sensitivity_analysis(model_id))
+    else:
+        tests.append(test_eval_evidence(model_id))
 
     overall_score = statistics.mean(t.score for t in tests)
     all_passed = all(t.passed for t in tests)
@@ -409,27 +526,35 @@ def run_validation_suite(model_id: str, portfolio_data: Optional[dict] = None) -
     else:
         recommended_status = ValidationStatus.FAILED
 
-    report = {
+    # LLM components can never be recommended above what the held-out eval earned.
+    evidence = next((t for t in tests if t.test_name == "Held-out Eval Evidence"), None)
+    if evidence is not None and not evidence.passed:
+        rec = (evidence.details or {}).get("approval") or {}
+        recommended_status = ValidationStatus.FAILED if rec.get("status") == "FAILED" else ValidationStatus.PENDING
+
+    return {
         "model_id": model_id,
         "validation_date": datetime.today().isoformat(),
         "overall_score": round(overall_score, 4),
         "all_tests_passed": all_passed,
-        "recommended_status": recommended_status,
+        "recommended_status": recommended_status.value,
         "tests": [t.to_dict() for t in tests],
         "summary": (
             f"Model {model_id} validation: overall score {overall_score:.1%}. "
-            f"Recommended status: {recommended_status}. "
+            f"Recommended status: {recommended_status.value}. "
             f"{'All tests passed.' if all_passed else 'Some tests failed - see findings.'}"
         ),
     }
 
-    print(f"  Score: {overall_score:.1%} | Status: {recommended_status}")
-    return report
+
+def run_all_validations(portfolio_data: Optional[dict] = None) -> dict:
+    """Run the suite for every inventory model. Returns {model_id: report}."""
+    inv = get_inventory()
+    return {mid: run_validation_suite(mid, portfolio_data) for mid in inv.models.keys()}
 
 
 if __name__ == "__main__":
-    for mid in ["MRM-001", "MRM-003", "MRM-006"]:
-        report = run_validation_suite(mid)
+    for mid, report in run_all_validations().items():
         print(f"\n{'='*50}")
         print(f"Model: {mid} | Score: {report['overall_score']:.1%} | Status: {report['recommended_status']}")
         for test in report["tests"]:

@@ -1,0 +1,380 @@
+{
+  "run_id": "heldout-20260929T220706Z",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-09-29T22:07:06+00:00",
+  "provider": "gemini",
+  "models": {
+    "chat": "gemini-3.5-flash-lite",
+    "grader": "gemini-3.1-flash-lite",
+    "hyde": "gemini-3.1-flash-lite",
+    "embedding": "gemini-embedding-001"
+  },
+  "versions": {
+    "MRM-002": {
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "market_analysis@1.1.0#37d3f328"
+      ],
+      "provider": "gemini"
+    }
+  },
+  "throttle_s": 20.0,
+  "items": [
+    {
+      "id": "mrm-002-subset10",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset10",
+      "outputs": [
+        "### Sector Exposure and Performance\n* **Technology:** Weight 57.75%, Average P&L 42.08%\n* **Healthcare:** Weight 25.86%, Average P&L -2.24%\n* **Financials:** Weight 9.44%, Average P&L 67.88%\n* **Consumer Discretionary:** Weight 4.06%, Average P&L 5.8%\n* **Energy:** Weight 2.89%, Average P&L -29.09%\n\n### Technical Signals per Position\n* **AAPL:** RSI 29.4 (oversold), SMA-50 464.01 below SMA-200 508.46, MACD signal -0.301, volume 45,320,582 vs 20-day average 28,774,610 (ratio 1.58). **(Concerning: ALERT)**\n* **GOOGL:** RSI 40.6, SMA-50 575.14 above SMA-200 548.79, MACD signal -1.517, volume 8,789,281 vs 20-day average 28,735,139 (ratio 0.31).\n* **JPM:** RSI 65.9, SMA-50 48.45 below SMA-200 53.57, MACD signal 1.084, volume 37,915,333 vs 20-day average 29,640,222 (ratio 1.28).\n* **MSFT:** RSI 36.5, SMA-50 65.21 below SMA-200 71.77, MACD signal -1.896, volume 30,511,983 vs 20-day average 25,097,108 (ratio 1.22).\n* **NVDA:** RSI 36.3, SMA-50 435.97 above SMA-200 391.29, MACD signal -3.908, volume 18,209,663 vs 20-day average 30,723,741 (ratio 0.59).\n* **ORCL:** RSI 66.3, SMA-50 555.32 above SMA-200 496.68, MACD signal 3.073, volume 36,052,154 vs 20-day average 24,807,278 (ratio 1.45).\n* **TSLA:** RSI 25.0 (oversold), SMA-50 223.87 above SMA-200 223.39, MACD signal -2.422, volume 9,984,743 vs 20-day average 26,835,706 (ratio 0.37).\n* **UNH:** RSI 74.1 (overbought), SMA-50 150.02 below SMA-200 169.7, MACD signal 0.88, volume 3,508,369 vs 20-day average 25,140,486 (ratio 0.14). **(Concerning: ALERT)**\n* **V:** RSI 37.7, SMA-50 296.96 below SMA-200 334.98, MACD signal -1.466, volume 6,849,724 vs 20-day average 22,230,478 (ratio 0.31).\n* **XOM:** RSI 39.7, SMA-50 183.83 above SMA-200 164.74, MACD signal 0.952, volume 44,682,597 vs 20-day average 27,636,955 (ratio 1.62).\n\n### Earnings Beat/Miss Pattern (Latest Quarter)\n* **Beats:** MSFT, XOM\n* **Misses:** AAPL, GOOGL, JPM, NVDA, ORCL, TSLA, UNH, V\n\n### Macro Backdrop\n* **Readings:** Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7, VIX 16.65.\n* **10Y-2Y Spread & Changes:** 10Y-2Y spread -1.14 percentage points (-114.0 bps). Month-over-month changes: Federal Funds Rate +0.59; CPI YoY +0.02; Core PCE +0.5; 10Y Treasury Yield +0.2; 2Y Treasury Yield +1.04; Unemployment Rate -0.53; GDP Growth QoQ +3.12; ISM Manufacturing PMI -1.7; Consumer Confidence Index +39.5; VIX -12.37.\n* **Regime:** Risk-Off (VIX regime: Low, curve inverted: True, PMI above 50: False, CPI trend: Rising)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 102,
+            "matched": 102,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 23134.9,
+      "error": null,
+      "trace_id": "7920803916754178"
+    },
+    {
+      "id": "mrm-002-subset12",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset12",
+      "outputs": [
+        "### 1. Sector Exposure and Performance\n* **Technology:** Portfolio weight 40.41%, Average P&L across positions 42.66%\n* **Financials:** Portfolio weight 23.93%, Average P&L across positions 14.87%\n* **Energy:** Portfolio weight 23.18%, Average P&L across positions -25.38%\n* **Healthcare:** Portfolio weight 6.66%, Average P&L across positions -10.62%\n* **Consumer Discretionary:** Portfolio weight 5.81%, Average P&L across positions 5.8%\n\n### 2. Technical Signals per Position\n* **AAPL:** RSI 29.4 (oversold), SMA-50 464.01 below SMA-200 508.46, MACD signal -0.301, volume 45,320,582 vs 20-day average 28,774,610 (ratio 1.58). Flagged concerning: Technical status ALERT.\n* **AVGO:** RSI 40.3, SMA-50 411.47 below SMA-200 439.76, MACD signal -1.383, volume 19,414,190 vs 20-day average 19,312,456 (ratio 1.01). Flagged concerning: Technical status WATCH.\n* **CVX:** RSI 75.9 (overbought), SMA-50 87.88 below SMA-200 104.16, MACD signal 4.571, volume 28,433,270 vs 20-day average 30,173,745 (ratio 0.94). Flagged concerning: Technical status ALERT.\n* **GS:** RSI 23.0 (oversold), SMA-50 435.22 above SMA-200 371.82, MACD signal -1.081, volume 30,772,689 vs 20-day average 21,603,135 (ratio 1.42). Flagged concerning: Technical status WATCH.\n* **JNJ:** RSI 37.3, SMA-50 795.93 above SMA-200 795.17, MACD signal -2.679, volume 44,364,393 vs 20-day average 26,279,292 (ratio 1.69).\n* **JPM:** RSI 65.9, SMA-50 48.45 below SMA-200 53.57, MACD signal 1.084, volume 37,915,333 vs 20-day average 29,640,222 (ratio 1.28). Flagged concerning: Technical status WATCH.\n* **MA:** RSI 64.0, SMA-50 85.19 below SMA-200 92.83, MACD signal 2.005, volume 14,661,719 vs 20-day average 21,426,025 (ratio 0.68). Flagged concerning: Technical status WATCH.\n* **NVDA:** RSI 36.3, SMA-50 435.97 above SMA-200 391.29, MACD signal -3.908, volume 18,209,663 vs 20-day average 30,723,741 (ratio 0.59).\n* **TSLA:** RSI 25.0 (oversold), SMA-50 223.87 above SMA-200 223.39, MACD signal -2.422, volume 9,984,743 vs 20-day average 26,835,706 (ratio 0.37). Flagged concerning: Technical status WATCH.\n* **XOM:** RSI 39.7, SMA-50 183.83 above SMA-200 164.74, MACD signal 0.952, volume 44,682,597 vs 20-day average 27,636,955 (ratio 1.62).\n\n### 3. Earnings Beat/Miss Pattern\nLatest quarter results show a predominant pattern of EPS beats accompanied by revenue misses, alongside mixed guidance. GS and XOM recorded beats on both revenue and EPS. AAPL, CVX, JNJ, JPM, MA, NVDA, and TSLA missed revenue estimates while beating or mixing on EPS. AVGO missed revenue but beat EPS.\n\n### 4. Macro Backdrop\n* **Latest Readings (2026-02):** Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7, VIX 16.65.\n* **Spread and Curve:** 10Y-2Y spread -1.14 percentage points (-114.0 bps), curve inverted: True.\n* **Month-over-Month Changes:** Federal Funds Rate +0.59, CPI YoY +0.02, Core PCE +0.5, 10Y Treasury Yield +0.2, 2Y Treasury Yield +1.04, Unemployment Rate -0.53, GDP Growth QoQ +3.12, ISM Manufacturing PMI -1.7, Consumer Confidence Index +39.5, VIX -12.37.\n* **Regime:** VIX regime Low, PMI above 50 False, CPI trend Rising, Rule-based market regime Risk-Off."
+      ],
+      "graders": [
+        {
+          "groundedness": 0.95,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [
+            "Latest quarter results show a predominant pattern of EPS beats accompanied by revenue misses",
+            "AAPL, CVX, JNJ, JPM, MA, NVDA, and TSLA missed revenue estimates while beating or mixing on EPS"
+          ],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 102,
+            "matched": 102,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 9498.4,
+      "error": null,
+      "trace_id": "9d5bf321a35542a4"
+    },
+    {
+      "id": "mrm-002-subset13",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset13",
+      "outputs": [
+        "### 1. Sector Exposure and Performance\n* **Technology**: Portfolio weight 36.34%, Average P&L 36.6% (GOOGL, MSFT, ORCL).\n* **Healthcare**: Portfolio weight 34.27%, Average P&L -6.43% (JNJ, UNH).\n* **Energy**: Portfolio weight 14.94%, Average P&L -21.66% (CVX).\n* **Financials**: Portfolio weight 9.9%, Average P&L 13.01% (GS, MA, V).\n* **Consumer Discretionary**: Portfolio weight 4.56%, Average P&L 5.8% (TSLA).\n\n### 2. Technical Signals per Position\n* **CVX**: RSI-14 75.9 (overbought), SMA-50 87.88 below SMA-200 104.16, MACD signal 4.571, volume 28,433,270 vs 20-day average 30,173,745. **Concerning (ALERT)**.\n* **GOOGL**: RSI-14 40.6, SMA-50 575.14 above SMA-200 548.79, MACD signal -1.517 (negative), volume 8,789,281 vs 20-day average 28,735,139.\n* **GS**: RSI-14 23.0 (oversold), SMA-50 435.22 above SMA-200 371.82, MACD signal -1.081 (negative), volume 30,772,689 vs 20-day average 21,603,135. **Concerning (WATCH)**.\n* **JNJ**: RSI-14 37.3, SMA-50 795.93 above SMA-200 795.17, MACD signal -2.679 (negative), volume 44,364,393 vs 20-day average 26,279,292.\n* **MA**: RSI-14 64.0, SMA-50 85.19 below SMA-200 92.83, MACD signal 2.005, volume 14,661,719 vs 20-day average 21,426,025. **Concerning (WATCH)**.\n* **MSFT**: RSI-14 36.5, SMA-50 65.21 below SMA-200 71.77, MACD signal -1.896 (negative), volume 30,511,983 vs 20-day average 25,097,108. **Concerning (WATCH)**.\n* **ORCL**: RSI-14 66.3, SMA-50 555.32 above SMA-200 496.68, MACD signal 3.073, volume 36,052,154 vs 20-day average 24,807,278.\n* **TSLA**: RSI-14 25.0 (oversold), SMA-50 223.87 above SMA-200 223.39, MACD signal -2.422 (negative), volume 9,984,743 vs 20-day average 26,835,706. **Concerning (WATCH)**.\n* **UNH**: RSI-14 74.1 (overbought), SMA-50 150.02 below SMA-200 169.7, MACD signal 0.88, volume 3,508,369 vs 20-day average 25,140,486. **Concerning (ALERT)**.\n* **V**: RSI-14 37.7, SMA-50 296.96 below SMA-200 334.98, MACD signal -1.466 (negative), volume 6,849,724 vs 20-day average 22,230,478. **Concerning (WATCH)**.\n\n### 3. Earnings Beat/Miss Pattern\nLatest quarter results showed mixed performance:\n* **Beats**: GS, MSFT.\n* **Misses**: CVX, GOOGL, JNJ, MA, ORCL, TSLA, UNH, V.\n\n### 4. Macro Backdrop\n* **Latest Readings**: Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7, VIX 16.65.\n* **10Y-2Y Spread & MoM Changes**: 10Y-2Y spread -1.14 percentage points (-114.0 bps); curve inverted: True. Month-over-month changes: Federal Funds Rate +0.59; CPI YoY +0.02; Core PCE +0.5; 10Y Treasury Yield +0.2; 2Y Treasury Yield +1.04; Unemployment Rate -0.53; GDP Growth QoQ +3.12; ISM Manufacturing PMI -1.7; Consumer Confidence Index +39.5; VIX -12.37.\n* **Regime**: VIX regime is Low, PMI above 50 is False, CPI trend is Rising. Rule-based market regime is Risk-Off."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 92,
+            "matched": 92,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 14264.5,
+      "error": null,
+      "trace_id": "ad3efdfc4f9e485b"
+    },
+    {
+      "id": "mrm-002-subset16",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset16",
+      "outputs": [
+        "### Sector Exposure and Performance\n* **Technology**: Portfolio weight is 67.16% ($15,215,512.94 market value, unrealized P&L of $4,868,339.93) with an average P&L across positions of 39.63%. Positions include GOOGL, AAPL, NVDA, MSFT, AVGO, and ORCL. Largest position overall is MSFT with a market value of $5,653,824.37 (24.96% weight).\n* **Energy**: Portfolio weight is 14.75% ($3,341,380.66 market value, unrealized P&L of -$923,765.75) with an average P&L across positions of -21.66%. Positions include CVX.\n* **Financials**: Portfolio weight is 12.93% ($2,928,707.56 market value, unrealized P&L of $941,574.62) with an average P&L across positions of 38.13%. Positions include GS and JPM.\n* **Healthcare**: Portfolio weight is 5.16% ($1,169,125.19 market value, unrealized P&L of -$138,966.61) with an average P&L across positions of -10.62%. Positions include JNJ.\n\n### Technical Signals and Concerns\n* **AAPL**: RSI 29.4 (oversold <=30); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 negative; Volume 45,320,582 vs 20-day average 28,774,610 (ratio 1.58); Status: ALERT (Concerning).\n* **AVGO**: RSI 40.3; SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 negative; Volume 19,414,190 vs 20-day average 19,312,456 (ratio 1.01); Status: WATCH.\n* **CVX**: RSI 75.9 (overbought >=70); SMA-50 87.88 below SMA-200 104.16; MACD signal 4.571; Volume 28,433,270 vs 20-day average 30,173,745 (ratio 0.94); Status: ALERT (Concerning).\n* **GOOGL**: RSI 40.6; SMA-50 575.14 above SMA-200 548.79; MACD signal -1.517 negative; Volume 8,789,281 vs 20-day average 28,735,139 (ratio 0.31); Status: OK.\n* **GS**: RSI 23.0 (oversold <=30); SMA-50 435.22 above SMA-200 371.82; MACD signal -1.081 negative; Volume 30,772,689 vs 20-day average 21,603,135 (ratio 1.42); Status: WATCH (Concerning).\n* **JNJ**: RSI 37.3; SMA-50 795.93 above SMA-200 795.17; MACD signal -2.679 negative; Volume 44,364,393 vs 20-day average 26,279,292 (ratio 1.69); Status: OK.\n* **JPM**: RSI 65.9; SMA-50 48.45 below SMA-200 53.57; MACD signal 1.084; Volume 37,915,333 vs 20-day average 29,640,222 (ratio 1.28); Status: WATCH.\n* **MSFT**: RSI 36.5; SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative; Volume 30,511,983 vs 20-day average 25,097,108 (ratio 1.22); Status: WATCH.\n* **NVDA**: RSI 36.3; SMA-50 435.97 above SMA-200 391.29; MACD signal -3.908 negative; Volume 18,209,663 vs 20-day average 30,723,741 (ratio 0.59); Status: OK.\n* **ORCL**: RSI 66.3; SMA-50 555.32 above SMA-200 496.68; MACD signal 3.073; Volume 36,052,154 vs 20-day average 24,807,278 (ratio 1.45); Status: OK.\n\n### Earnings Beat/Miss Pattern\nLatest quarter results show a majority miss pattern: GS and MSFT reported beats, while AAPL, AVGO, CVX, GOOGL, JNJ, JPM, NVDA, and ORCL recorded misses.\n\n### Macro Backdrop\n* **Latest Readings**: Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7, VIX 16.65.\n* **Spreads and MoM Changes**: 10Y-2Y spread -1.14 percentage points (-114.0 bps); curve inverted: True. MoM changes: Federal Funds Rate +0.59; CPI YoY +0.02; Core PCE +0.5; 10Y Treasury Yield +0.2; 2Y Treasury Yield +1.04; Unemployment Rate -0.53; GDP Growth QoQ +3.12; ISM Manufacturing PMI -1.7; Consumer Confidence Index +39.5; VIX -12.37.\n* **Regime**: VIX regime is Low, PMI above 50 is False, CPI trend is Rising, and the rule-based market regime is Risk-Off."
+      ],
+      "graders": [
+        {
+          "groundedness": 0.96,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [
+            "Latest quarter results show a majority miss pattern: GS and MSFT reported beats, while AAPL, AVGO, CVX, GOOGL, JNJ, JPM, NVDA, and ORCL recorded misses."
+          ],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 110,
+            "matched": 110,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 19354.5,
+      "error": null,
+      "trace_id": "548489627fbf4b33"
+    },
+    {
+      "id": "mrm-002-subset17",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset17",
+      "outputs": [
+        "MARKET ANALYSIS REPORT:\n\n### 1. Sector Exposure and Performance\n* **Technology:** Portfolio weight 36.82%, average P&L 36.6%. Positions: GOOGL, MSFT, ORCL.\n* **Healthcare:** Portfolio weight 34.72%, average P&L -6.43%. Positions: JNJ, UNH.\n* **Energy:** Portfolio weight 18.43%, average P&L -25.38%. Positions: XOM, CVX.\n* **Financials:** Portfolio weight 10.03%, average P&L 13.01%. Positions: GS, MA, V.\n\n### 2. Technical Signals per Position\n* **CVX:** RSI-14 75.9 (overbought), SMA-50 87.88 below SMA-200 104.16, MACD signal 4.571, volume ratio 0.94. **Flagged (ALERT).**\n* **GOOGL:** RSI-14 40.6, SMA-50 575.14 above SMA-200 548.79, MACD signal -1.517 (negative), volume ratio 0.31. Status: OK.\n* **GS:** RSI-14 23.0 (oversold), SMA-50 435.22 above SMA-200 371.82, MACD signal -1.081 (negative), volume ratio 1.42. **Flagged (WATCH).**\n* **JNJ:** RSI-14 37.3, SMA-50 795.93 above SMA-200 795.17, MACD signal -2.679 (negative), volume ratio 1.69. Status: OK.\n* **MA:** RSI-14 64.0, SMA-50 85.19 below SMA-200 92.83, MACD signal 2.005, volume ratio 0.68. **Flagged (WATCH).**\n* **MSFT:** RSI-14 36.5, SMA-50 65.21 below SMA-200 71.77, MACD signal -1.896 (negative), volume ratio 1.22. **Flagged (WATCH).**\n* **ORCL:** RSI-14 66.3, SMA-50 555.32 above SMA-200 496.68, MACD signal 3.073, volume ratio 1.45. Status: OK.\n* **UNH:** RSI-14 74.1 (overbought), SMA-50 150.02 below SMA-200 169.7, MACD signal 0.88, volume ratio 0.14. **Flagged (ALERT).**\n* **V:** RSI-14 37.7, SMA-50 296.96 below SMA-200 334.98, MACD signal -1.466 (negative), volume ratio 0.31. **Flagged (WATCH).**\n* **XOM:** RSI-14 39.7, SMA-50 183.83 above SMA-200 164.74, MACD signal 0.952, volume ratio 1.62. Status: OK.\n\n### 3. Earnings Beat/Miss Pattern (Latest Quarter)\n* **CVX:** Miss (Revenue miss, EPS beat).\n* **GOOGL:** Miss (Revenue miss, EPS beat).\n* **GS:** Beat (Revenue beat, EPS beat).\n* **JNJ:** Miss (Revenue beat, EPS miss).\n* **MA:** Miss (Revenue miss, EPS beat).\n* **MSFT:** Beat (Revenue beat, EPS beat).\n* **ORCL:** Miss (Revenue miss, EPS miss).\n* **UNH:** Miss (Revenue beat, EPS miss).\n* **V:** Miss (Revenue miss, EPS beat).\n* **XOM:** Beat (Revenue beat, EPS beat).\n\n### 4. Macro Backdrop\n* **Latest Readings:** Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7, VIX 16.65.\n* **Spread & Month-over-Month Changes:** 10Y-2Y spread -1.14 percentage points (-114.0 bps); curve inverted: True. MoM changes: Federal Funds Rate +0.59; CPI YoY +0.02; Core PCE +0.5; 10Y Treasury Yield +0.2; 2Y Treasury Yield +1.04; Unemployment Rate -0.53; GDP Growth QoQ +3.12; ISM Manufacturing PMI -1.7; Consumer Confidence Index +39.5; VIX -12.37.\n* **Regime:** Rule-based market regime is Risk-Off (VIX regime: Low, PMI above 50: False, CPI trend: Rising)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 80,
+            "matched": 80,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 38668.6,
+      "error": null,
+      "trace_id": "255f1ed1bf774bb7"
+    },
+    {
+      "id": "mrm-002-subset19",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset19",
+      "outputs": [
+        "### 1. Sector Exposure and Performance\n- **Technology**: Portfolio weight 52.4%, average P&L across positions 40.3%.\n- **Healthcare**: Portfolio weight 26.2%, average P&L across positions -2.24%.\n- **Energy**: Portfolio weight 13.48%, average P&L across positions -21.66%.\n- **Consumer Discretionary**: Portfolio weight 4.11%, average P&L across positions 5.8%.\n- **Financials**: Portfolio weight 3.81%, average P&L across positions 35.34%.\n\n### 2. Technical Signals per Position\n- **AAPL**: RSI 29.4 (oversold, concerning); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 negative; volume 45,320,582 vs 20-day average 28,774,610 (ratio 1.58); status ALERT.\n- **AVGO**: RSI 40.3; SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 negative; volume 19,414,190 vs 20-day average 19,312,456 (ratio 1.01); status WATCH.\n- **CVX**: RSI 75.9 (overbought, concerning); SMA-50 87.88 below SMA-200 104.16; MACD signal 4.571; volume 28,433,270 vs 20-day average 30,173,745 (ratio 0.94); status ALERT.\n- **GOOGL**: RSI 40.6; SMA-50 575.14 above SMA-200 548.79; MACD signal -1.517 negative; volume 8,789,281 vs 20-day average 28,735,139 (ratio 0.31); status OK.\n- **GS**: RSI 23.0 (oversold, concerning); SMA-50 435.22 above SMA-200 371.82; MACD signal -1.081 negative; volume 30,772,689 vs 20-day average 21,603,135 (ratio 1.42); status WATCH.\n- **MSFT**: RSI 36.5; SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative; volume 30,511,983 vs 20-day average 25,097,108 (ratio 1.22); status WATCH.\n- **ORCL**: RSI 66.3; SMA-50 555.32 above SMA-200 496.68; MACD signal 3.073; volume 36,052,154 vs 20-day average 24,807,278 (ratio 1.45); status OK.\n- **TSLA**: RSI 25.0 (oversold, concerning); SMA-50 223.87 above SMA-200 223.39; MACD signal -2.422 negative; volume 9,984,743 vs 20-day average 26,835,706 (ratio 0.37); status WATCH.\n- **UNH**: RSI 74.1 (overbought, concerning); SMA-50 150.02 below SMA-200 169.7; MACD signal 0.88; volume 3,508,369 vs 20-day average 25,140,486 (ratio 0.14); status ALERT.\n- **V**: RSI 37.7; SMA-50 296.96 below SMA-200 334.98; MACD signal -1.466 negative; volume 6,849,724 vs 20-day average 22,230,478 (ratio 0.31); status WATCH.\n\n### 3. Earnings Beat/Miss Pattern\nLatest quarter results show beats for GS and MSFT, while AAPL, AVGO, CVX, GOOGL, ORCL, TSLA, UNH, and V recorded misses.\n\n### 4. Macro Backdrop\n- **Latest Readings**: Federal Funds Rate 5.22; CPI YoY 4.59; Core PCE 2.86; 10Y Treasury Yield 4.14; 2Y Treasury Yield 5.28; Unemployment Rate 3.76; GDP Growth QoQ 2.92; ISM Manufacturing PMI 48.7; Consumer Confidence Index 108.7; VIX 16.65.\n- **Spread & Curve**: 10Y-2Y spread -1.14 percentage points (-114.0 bps); curve inverted: True.\n- **Month-over-Month Changes**: Federal Funds Rate +0.59; CPI YoY +0.02; Core PCE +0.5; 10Y Treasury Yield +0.2; 2Y Treasury Yield +1.04; Unemployment Rate -0.53; GDP Growth QoQ +3.12; ISM Manufacturing PMI -1.7; Consumer Confidence Index +39.5; VIX -12.37.\n- **Regime**: VIX regime Low; PMI above 50 False; CPI trend Rising; Rule-based market regime Risk-Off."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 102,
+            "matched": 102,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 11424.3,
+      "error": null,
+      "trace_id": "4bfb1bddfedd45f2"
+    },
+    {
+      "id": "mrm-002-subset3",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset3",
+      "outputs": [
+        "### Sector Exposure and Performance\n* **Technology:** Portfolio weight 48.83%, average P&L 46.49%. Positions: GOOGL, AAPL, NVDA, MSFT.\n* **Healthcare:** Portfolio weight 28.52%, average P&L -6.43%. Positions: JNJ, UNH.\n* **Energy:** Portfolio weight 15.13%, average P&L -25.38%. Positions: XOM, CVX.\n* **Financials:** Portfolio weight 7.52%, average P&L -13.03%. Positions: GS, MA.\n\n### Technical Signals per Position\n* **AAPL:** RSI 29.4 (oversold), SMA-50 464.01 below SMA-200 508.46, negative MACD signal -0.301, volume 45,320,582 vs 20-day average 28,774,610. **Concerning (ALERT).**\n* **CVX:** RSI 75.9 (overbought), SMA-50 87.88 below SMA-200 104.16, positive MACD signal 4.571, volume 28,433,270 vs 20-day average 30,173,745. **Concerning (ALERT).**\n* **GOOGL:** RSI 40.6, SMA-50 575.14 above SMA-200 548.79, negative MACD signal -1.517, volume 8,789,281 vs 20-day average 28,735,139.\n* **GS:** RSI 23.0 (oversold), SMA-50 435.22 above SMA-200 371.82, negative MACD signal -1.081, volume 30,772,689 vs 20-day average 21,603,135. **Concerning (WATCH).**\n* **JNJ:** RSI 37.3, SMA-50 795.93 above SMA-200 795.17, negative MACD signal -2.679, volume 44,364,393 vs 20-day average 26,279,292.\n* **MA:** RSI 64.0, SMA-50 85.19 below SMA-200 92.83, positive MACD signal 2.005, volume 14,661,719 vs 20-day average 21,426,025. **Concerning (WATCH).**\n* **MSFT:** RSI 36.5, SMA-50 65.21 below SMA-200 71.77, negative MACD signal -1.896, volume 30,511,983 vs 20-day average 25,097,108. **Concerning (WATCH).**\n* **NVDA:** RSI 36.3, SMA-50 435.97 above SMA-200 391.29, negative MACD signal -3.908, volume 18,209,663 vs 20-day average 30,723,741.\n* **UNH:** RSI 74.1 (overbought), SMA-50 150.02 below SMA-200 169.7, positive MACD signal 0.88, volume 3,508,369 vs 20-day average 25,140,486. **Concerning (ALERT).**\n* **XOM:** RSI 39.7, SMA-50 183.83 above SMA-200 164.74, positive MACD signal 0.952, volume 44,682,597 vs 20-day average 27,636,955.\n\n### Earnings Beat/Miss Pattern\n* **GS, MSFT, XOM:** Beat both revenue and EPS estimates.\n* **AAPL, GOOGL, JNJ, UNH:** Beat revenue estimates but missed EPS estimates.\n* **CVX, MA:** Missed revenue estimates but beat EPS estimates.\n* **NVDA:** Missed both revenue and EPS estimates.\n\n### Macro Backdrop\n* **Latest Readings:** Federal Funds Rate: 5.22, CPI YoY: 4.59, Core PCE: 2.86, 10Y Treasury Yield: 4.14, 2Y Treasury Yield: 5.28, Unemployment Rate: 3.76, GDP Growth QoQ: 2.92, ISM Manufacturing PMI: 48.7, Consumer Confidence Index: 108.7, VIX: 16.65.\n* **Spreads and Changes:** 10Y-2Y spread -1.14 percentage points (-114.0 bps). Month-over-month changes: Federal Funds Rate +0.59; CPI YoY +0.02; Core PCE +0.5; 10Y Treasury Yield +0.2; 2Y Treasury Yield +1.04; Unemployment Rate -0.53; GDP Growth QoQ +3.12; ISM Manufacturing PMI -1.7; Consumer Confidence Index +39.5; VIX -12.37.\n* **Regime:** Rule-based market regime is Risk-Off with a Low VIX regime, inverted yield curve, and rising CPI trend."
+      ],
+      "graders": [
+        {
+          "groundedness": 0.96,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [
+            "AAPL, GOOGL, JNJ, UNH: Beat revenue estimates but missed EPS estimates.",
+            "CVX, MA: Missed revenue estimates but beat EPS estimates."
+          ],
+          "verdict": "FLAG",
+          "parse_error": false,
+          "llm_verdict": "FLAG",
+          "numeric_check": {
+            "checked": 90,
+            "matched": 90,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": false,
+      "latency_ms": 18728.6,
+      "error": null,
+      "trace_id": "eb025bebc2af442d"
+    },
+    {
+      "id": "mrm-002-subset4",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset4",
+      "outputs": [
+        "### 1. Sector Exposure and Performance\n- **Technology:** Portfolio weight is 50.24% with an average P&L across positions of 42.31%.\n- **Healthcare:** Portfolio weight is 32.37% with an average P&L across positions of -6.43%.\n- **Financials:** Portfolio weight is 10.02% with an average P&L across positions of 67.88%.\n- **Consumer Discretionary:** Portfolio weight is 4.31% with an average P&L across positions of 5.8%.\n- **Energy:** Portfolio weight is 3.06% with an average P&L across positions of -29.09%.\n\n### 2. Technical Signals per Position\n- **AAPL:** RSI-14 29.4 (oversold), SMA-50 464.01 below SMA-200 508.46, MACD signal -0.301, volume ratio 1.58. Technical status: ALERT (concerning).\n- **AVGO:** RSI-14 40.3, SMA-50 411.47 below SMA-200 439.76, MACD signal -1.383, volume ratio 1.01. Technical status: WATCH.\n- **JNJ:** RSI-14 37.3, SMA-50 795.93 above SMA-200 795.17, MACD signal -2.679, volume ratio 1.69. Technical status: OK.\n- **JPM:** RSI-14 65.9, SMA-50 48.45 below SMA-200 53.57, MACD signal 1.084, volume ratio 1.28. Technical status: WATCH.\n- **MSFT:** RSI-14 36.5, SMA-50 65.21 below SMA-200 71.77, MACD signal -1.896, volume ratio 1.22. Technical status: WATCH.\n- **ORCL:** RSI-14 66.3, SMA-50 555.32 above SMA-200 496.68, MACD signal 3.073, volume ratio 1.45. Technical status: OK.\n- **TSLA:** RSI-14 25.0 (oversold), SMA-50 223.87 above SMA-200 223.39, MACD signal -2.422, volume ratio 0.37. Technical status: WATCH.\n- **UNH:** RSI-14 74.1 (overbought), SMA-50 150.02 below SMA-200 169.7, MACD signal 0.88, volume ratio 0.14. Technical status: ALERT (concerning).\n- **V:** RSI-14 37.7, SMA-50 296.96 below SMA-200 334.98, MACD signal -1.466, volume ratio 0.31. Technical status: WATCH.\n- **XOM:** RSI-14 39.7, SMA-50 183.83 above SMA-200 164.74, MACD signal 0.952, volume ratio 1.62. Technical status: OK.\n\n### 3. Earnings Beat/Miss Pattern\nIn the latest quarter, MSFT and XOM reported earnings beats. AAPL, AVGO, JNJ, JPM, ORCL, TSLA, UNH, and V missed consensus estimates on either revenue or EPS.\n\n### 4. Macro Backdrop\n- **Latest Readings:** Federal Funds Rate: 5.22, CPI YoY: 4.59, Core PCE: 2.86, 10Y Treasury Yield: 4.14, 2Y Treasury Yield: 5.28, Unemployment Rate: 3.76, GDP Growth QoQ: 2.92, ISM Manufacturing PMI: 48.7, Consumer Confidence Index: 108.7, VIX: 16.65.\n- **10Y-2Y Spread & Month-over-Month Changes:** The 10Y-2Y spread is -1.14 percentage points (-114.0 bps). Month-over-month changes: Federal Funds Rate +0.59; CPI YoY +0.02; Core PCE +0.5; 10Y Treasury Yield +0.2; 2Y Treasury Yield +1.04; Unemployment Rate -0.53; GDP Growth QoQ +3.12; ISM Manufacturing PMI -1.7; Consumer Confidence Index +39.5; VIX -12.37.\n- **Regime:** Rule-based market regime is Risk-Off, with a low VIX regime, an inverted yield curve, and ISM Manufacturing PMI below 50."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 82,
+            "matched": 82,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 5213.6,
+      "error": null,
+      "trace_id": "5e101d30400a415f"
+    },
+    {
+      "id": "mrm-002-subset8",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset8",
+      "outputs": [
+        "MARKET ANALYSIS REPORT:\n\n1. **Sector Exposure and Performance**\n- Technology: Portfolio weight 44.27%, Market value $11,070,160.48, Average P&L 34.69%, Unrealized P&L $3,245,762.03 (Positions: GOOGL, NVDA, MSFT, AVGO, ORCL).\n- Healthcare: Portfolio weight 30.65%, Market value $7,663,223.59, Average P&L -6.43%, Unrealized P&L -$287,641.97 (Positions: JNJ, UNH).\n- Energy: Portfolio weight 13.36%, Market value $3,341,380.66, Average P&L -21.66%, Unrealized P&L -$923,765.75 (Position: CVX).\n- Financials: Portfolio weight 11.71%, Market value $2,928,707.56, Average P&L 38.13%, Unrealized P&L $941,574.62 (Positions: GS, JPM).\n\n2. **Technical Signals per Position**\n- AVGO: RSI-14 40.3, SMA-50 411.47, SMA-200 439.76, MACD signal -1.383, Volume ratio 1.01. Concerning signals: SMA-50 below SMA-200; negative MACD signal.\n- CVX: RSI-14 75.9, SMA-50 87.88, SMA-200 104.16, MACD signal 4.571, Volume ratio 0.94. Concerning signals: RSI overbought (>=70); SMA-50 below SMA-200. (ALERT status).\n- GOOGL: RSI-14 40.6, SMA-50 575.14, SMA-200 548.79, MACD signal -1.517, Volume ratio 0.31. Concerning signals: negative MACD signal.\n- GS: RSI-14 23.0, SMA-50 435.22, SMA-200 371.82, MACD signal -1.081, Volume ratio 1.42. Concerning signals: RSI oversold (<=30); negative MACD signal.\n- JNJ: RSI-14 37.3, SMA-50 795.93, SMA-200 795.17, MACD signal -2.679, Volume ratio 1.69. Concerning signals: negative MACD signal.\n- JPM: RSI-14 65.9, SMA-50 48.45, SMA-200 53.57, MACD signal 1.084, Volume ratio 1.28. Concerning signals: SMA-50 below SMA-200.\n- MSFT: RSI-14 36.5, SMA-50 65.21, SMA-200 71.77, MACD signal -1.896, Volume ratio 1.22. Concerning signals: SMA-50 below SMA-200; negative MACD signal.\n- NVDA: RSI-14 36.3, SMA-50 435.97, SMA-200 391.29, MACD signal -3.908, Volume ratio 0.59. Concerning signals: negative MACD signal.\n- ORCL: RSI-14 66.3, SMA-50 555.32, SMA-200 496.68, MACD signal 3.073, Volume ratio 1.45.\n- UNH: RSI-14 74.1, SMA-50 150.02, SMA-200 169.7, MACD signal 0.88, Volume ratio 0.14. Concerning signals: RSI overbought (>=70); SMA-50 below SMA-200. (ALERT status).\n\n3. **Earnings Beat/Miss Pattern**\n- Beats: GS, MSFT.\n- Misses: AVGO, CVX, GOOGL, JNJ, JPM, NVDA, ORCL, UNH.\n\n4. **Macro Backdrop**\n- Latest readings: Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7, VIX 16.65.\n- Spread and month-over-month changes: 10Y-2Y spread -1.14 percentage points (-114.0 bps); Federal Funds Rate change +0.59; CPI YoY change +0.02; Core PCE change +0.5; 10Y Treasury Yield change +0.2; 2Y Treasury Yield change +1.04; Unemployment Rate change -0.53; GDP Growth QoQ change +3.12; ISM Manufacturing PMI change -1.7; Consumer Confidence Index change +39.5; VIX change -12.37.\n- Regime: Risk-Off (Curve inverted: True, VIX regime: Low, PMI above 50: False, CPI trend: Rising)."
+      ],
+      "graders": [
+        {
+          "groundedness": 0.98,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [
+            "JNJ: RSI-14 37.3, SMA-50 795.93, SMA-200 795.17, MACD signal -2.679, Volume ratio 1.69. Concerning signals: negative MACD signal."
+          ],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 88,
+            "matched": 88,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 6128.7,
+      "error": null,
+      "trace_id": "678af7c7116d48a4"
+    },
+    {
+      "id": "mrm-002-subset9",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset9",
+      "outputs": [
+        "MARKET ANALYSIS REPORT:\n\n**1. Sector Exposure and Performance**\n- Technology: Portfolio weight 50.41%, Market value $12,986,763.92, Average P&L 40.3%, Unrealized P&L $4,274,993.87. Positions: GOOGL, AAPL, MSFT, AVGO, ORCL.\n- Healthcare: Portfolio weight 29.75%, Market value $7,663,223.59, Average P&L -6.43%, Unrealized P&L -$287,641.97. Positions: JNJ, UNH.\n- Energy: Portfolio weight 12.97%, Market value $3,341,380.66, Average P&L -21.66%, Unrealized P&L -$923,765.75. Positions: CVX.\n- Consumer Discretionary: Portfolio weight 3.96%, Market value $1,019,773.01, Average P&L 5.8%, Unrealized P&L $55,869.86. Positions: TSLA.\n- Financials: Portfolio weight 2.91%, Market value $750,816.36, Average P&L 5.59%, Unrealized P&L $39,747.12. Positions: GS.\n\n**2. Technical Signals per Position**\n- AAPL: RSI-14 29.4 (oversold), SMA-50 464.01 below SMA-200 508.46, MACD signal -0.301, volume 45,320,582 vs 20-day average 28,774,610 (ratio 1.58). Status: ALERT (concerning).\n- AVGO: RSI-14 40.3, SMA-50 411.47 below SMA-200 439.76, MACD signal -1.383, volume 19,414,190 vs 20-day average 19,312,456 (ratio 1.01). Status: WATCH.\n- CVX: RSI-14 75.9 (overbought), SMA-50 87.88 below SMA-200 104.16, MACD signal 4.571, volume 28,433,270 vs 20-day average 30,173,745 (ratio 0.94). Status: ALERT (concerning).\n- GOOGL: RSI-14 40.6, SMA-50 575.14 above SMA-200 548.79, MACD signal -1.517, volume 8,789,281 vs 20-day average 28,735,139 (ratio 0.31). Status: OK.\n- GS: RSI-14 23.0 (oversold), SMA-50 435.22 above SMA-200 371.82, MACD signal -1.081, volume 30,772,689 vs 20-day average 21,603,135 (ratio 1.42). Status: WATCH.\n- JNJ: RSI-14 37.3, SMA-50 795.93 above SMA-200 795.17, MACD signal -2.679, volume 44,364,393 vs 20-day average 26,279,292 (ratio 1.69). Status: OK.\n- MSFT: RSI-14 36.5, SMA-50 65.21 below SMA-200 71.77, MACD signal -1.896, volume 30,511,983 vs 20-day average 25,097,108 (ratio 1.22). Status: WATCH.\n- ORCL: RSI-14 66.3, SMA-50 555.32 above SMA-200 496.68, MACD signal 3.073, volume 36,052,154 vs 20-day average 24,807,278 (ratio 1.45). Status: OK.\n- TSLA: RSI-14 25.0 (oversold), SMA-50 223.87 above SMA-200 223.39, MACD signal -2.422, volume 9,984,743 vs 20-day average 26,835,706 (ratio 0.37). Status: WATCH.\n- UNH: RSI-14 74.1 (overbought), SMA-50 150.02 below SMA-200 169.7, MACD signal 0.88, volume 3,508,369 vs 20-day average 25,140,486 (ratio 0.14). Status: ALERT (concerning).\n\n**3. Earnings Beat/Miss Pattern**\n- AAPL: Revenue miss, EPS miss.\n- AVGO: Revenue miss, EPS beat.\n- CVX: Revenue miss, EPS beat.\n- GOOGL: Revenue miss, EPS beat.\n- GS: Revenue beat, EPS beat.\n- JNJ: Revenue beat, EPS miss.\n- MSFT: Revenue beat, EPS beat.\n- ORCL: Revenue miss, EPS miss.\n- TSLA: Revenue beat, EPS miss.\n- UNH: Revenue beat, EPS miss.\n\n**4. Macro Backdrop**\n- Readings: Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, GDP Growth QoQ 2.92, ISM Manufacturing PMI 48.7, Consumer Confidence Index 108.7, VIX 16.65.\n- 10Y-2Y spread: -1.14 percentage points (-114.0 bps).\n- Month-over-month changes: Federal Funds Rate +0.59, CPI YoY +0.02, Core PCE +0.5, 10Y Treasury Yield +0.2, 2Y Treasury Yield +1.04, Unemployment Rate -0.53, GDP Growth QoQ +3.12, ISM Manufacturing PMI -1.7, Consumer Confidence Index +39.5, VIX -12.37.\n- Regime: Risk-Off (VIX regime: Low; PMI above 50: False; CPI trend: Rising; curve inverted: True)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 112,
+            "matched": 112,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 7070.6,
+      "error": null,
+      "trace_id": "670a5d0c723c4cc1"
+    }
+  ],
+  "components": {
+    "MRM-002": {
+      "n_items": 10,
+      "passed": 9,
+      "pass_rate": 0.9,
+      "mean_groundedness": 0.985,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 0.9,
+      "errors": 0,
+      "status": "APPROVED"
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "finished_at": "2026-09-29T22:14:53+00:00"
+}

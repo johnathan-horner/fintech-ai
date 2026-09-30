@@ -1,0 +1,5 @@
+# FastAPI backend (uvicorn src.api.main:app). Includes the app/AI stack.
+-r requirements.txt
+fastapi==0.142.0
+uvicorn==0.54.0
+httpx==0.28.1

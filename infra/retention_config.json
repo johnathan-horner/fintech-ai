@@ -1,0 +1,7 @@
+{
+  "cloudtrail_log_group_retention": "SEVEN_YEARS",
+  "cloudtrail_log_group_retention_days": 2557,
+  "audit_bucket_expiration_days": 2555,
+  "audit_bucket_glacier_transition_days": 90,
+  "note": "7-year audit retention. CloudWatch Logs only offers 2557 days (RetentionDays.SEVEN_YEARS); the S3 audit bucket expires objects after 2555 days. Read by infra/fintech_stack.py and reported by mcp_server.py."
+}

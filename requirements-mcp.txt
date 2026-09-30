@@ -1,0 +1,4 @@
+# MCP server deps (separate from the Streamlit Cloud requirements).
+# fastmcp 4.x needs websockets>=17, which conflicts with streamlit<17 pins, so this is its own env.
+fastmcp>=4.0.10,<5
+numpy==2.4.6

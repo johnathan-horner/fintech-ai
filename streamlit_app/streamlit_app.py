@@ -1,16 +1,20 @@
 """
 FinTech AI -- Streamlit Cloud Entry Point
-Demo mode: synthetic data + mock AI responses, no AWS needed.
-Live mode: full Amazon Bedrock + FAISS pipeline.
+
+Quant metrics are always computed from the bundled synthetic data.
+AI features use Google Gemini (free tier) when st.secrets["gemini"]["api_key"]
+is set, gated by model governance, capped at 10 live requests per session and
+falling back to labelled, data-derived demo output otherwise.
 """
 
-import streamlit as st
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+import streamlit as st
 
-DEMO_MODE = os.getenv("FINTECH_DEMO_MODE", "true").lower() != "false"
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.llm import config  # noqa: E402
 
 st.set_page_config(
     page_title="FinTech AI -- Hedge Fund Intelligence",
@@ -26,25 +30,22 @@ st.markdown("""
         color: white; border: none; border-radius: 8px;
         padding: 0.5rem 1.5rem; font-weight: 600;
     }
-    .demo-banner {
-        background: linear-gradient(135deg, #1e3a5f, #1a1f3a);
-        border: 1px solid #3b82f6; border-radius: 8px;
-        padding: 0.6rem 1rem; margin-bottom: 1rem;
-        font-size: 0.85rem; color: #93c5fd;
-    }
     h1, h2, h3 { color: #f1f5f9 !important; }
 </style>
 """, unsafe_allow_html=True)
 
+LIVE_AVAILABLE = config.has_credentials()
+
 with st.sidebar:
     st.markdown("# FinTech AI")
     st.markdown("**Hedge Fund Intelligence Platform**")
-    if DEMO_MODE:
-        st.success("Demo Mode")
-        st.caption("Synthetic data | Mock AI responses")
+    if LIVE_AVAILABLE:
+        st.success("Live AI available")
+        st.caption(f"{config.get_provider().title()} · chat {config.model_id('chat')} · "
+                   f"grader {config.model_id('grader')}")
     else:
-        st.info("Live Mode")
-        st.caption("Amazon Bedrock | Real AI pipeline")
+        st.warning("Demo mode")
+        st.caption("No Gemini API key configured · AI sections show data-derived templates")
     st.markdown("---")
     page = st.radio(
         "Navigation",
@@ -59,16 +60,26 @@ with st.sidebar:
         key="main_nav",
     )
     st.markdown("---")
+    from streamlit_app.live_ai import MAX_LIVE_REQUESTS_PER_SESSION, requests_used  # noqa: E402
+
+    with st.expander("System"):
+        st.caption(f"Live AI requests this session: {requests_used()}/{MAX_LIVE_REQUESTS_PER_SESSION}")
+        st.caption(f"Traced outputs this session: {len(st.session_state.get('trace_log', []))}")
+        st.caption(f"Embeddings: {config.model_id('embedding')} · re-ranker: ms-marco-MiniLM-L-6-v2 (local ONNX)")
+        st.caption(config.free_tier_label())
     st.caption("Built by Johnathan Horner")
-    st.caption("Amazon Bedrock | LangGraph | FAISS")
+    st.caption("LangGraph | FAISS | Gemini free tier (demo) | Bedrock (production target)")
     st.caption("SR 11-7 MRM Framework")
 
-if DEMO_MODE:
-    st.info("**[DEMO] Demo Mode** -- Running on synthetic portfolio data with mock AI responses. No AWS credentials required.")
+if LIVE_AVAILABLE:
+    st.info("Synthetic portfolio data. AI outputs are labelled **Live AI** or **Demo mode**; "
+            f"live use is gated by model approvals and capped at {MAX_LIVE_REQUESTS_PER_SESSION} requests per session.")
+else:
+    st.info("**Demo mode** -- synthetic portfolio data; quant metrics are computed live, AI sections show "
+            "deterministic templates filled from the data (no Gemini API key configured).")
 
-from streamlit_app.demo_pages import (
-    page_portfolio, page_market, page_risk,
-    page_portfolio_management, page_chat, page_mrm,
+from streamlit_app.demo_pages import (  # noqa: E402
+    page_chat, page_market, page_mrm, page_portfolio, page_portfolio_management, page_risk,
 )
 
 if page == "Portfolio Overview":
@@ -83,3 +94,6 @@ elif page == "AI Chat":
     page_chat()
 elif page == "Model Risk Management":
     page_mrm()
+
+st.markdown("---")
+st.caption(config.free_tier_label())

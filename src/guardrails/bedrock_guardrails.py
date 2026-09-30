@@ -5,8 +5,6 @@ Filters sensitive client PII and blocks non-compliant outputs.
 Mirrors EduAI's bedrock_guardrails.py.
 """
 
-import boto3
-import json
 import re
 
 REGION = "us-east-1"
@@ -76,6 +74,8 @@ def create_bedrock_guardrail():
     Create the Bedrock Guardrail in AWS (run once during setup).
     Returns the guardrail_id.
     """
+    import boto3  # optional (production/Bedrock path only)
+
     client = boto3.client("bedrock", region_name=REGION)
     try:
         response = client.create_guardrail(

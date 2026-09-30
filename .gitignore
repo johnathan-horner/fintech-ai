@@ -27,8 +27,8 @@ ENV/
 .aws/
 credentials
 
-# FAISS index (rebuild from data)
-faiss_index/
+# FAISS index: committed on purpose (built with scripts/build_index.py; the
+# manifest is verified against the data + embedding model on load).
 
 # Logs
 logs/

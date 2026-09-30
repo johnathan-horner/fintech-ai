@@ -1,94 +1,114 @@
 """
-FinTech AI - RAG Chain
-LCEL chain with conversational memory for financial Q&A.
-Mirrors EduAI's rag_chain.py.
+FinTech AI - RAG chain (inventory MRM-001).
+
+question -> approval gate -> HyDE retrieval (FAISS, k=12, + raw-query merge)
+-> cross-encoder re-rank (top 4) -> answer (chat model, cites source ids)
+-> independent grader -> TraceRecord.
+
+Conversational memory: the last 5 turns of the session history are included
+in the answer prompt.
 """
 
-import boto3
-from langchain_aws import ChatBedrock
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferWindowMemory
-from langchain.prompts import PromptTemplate
-from src.rag.vector_store import load_vector_store
-from src.rag.query_transform import transform_query
+from __future__ import annotations
 
-REGION = "us-east-1"
-MODEL_ID = "anthropic.claude-3-sonnet-20240229-v1:0"
+import time
+from typing import List, Optional
 
-SYSTEM_PROMPT = """You are a senior hedge fund analyst AI assistant. 
-You have access to portfolio positions, earnings transcripts, and macro economic data.
+from src.llm import config
+from src.llm.guard import call_llm
+from src.llm.provider import Embedder, get_chat_model, message_text
+from src.mrm.grader import format_sources, grade_output
+from src.mrm.model_inventory import current_version, require_approved
+from src.mrm.trace import TraceRecord, log_trace
+from src.prompts import registry
+from src.rag.query_transform import hyde_retrieve
+from src.rag.reranker import RERANK_TOP_N, get_reranker
 
-Answer the analyst's question using the provided context. Be precise and quantitative.
-Always cite specific numbers (prices, percentages, ratios) when available.
-If you identify risk, be direct about it. Format responses professionally.
-
-Context:
-{context}
-
-Chat History:
-{chat_history}
-
-Question: {question}
-
-Analysis:"""
-
-PROMPT = PromptTemplate(
-    input_variables=["context", "chat_history", "question"],
-    template=SYSTEM_PROMPT,
-)
+INVENTORY_ID = "MRM-001"
+MEMORY_TURNS = 5
 
 
-def build_rag_chain():
-    """Build the conversational RAG chain."""
-    bedrock_client = boto3.client("bedrock-runtime", region_name=REGION)
-    llm = ChatBedrock(
-        client=bedrock_client,
-        model_id=MODEL_ID,
-        model_kwargs={"max_tokens": 1024, "temperature": 0.1},
+def _format_history(history: Optional[List[dict]]) -> str:
+    if not history:
+        return "(none)"
+    turns = history[-2 * MEMORY_TURNS:]
+    return "\n".join(f"{m['role']}: {m['content'][:600]}" for m in turns)
+
+
+def answer_question(
+    question: str,
+    history: Optional[List[dict]] = None,
+    *,
+    chat_llm=None,
+    hyde_llm=None,
+    grader_llm=None,
+    embedder=None,
+    index=None,
+    reranker=None,
+    approvals: Optional[dict] = None,
+    enforce_approval: bool = True,
+) -> dict:
+    started = time.perf_counter()
+    cur = current_version(INVENTORY_ID)
+    if enforce_approval:
+        approval = require_approved(INVENTORY_ID, cur["model_id"], cur["prompt_versions"], approvals)
+    else:
+        approval = {"status": "EVALUATION_RUN", "reason": "approval gate bypassed by the eval harness"}
+
+    embedder = embedder or Embedder()
+    if index is None:
+        from src.rag.vector_store import get_index
+
+        index = get_index(embedder)
+
+    retrieval = hyde_retrieve(question, index, embedder, llm=hyde_llm or get_chat_model("hyde"))
+    candidates = retrieval["candidates"]
+    rerank_note = None
+    try:
+        ranked = (reranker or get_reranker()).rerank(question, candidates, top_n=RERANK_TOP_N)
+    except Exception as exc:  # model download blocked etc. - keep FAISS order, but say so
+        rerank_note = f"re-ranker unavailable ({type(exc).__name__}); FAISS order used"
+        ranked = [(c, None) for c in sorted(candidates, key=lambda c: -c["faiss_score"])[:RERANK_TOP_N]]
+
+    sources = [
+        {"source_id": d["source_id"], "text": d["text"], "rerank_score": s,
+         "faiss_score": round(d["faiss_score"], 4), "retrieved_by": d["retrieved_by"]}
+        for d, s in ranked
+    ]
+    prompt = registry.get("rag_answer").format(
+        history=_format_history(history), sources=format_sources(sources), question=question
     )
+    answer = message_text(call_llm(chat_llm or get_chat_model("chat"), prompt)).strip()
+    grader = grade_output(answer, sources, llm=grader_llm)
 
-    vectorstore = load_vector_store()
-    retriever = vectorstore.as_retriever(
-        search_type="similarity",
-        search_kwargs={"k": 8}
+    trace = TraceRecord(
+        inventory_id=INVENTORY_ID,
+        provider=cur["provider"],
+        model_id=cur["model_id"],
+        prompt_versions=cur["prompt_versions"],
+        mode="live",
+        embedding_model=embedder.model_name,
+        index_manifest_hash=getattr(index, "manifest_hash", None),
+        source_ids=[s["source_id"] for s in sources],
+        grader={k: grader.get(k) for k in ("groundedness", "numeric_consistency", "verdict", "llm_verdict",
+                                           "unsupported_claims", "grader_model", "grader_prompt")}
+        | {"numeric_mismatches": grader["numeric_check"]["mismatches"], "grader_error": grader.get("grader_error")},
+        approval_status=approval["status"],
+        approval_reason=approval["reason"],
+        latency_ms=round((time.perf_counter() - started) * 1000, 1),
+        extra={"hyde_model": config.model_id("hyde"), "candidates": len(candidates),
+               "reranker": rerank_note or "Xenova/ms-marco-MiniLM-L-6-v2"},
     )
-
-    memory = ConversationBufferWindowMemory(
-        k=5,
-        memory_key="chat_history",
-        return_messages=True,
-        output_key="answer",
-    )
-
-    chain = ConversationalRetrievalChain.from_llm(
-        llm=llm,
-        retriever=retriever,
-        memory=memory,
-        combine_docs_chain_kwargs={"prompt": PROMPT},
-        return_source_documents=True,
-        verbose=False,
-    )
-    return chain
-
-
-# Module-level singleton
-_chain = None
-
-
-def get_rag_chain():
-    global _chain
-    if _chain is None:
-        _chain = build_rag_chain()
-    return _chain
-
-
-def query(question: str) -> dict:
-    """Run a financial question through the RAG chain."""
-    transformed = transform_query(question)
-    chain = get_rag_chain()
-    result = chain({"question": transformed})
     return {
         "question": question,
-        "answer": result["answer"],
-        "sources": [doc.metadata for doc in result.get("source_documents", [])],
+        "answer": answer,
+        "sources": sources,
+        "hypothetical_passage": retrieval["passage"],
+        "grader": grader,
+        "trace": log_trace(trace),
     }
+
+
+def query(question: str, history: Optional[List[dict]] = None) -> dict:
+    """Backwards-compatible entry point used by the API."""
+    return answer_question(question, history)

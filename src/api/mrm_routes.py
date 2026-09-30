@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 from src.mrm.model_inventory import get_inventory
-from src.mrm.validation.model_validator import run_validation_suite
+from src.mrm.validation.model_validator import run_all_validations, run_validation_suite
 from src.mrm.monitoring.model_monitor import run_monitoring_report, detect_input_drift
 from src.mrm.governance.model_governance import (
     get_governance_summary,
@@ -90,12 +90,8 @@ def run_model_validation(model_id: str):
 
 @router.post("/validation/run-all")
 def run_all_validations():
-    """Run validation suite for all models in the inventory."""
-    inv = get_inventory()
-    results = {}
-    for model_id in inv.models.keys():
-        results[model_id] = run_validation_suite(model_id)
-    return results
+    """Run validation suite for all models in the inventory. Returns {model_id: report}."""
+    return run_all_validations()
 
 
 #  Monitoring 
@@ -110,8 +106,9 @@ def get_monitoring_report():
 
 @router.get("/monitoring/drift/{model_id}")
 def get_drift_report(model_id: str):
-    """Get input distribution drift analysis (PSI) for a model."""
-    return detect_input_drift(model_id)
+    """PSI drift: MRM-006 returns (first 250d vs last 60d); LLM components grader scores."""
+    from src.mrm.trace import recent_traces
+    return detect_input_drift(model_id, recent_traces(500))
 
 
 @router.get("/monitoring/expiry-alerts")

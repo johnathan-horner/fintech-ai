@@ -1,0 +1,110 @@
+{
+  "approvals": {
+    "MRM-001": {
+      "approved_at": "2026-09-29T21:25:10+00:00",
+      "approved_by": "eval-harness (scripts/run_eval.py)",
+      "evidence": "heldout-20260929T210703Z",
+      "grader_model": "gemini-3.1-flash-lite",
+      "metrics": {
+        "exact_fact_accuracy": 0.9524,
+        "grader_pass_rate": 1.0,
+        "mean_groundedness": 1.0,
+        "n_items": 23,
+        "pass_rate": 0.9565
+      },
+      "model_id": "gemini-3.5-flash-lite+hyde:gemini-3.1-flash-lite+emb:gemini-embedding-001",
+      "prompt_versions": [
+        "hyde_passage@1.0.0#abb1a9d5",
+        "rag_answer@1.0.0#b6aacf6d"
+      ],
+      "status": "APPROVED"
+    },
+    "MRM-002": {
+      "approved_at": "2026-09-30T00:50:56+00:00",
+      "approved_by": "eval-harness (scripts/run_eval.py)",
+      "evidence": "heldout-20260930T004656Z",
+      "grader_model": "gemini-3.1-flash-lite",
+      "metrics": {
+        "exact_fact_accuracy": null,
+        "grader_pass_rate": 1.0,
+        "mean_groundedness": 1.0,
+        "n_items": 10,
+        "pass_rate": 1.0
+      },
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "market_analysis@1.2.0#f046466c"
+      ],
+      "status": "APPROVED"
+    },
+    "MRM-003": {
+      "approved_at": "2026-09-30T01:15:41+00:00",
+      "approved_by": "eval-harness (scripts/run_eval.py)",
+      "evidence": "heldout-20260930T010751Z",
+      "grader_model": "gemini-3.1-flash-lite",
+      "metrics": {
+        "exact_fact_accuracy": null,
+        "grader_pass_rate": 1.0,
+        "mean_groundedness": 1.0,
+        "n_items": 10,
+        "pass_rate": 1.0
+      },
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "risk_report@1.2.0#7ca70726"
+      ],
+      "status": "APPROVED"
+    },
+    "MRM-004": {
+      "approved_at": "2026-09-30T01:15:41+00:00",
+      "approved_by": "eval-harness (scripts/run_eval.py)",
+      "evidence": "heldout-20260930T010751Z",
+      "grader_model": "gemini-3.1-flash-lite",
+      "metrics": {
+        "exact_fact_accuracy": null,
+        "grader_pass_rate": 1.0,
+        "mean_groundedness": 1.0,
+        "n_items": 10,
+        "pass_rate": 1.0
+      },
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "portfolio_recommendations@1.2.0#c5fa95b1"
+      ],
+      "status": "APPROVED"
+    },
+    "MRM-005": {
+      "approved_at": "2026-09-30T00:58:36+00:00",
+      "approved_by": "eval-harness (scripts/run_eval.py)",
+      "evidence": "heldout-20260930T005058Z",
+      "grader_model": "gemini-3.1-flash-lite",
+      "metrics": {
+        "exact_fact_accuracy": null,
+        "grader_pass_rate": 1.0,
+        "mean_groundedness": 0.9987,
+        "n_items": 10,
+        "pass_rate": 1.0
+      },
+      "model_id": "gemini-3.5-flash-lite",
+      "prompt_versions": [
+        "market_analysis@1.2.0#f046466c",
+        "portfolio_recommendations@1.2.0#c5fa95b1",
+        "risk_report@1.2.0#7ca70726"
+      ],
+      "status": "APPROVED"
+    },
+    "MRM-006": {
+      "approved_at": "2026-09-29T21:25:10+00:00",
+      "approved_by": "eval-harness (scripts/run_eval.py)",
+      "evidence": "heldout-20260929T210703Z",
+      "metrics": {
+        "basel_zone": "GREEN",
+        "period": "2024-04-15 to 2026-03-19"
+      },
+      "model_id": "src/utils/metrics.py",
+      "prompt_versions": [],
+      "status": "APPROVED"
+    }
+  },
+  "note": "Written by scripts/run_eval.py from measured evaluation runs. Do not edit by hand."
+}
