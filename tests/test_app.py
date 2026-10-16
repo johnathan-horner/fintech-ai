@@ -33,7 +33,7 @@ def test_page_renders_without_key(page):
     txt = _text(at)
     assert "Demo mode" in txt
     assert "5.42M" not in txt and "43.5%" not in txt and "Weighted beta 1.31" not in txt
-    assert "(free tier) + Gemini embeddings" in txt and "Amazon Bedrock (Claude)" in txt
+    assert "Amazon Bedrock Claude Haiku 4.5 (primary)" in txt and "not used by this live demo" in txt
 
 
 def test_portfolio_kpis_are_computed():
@@ -49,7 +49,7 @@ def test_ai_sections_fall_back_with_labels():
     at.button(key="run_orch_market").click().run()
     assert not at.exception
     txt = _text(at)
-    assert "Demo mode" in txt and "No Gemini API key configured" in txt
+    assert "Demo mode" in txt and "No LLM provider configured" in txt
     assert any(e.label.startswith("Trace ") for e in at.expander)
 
 
@@ -58,7 +58,7 @@ def test_chat_demo_answer_with_trace():
     at.chat_input[0].set_value("What does my CVaR tell me? $5 test").run()
     assert not at.exception
     txt = _text(at)
-    assert "No Gemini API key configured" in txt
+    assert "No LLM provider configured" in txt
     assert "Grader: LLM grader not run (demo output)" in txt
     assert any(e.label.startswith("Trace ") for e in at.expander)
 

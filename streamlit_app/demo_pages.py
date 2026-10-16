@@ -176,7 +176,8 @@ def _render_section(section_key: str, placeholder_demo):
         mode, reason = section.get("mode", "live"), section.get("reason")
     else:
         mode, reason = ("blocked" if res.get("blocked") else "demo"), res.get("reason")
-    render_output(section.get("text", ""), mode, reason, section.get("grader"), section.get("trace"))
+    fallback = section.get("fallback_reason") or (out.get("trace") or {}).get("fallback_reason")
+    render_output(section.get("text", ""), mode, reason, section.get("grader"), section.get("trace"), fallback)
     if res["mode"] == "live" and out.get("trace"):
         with st.expander(f"Orchestrator trace {out['trace']['trace_id']} · MRM-005"):
             st.json(out["trace"])
@@ -434,8 +435,10 @@ def page_chat():
     )
 
     st.title("AI Chat")
-    st.caption("RAG over the bundled data: HyDE retrieval (FAISS) -> cross-encoder re-rank -> "
-               f"{config.model_id('chat')} answer -> independent grader ({config.model_id('grader')})")
+    st.caption("RAG over the bundled data: HyDE retrieval (FAISS, gemini-embedding-001) -> cross-encoder re-rank -> "
+               f"answer on {config.provider_label('bedrock', config.HAIKU_45)} (fallback "
+               f"{config.provider_label('gemini', config.model_id('chat', 'gemini'))}) -> independent grader "
+               "(always a different model)")
 
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -464,6 +467,7 @@ def page_chat():
             "grader": out.get("grader"),
             "trace": out.get("trace"),
             "sources": out.get("sources", []),
+            "fallback_reason": out.get("fallback_reason"),
         })
 
     st.subheader("Suggested Queries")
@@ -477,7 +481,6 @@ def page_chat():
     for i, ex in enumerate(examples):
         if cols[i].button(ex, key=f"ex_{i}"):
             ask(ex)
-    st.caption(f"Live AI requests this session: {requests_used()}/{MAX_LIVE_REQUESTS_PER_SESSION}")
     st.divider()
 
     if prompt := st.chat_input("Ask about your portfolio or markets..."):
@@ -488,7 +491,8 @@ def page_chat():
             if msg["role"] == "user":
                 st.markdown(md_escape(msg["content"]))
                 continue
-            render_output(msg["content"], msg.get("mode", "demo"), msg.get("reason"), msg.get("grader"), msg.get("trace"))
+            render_output(msg["content"], msg.get("mode", "demo"), msg.get("reason"), msg.get("grader"), msg.get("trace"),
+                          msg.get("fallback_reason"))
             if msg.get("sources"):
                 with st.expander(f"Sources ({len(msg['sources'])})"):
                     for s in msg["sources"]:
@@ -498,6 +502,9 @@ def page_chat():
                             head += f" · faiss {s['faiss_score']:.3f} ({s.get('retrieved_by')})"
                         st.markdown(md_money(head))
                         st.caption(md_money(s["text"][:400]))
+
+    # Rendered after any request in this run has been counted, so the number is current.
+    st.caption(f"Live AI requests this session: {requests_used()}/{MAX_LIVE_REQUESTS_PER_SESSION}")
 
 
 def page_mrm():

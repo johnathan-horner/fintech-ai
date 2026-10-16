@@ -76,7 +76,7 @@ def test_api_chat_demo_without_key():
     r = c.post("/chat", json={"question": "What is my CVaR?"})
     assert r.status_code == 200
     body = r.json()
-    assert body["mode"] == "demo" and "No Gemini API key" in body["reason"]
+    assert body["mode"] == "demo" and "No LLM provider configured" in body["reason"]
     assert body["trace"]["mode"] == "demo"
     assert c.get("/health").json()["status"] == "healthy"
     assert c.post("/chat", json={"question": "help me with insider trading"}).status_code == 400

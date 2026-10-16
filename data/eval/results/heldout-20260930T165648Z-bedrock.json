@@ -1,0 +1,779 @@
+{
+  "run_id": "heldout-20260930T165648Z-bedrock",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-09-30T16:56:48+00:00",
+  "provider": "bedrock",
+  "models": {
+    "chat": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "grader": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "hyde": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "embedding": "gemini-embedding-001"
+  },
+  "grader": {
+    "provider": "gemini",
+    "model_id": "gemini-3.1-flash-lite"
+  },
+  "versions": {
+    "MRM-005": {
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "prompt_versions": [
+        "market_analysis_haiku@1.0.0#09294fbd",
+        "portfolio_recommendations_haiku@1.0.0#45848a4d",
+        "risk_report@1.2.0#7ca70726"
+      ],
+      "provider": "bedrock"
+    }
+  },
+  "throttle_s": 15.0,
+  "items": [
+    {
+      "id": "mrm-005-subset11",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset11",
+      "outputs": [
+        "# Market Analysis Report\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | P&L |\n|--------|--------|----------------------|-----|\n| Technology | 46.48% | 34.69% | $3,245,762.03 |\n| Healthcare | 32.17% | -6.43% | -$287,641.97 |\n| Energy | 17.07% | -25.38% | -$1,221,195.61 |\n| Consumer Discretionary | 4.28% | 5.8% | $55,869.86 |\n\nTechnology drives portfolio gains; Energy and Healthcare drag performance.\n\n---\n\n## Technical Signals\n\n**ALERT Status:**\n- **CVX**: RSI-14 75.9 overbought; SMA-50 87.88 below SMA-200 104.16; down 6.66% over market-data window 2025-12-19 to 2026-03-18\n- **UNH**: RSI-14 74.1 overbought; SMA-50 150.02 below SMA-200 169.7; down 24.22% over market-data window 2025-12-19 to 2026-03-18\n\n**WATCH Status:**\n- **AVGO**: SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 negative; up 4.68%\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative; down 3.54%\n- **TSLA**: RSI-14 25.0 oversold; MACD signal -2.422 negative; down 22.49%\n\nVolume concerns: GOOGL (0.31 ratio), TSLA (0.37 ratio), NVDA (0.59 ratio), UNH (0.14 ratio) trade below 20-day averages.\n\n---\n\n## Earnings Pattern (Q2 2024)\n\n**Beats (2):** MSFT, XOM  \n**Misses (8):** AVGO, CVX, GOOGL, JNJ, NVDA, ORCL, TSLA, UNH\n\nRevenue misses dominate: AVGO (-$0.2B), CVX (-$6.8B), GOOGL (-$2.8B), NVDA (-$0.1B), ORCL (-$1.4B). EPS mixed; MSFT and XOM beat consensus.\n\n---\n\n## Macro Backdrop\n\n**February 2026 Readings:**\n- Federal Funds Rate: 5.22 (increased 0.59 percentage points)\n- CPI YoY: 4.59 (increased 0.02 percentage points)\n- Core PCE: 2.86 (increased 0.5 percentage points)\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- ISM Manufacturing PMI: 48.7 (decreased 1.7 points; below 50)\n- VIX: 16.65 (decreased 12.37 points; Low regime)\n\n**Regime:** Risk-Off. Curve inversion, rising rates, and manufacturing contraction offset improved consumer confidence (+39.5 points) and unemployment decline (-0.53 percentage points).",
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $23,819,551.12**\n\n---\n\n## \u26a0\ufe0f CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day 95% CVaR: $893,891.72 (3.753% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.411 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $2,826,733.82\n\n**Concentration Breaches (Policy: 30% sector / 15% single-name)**\n- Technology: 46.48% (excess 16.48 points; $3,925,462.02 over limit)\n- Healthcare: 32.17% (excess 2.17 points; $516,884.26 over limit)\n- UNH: 27.26% (excess 12.26 points; $2,920,276.97 over limit)\n- MSFT: 23.74% (excess 8.74 points; $2,081,828.77 over limit)\n\n**Catastrophic Stress Scenarios**\n- 2008 GFC (-40% market): Portfolio loss -$15,867,075.51 (-66.61%)\n- COVID-19 crash (-34% market): Portfolio loss -$12,449,551.55 (-52.27%)\n- Tech selloff (-30%): Portfolio loss -$9,893,827.58 (-41.54%)\n\n---\n\n## 1. PORTFOLIO VALUE-AT-RISK & TAIL METRICS\n\n| Metric | Value |\n|--------|-------|\n| 1-day VaR (95%) | $602,338.60 (2.529% of value) |\n| 1-day VaR (99%) | $851,695.79 |\n| 10-day VaR (95%) | $1,904,761.90 |\n| 1-day CVaR (95%) | $893,891.72 (3.753% of value) |\n| 10-day CVaR (95%) | $2,826,733.82 |\n| **Tail Ratio** | **1.411** |\n| Weighted Portfolio Beta | 1.281 |\n| Risk Classification | HIGH (VaR); **CRITICAL** (CVaR) |\n\n---\n\n## 2. HISTORICAL PERFORMANCE RISK\n\n| Metric | Value |\n|--------|-------|\n| Annualized Sharpe Ratio | 0.113 |\n| Annualized Sortino Ratio | 0.118 |\n| Annualized Volatility | 21.51% |\n| Maximum Drawdown | -16.44% |\n\n**Assessment:** Weak risk-adjusted returns relative to 5.22% risk-free rate; volatility elevated.\n\n---\n\n## 3. STRESS TEST RESULTS\n\n**Worst-Case Scenario: 2008 GFC (-40% market shock)**\n- Portfolio P&L: -$15,867,075.51 (-66.61%)\n- Severity: CATASTROPHIC\n- Top loss drivers: UNH (-$5,335,551.25), CVX (-$3,075,406.76), MSFT (-$2,381,390.82)\n\n**Other Severe Scenarios:**\n- COVID-19 crash: -$12,449,551.55 (-52.27%)\n- Tech selloff: -$9,893,827.58 (-41.54%)\n- Rate shock (+200bps): -$5,034,745.11 (-21.14%)\n\n---\n\n## 4. HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Level | Key Flags |\n|----------|-----------|-------|-----------|\n| **UNH** | **45/100** | **HIGH** | **Beta 1.58x; 27.26% concentration** |\n| **CVX** | **45/100** | **HIGH** | **Beta 1.77x; -21.66% drawdown; 14.03% weight** |\n| **TSLA** | **35/100** |",
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**UNH**: reduce \u2013 Concentration 27.26% exceeds 15.0% policy limit by 12.26 points; beta 1.58 elevated; RSI-14 74.1 overbought; price down 24.22% over market-data window 2025-12-19 to 2026-03-18.\n\n**XOM**: reduce \u2013 Analyst consensus Sell; unrealized loss -29.09% return since average cost; risk score 40/100 HIGH.\n\n**CVX**: hedge \u2013 Beta 1.77 elevated; unrealized loss -21.66% return since average cost; RSI-14 75.9 overbought; SMA-50 87.88 below SMA-200 104.16; concentration 14.03%.\n\n**TSLA**: trim \u2013 Beta 2.19 very high; RSI-14 25.0 oversold; price down 22.49% over market-data window 2025-12-19 to 2026-03-18.\n\n---\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector \u2013 Technology**: 46.48% vs 30.0% policy limit; excess **16.48 points** ($3,925,462.02).\n\n**Sector \u2013 Healthcare**: 32.17% vs 30.0% policy limit; excess **2.17 points** ($516,884.26).\n\n**Single name \u2013 UNH**: 27.26% vs 15.0% policy limit; excess **12.26 points** ($2,920,276.97).\n\n**Single name \u2013 MSFT**: 23.74% vs 15.0% policy limit; excess **8.74 points** ($2,081,828.77).\n\n---\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **JNJ**: unrealized loss -$138,966.61 (-10.62% return since average cost)\n- **UNH**: unrealized loss -$148,675.36 (-2.24% return since average cost)\n- **XOM**: unrealized loss -$297,429.86 (-29.09% return since average cost)\n- **CVX**: unrealized loss -$923,765.75 (-21.66% return since average cost)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 53,
+            "matched": 53,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 66,
+            "matched": 66,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 40,
+            "matched": 40,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 36855.4,
+      "error": null,
+      "trace_id": "b6e4cecf471b45cb",
+      "usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 11556,
+        "output_tokens": 2440,
+        "cost_usd": 0.026132
+      }
+    },
+    {
+      "id": "mrm-005-subset12",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset12",
+      "outputs": [
+        "# Market Analysis Report\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 40.41% | 42.66% | $2,369,408.06 |\n| Financials | 23.93% | 14.87% | $353,887.30 |\n| Energy | 23.18% | -25.38% | -$1,221,195.61 |\n| Healthcare | 6.66% | -10.62% | -$138,966.61 |\n| Consumer Discretionary | 5.81% | 5.8% | $55,869.86 |\n\nTechnology drives portfolio gains; Energy is a significant drag. Portfolio beta stands at 1.382 (value-weighted), with AAPL, CVX, MA, and TSLA exceeding 1.5 beta.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 (negative). Price change over market-data window 2025-12-19 to 2026-03-18: -4.39% (down).\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16. Price change: -6.66% (down).\n\n**WATCH Status:**\n- **AVGO**: SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 (negative). Price change: 4.68% (up).\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 (negative). Price change: -6.38% (down).\n- **JPM**: SMA-50 48.45 below SMA-200 53.57. Price change: -9.19% (down).\n- **MA**: SMA-50 85.19 below SMA-200 92.83. Price change: -9.81% (down).\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 (negative). Price change: -22.49% (down).\n\nVolume elevated for AAPL (1.58x), GS (1.42x), JNJ (1.69x), JPM (1.28x), and XOM (1.62x); depressed for TSLA (0.37x) and NVDA (0.59x).\n\n---\n\n## Earnings Summary (Q2 2024)\n\n**Beats:** GS (revenue $90.2B vs $88.4B; EPS $7.97 vs $7.86), XOM (revenue $65.0B vs $64.3B; EPS $4.07 vs $3.95).\n\n**Misses:** AAPL (EPS $6.59 vs $6.94), AVGO (revenue $24.7B vs $24.9B), CVX (revenue $117.6B vs $124.4B), JNJ (EPS $0.69 vs $0.69), JPM (revenue $81.5B vs $84.6B), MA (revenue $31.0B vs $31.6B), NVDA (revenue $114.5B vs $114.6B; EPS $2.54 vs $2.73), TSLA (EPS $4.46 vs $4.75).\n\n---\n\n## Macro Backdrop (February 2026)\n\n**Latest Readings:** Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, ISM Manufacturing PMI 48.7, VIX 16.65.\n\n**Month-over-Month Changes:** Federal Funds",
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $17,541,320.43**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day 95% CVaR: $707,066.06 (4.031% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.415 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $2,235,939.19\n\n**Concentration Breaches (Policy Limits Exceeded)**\n- **Technology sector:** 40.41% vs 30.0% limit \u2014 **excess 10.41 points** ($1,826,051.46)\n- **AAPL:** 23.63% vs 15.0% limit \u2014 **excess 8.63 points** ($1,513,815.95)\n- **CVX:** 19.05% vs 15.0% limit \u2014 **excess 4.05 points** ($710,423.48)\n\n**Stress Test Catastrophic Scenarios**\n- 2008 GFC scenario: portfolio loss -$12,603,096.67 (-71.85%)\n- COVID-19 crash scenario: portfolio loss -$9,888,583.54 (-56.37%)\n- Tech sector selloff: portfolio loss -$8,840,182.03 (-50.4%)\n\n---\n\n## 1. PORTFOLIO VALUE-AT-RISK & TAIL METRICS\n\n| Metric | Value |\n|--------|-------|\n| 1-day VaR (95%) | $478,432.94 (2.727% of value) |\n| 1-day VaR (99%) | $676,495.45 |\n| 10-day VaR (95%) | $1,512,937.80 |\n| 1-day CVaR (95%) | $707,066.06 (4.031% of value) |\n| 10-day CVaR (95%) | $2,235,939.19 |\n| Tail Ratio | 1.415 |\n| Weighted Portfolio Beta | 1.382 |\n| Risk Level | HIGH |\n\n---\n\n## 2. HISTORICAL PERFORMANCE & VOLATILITY\n\n| Metric | Value |\n|--------|-------|\n| Annualized Sharpe Ratio | 0.156 |\n| Sortino Ratio | 0.16 |\n| Annualized Volatility | 22.72% |\n| Maximum Drawdown | -17.62% |\n| Period | 2024-04-15 to 2026-03-19 |\n\n---\n\n## 3. STRESS TEST RESULTS: WORST SCENARIOS\n\n**Severity: 5 scenarios tested; 5 classified as severe or catastrophic**\n\n| Scenario | Market Shock | Portfolio P&L | Severity | Top Driver |\n|----------|--------------|---------------|----------|-----------|\n| 2008 GFC | -40.0% | -$12,603,096.67 (-71.85%) | CATASTROPHIC | AAPL -$3,815,382.40 |\n| COVID-19 Crash | -34.0% | -$9,888,583.54 (-56.37%) | CATASTROPHIC | AAPL -$2,993,607.73 |\n| Tech Selloff | -30.0% | -$8,840,182.03 (-50.4%) | CATASTROPHIC | AAPL -$4,622,482.53 |\n| Rate Shock +200bps | -15.0% | -$3,999,059.52 (-22.8%) | SEVERE | AAPL -$1,210,650.19 |\n| Flash Crash | -10.0% | -$3,635,508.65 (-20.73%) | SEVERE | AAPL -$1,100,591.08 |\n\n**Key observation:** AAPL drives losses across all scenarios; CVX and NVDA are secondary amplifiers.\n\n---\n\n## 4. HIGHEST-RISK POSITIONS\n\n| Position |",
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**CVX**: hedge or reduce \u2013 CRITICAL risk (60/100); -21.66% unrealized loss; 19.05% concentration (4.05 points above 15.0% limit); elevated beta 1.77; RSI-14 75.9 overbought.\n\n**AAPL**: trim \u2013 HIGH risk (45/100); 23.63% concentration (8.63 points above 15.0% limit); elevated beta 1.77; RSI-14 29.4 oversold; SMA-50 464.01 below SMA-200 508.46; price down -4.39% over market-data window 2025-12-19 to 2026-03-18.\n\n**MA**: reduce \u2013 HIGH risk (50/100); -31.65% unrealized loss; elevated beta 1.59; SMA-50 85.19 below SMA-200 92.83; price down -9.81% over market-data window 2025-12-19 to 2026-03-18.\n\n**XOM**: reduce \u2013 HIGH risk (40/100); -29.09% unrealized loss; Analyst consensus: Sell; price down -10.18% over market-data window 2025-12-19 to 2026-03-18.\n\n**TSLA**: hold \u2013 HIGH risk (35/100); very high beta 2.19; RSI-14 25.0 oversold; price down -22.49% over market-data window 2025-12-19 to 2026-03-18; modest gain (+5.8% return since average cost) provides limited cushion.\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Technology sector**: 40.41% vs 30.0% policy limit \u2013 excess 10.41 points ($1,826,051.46).\n\n**AAPL**: 23.63% vs 15.0% policy limit \u2013 excess 8.63 points ($1,513,815.95).\n\n**CVX**: 19.05% vs 15.0% policy limit \u2013 excess 4.05 points ($710,423.48).\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **MA**: -$587,687.32 unrealized loss\n- **JNJ**: -$138,966.61 unrealized loss\n- **XOM**: -$297,429.86 unrealized loss\n- **CVX**: -$923,765.75 unrealized loss"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 83,
+            "matched": 83,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 63,
+            "matched": 63,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 41,
+            "matched": 41,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 45944.8,
+      "error": null,
+      "trace_id": "2962782b12d240d6",
+      "usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 11946,
+        "output_tokens": 2660,
+        "cost_usd": 0.027771
+      }
+    },
+    {
+      "id": "mrm-005-subset13",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset13",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 36.34% | 36.6% | $2,498,931.87 |\n| Healthcare | 34.27% | -6.43% | -$287,641.97 |\n| Energy | 14.94% | -21.66% | -$923,765.75 |\n| Financials | 9.9% | 13.01% | -$471,704.89 |\n| Consumer Discretionary | 4.56% | 5.8% | $55,869.86 |\n\nTechnology drives portfolio gains (+36.6%), while Energy (-21.66%) and Healthcare (-6.43%) drag performance. Portfolio beta stands at 1.348, with four positions exceeding 1.5: CVX, MA, TSLA, UNH.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16; price down 6.66% over 2025-12-19 to 2026-03-18\n- **UNH**: RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; price down 24.22% over 2025-12-19 to 2026-03-18; volume ratio 0.14\n\n**WATCH Status:**\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 negative; price down 6.38%\n- **MA**: SMA-50 85.19 below SMA-200 92.83; price down 9.81%; volume ratio 0.68\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative; price down 3.54%\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 negative; price down 22.49%; volume ratio 0.37\n- **V**: SMA-50 296.96 below SMA-200 334.98; MACD signal -1.466 negative; price down 16.76%\n\n---\n\n## Q2 2024 Earnings Pattern\n\n**Beats (2):** GS, MSFT  \n**Misses (8):** CVX, GOOGL, JNJ, MA, ORCL, TSLA, UNH, V\n\nRevenue misses dominated: CVX (-$6.8B), GOOGL (-$2.8B), MA (-$0.6B), ORCL (-$1.4B), V (-$0.5B). EPS results mixed; notable beats: MSFT (+$0.39), MA (+$0.17), V (+$0.16). ORCL EPS missed by -$0.28; TSLA by -$0.29.\n\n---\n\n## Macro Backdrop\n\n**February 2026 Readings:**\n- Federal Funds Rate: 5.22 (increased 0.59 percentage points)\n- CPI YoY: 4.59 (increased 0.02 percentage points)\n- Core PCE: 2.86 (increased 0.5 percentage points)\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- Unemployment Rate: 3.76 (decreased 0.53 percentage points)\n- ISM Manufacturing PMI: 48.7 (below 50; decreased 1.7 points)\n- VIX: 16.65 (Low regime)\n\n**Regime:** Risk-Off. Inverted yield curve persists amid rising rates and elevated Core PCE. Manufacturing contraction (PMI 48.7) contrasts with strong GDP Growth QoQ (+3.12 percentage points) and elevated Consumer Confidence Index (+39.5 points).",
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $22,364,444.64**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day 95% CVaR: $883,932.51 (3.952% of portfolio value)\n- Tail ratio 1.408 indicates elevated fat-tail risk; expected shortfall significantly exceeds VaR\n- 10-day CVaR: $2,795,240.02\n\n**Concentration Breaches (Policy: 30% sector / 15% single-name)**\n- **UNH**: 29.04% weight, excess 14.04 points ($3,139,968.03) \u2014 **CRITICAL**\n- **MSFT**: 25.28% weight, excess 10.28 points ($2,299,064.91) \u2014 **CRITICAL**\n- **Technology sector**: 36.34%, excess 6.34 points ($1,417,905.79)\n- **Healthcare sector**: 34.27%, excess 4.27 points ($954,961.79)\n\n---\n\n## 1. PORTFOLIO VAR & TAIL RISK\n\n| Metric | Value |\n|--------|-------|\n| 1-day 95% VaR | $595,273.21 (2.662%) |\n| 10-day 95% VaR | $1,882,419.17 |\n| 1-day 99% VaR | $841,705.46 |\n| Weighted Beta | 1.348 |\n| **CVaR/VaR Tail Ratio** | **1.408** |\n\n**Risk Level: HIGH** (parametric); **CRITICAL** (Monte Carlo CVaR)\n\n---\n\n## 2. HISTORICAL PERFORMANCE & VOLATILITY\n\n| Metric | Value |\n|--------|-------|\n| Sharpe Ratio | -0.029 |\n| Sortino Ratio | -0.029 |\n| Annualized Volatility | 22.45% |\n| Max Drawdown | -16.85% |\n| Unrealized P&L | $871,689.12 |\n\n**Assessment**: Negative risk-adjusted returns; four positions carry unrealized losses totaling -$1,799,095.04.\n\n---\n\n## 3. STRESS TEST RESULTS \u2014 WORST SCENARIOS\n\n| Scenario | Market Shock | Portfolio P&L | Severity |\n|----------|--------------|---------------|----------|\n| **2008 GFC** | -40.0% | **-$15,680,955.86 (-70.12%)** | **CATASTROPHIC** |\n| COVID-19 Crash | -34.0% | -$12,303,519.22 (-55.01%) | CATASTROPHIC |\n| Tech Selloff | -30.0% | -$8,455,104.80 (-37.81%) | CATASTROPHIC |\n| Rate Shock +200bps | -15.0% | -$4,975,687.92 (-22.25%) | SEVERE |\n| Flash Crash | -10.0% | -$4,523,352.65 (-20.23%) | SEVERE |\n\n**Worst Positions Across Scenarios**: UNH, CVX, MSFT, TSLA, MA consistently drive losses.\n\n---\n\n## 4. HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Flags | Action |\n|----------|-----------|------|-------|--------|\n| **UNH** | **45/HIGH** | 1.58 | Concentration 29.04%; Elevated beta | **Review size; add stop-loss** |\n| **MA** | **50/HIGH** | 1.59 | Elevated beta; -31.65% unrealized loss | **Review size; add stop-loss** |\n| **CVX** | **45/HIGH** | 1.77 | Elevated beta; -21.66% loss; 14.94% weight | **Review size; add stop-loss** |\n| **TSLA** | **35/HIGH** | 2.19 | **Very high beta** (amplified exposure",
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**MA**: reduce \u2013 HIGH risk (50/100); elevated beta 1.59x; severe drawdown -31.65% return since average cost; technical status WATCH with SMA-50 85.19 below SMA-200 92.83.\n\n**UNH**: reduce \u2013 HIGH risk (45/100); elevated beta 1.58x; extreme concentration 29.04% of portfolio (14.04 points above 15.0% limit); technical status ALERT with RSI-14 74.1 overbought and SMA-50 150.02 below SMA-200 169.7.\n\n**CVX**: hedge \u2013 HIGH risk (45/100); elevated beta 1.77x; notable drawdown -21.66% return since average cost; technical status ALERT with RSI-14 75.9 overbought and SMA-50 87.88 below SMA-200 104.16.\n\n**TSLA**: hold \u2013 HIGH risk (35/100); very high beta 2.19x; technical status WATCH with RSI-14 25.0 oversold; price change over market-data window 2025-12-19 to 2026-03-18 -22.49% (down).\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector breaches:**\n- Technology 36.34% exceeds 30.0% limit by 6.34 points ($1,417,905.79)\n- Healthcare 34.27% exceeds 30.0% limit by 4.27 points ($954,961.79)\n\n**Single-name breaches:**\n- UNH 29.04% exceeds 15.0% limit by 14.04 points ($3,139,968.03)\n- MSFT 25.28% exceeds 15.0% limit by 10.28 points ($2,299,064.91)\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **MA**: -$587,687.32 unrealized loss (-31.65% return since average cost)\n- **JNJ**: -$138,966.61 unrealized loss (-10.62% return since average cost)\n- **UNH**: -$148,675.36 unrealized loss (-2.24% return since average cost)\n- **CVX**: -$923,765.75 unrealized loss (-21.66% return since average cost)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 73,
+            "matched": 73,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 0.96,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [
+            "TSLA... Very high beta (amplified exposure"
+          ],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 59,
+            "matched": 59,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 43,
+            "matched": 43,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 36012.9,
+      "error": null,
+      "trace_id": "8b8f35a3b3d24041",
+      "usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 11657,
+        "output_tokens": 2640,
+        "cost_usd": 0.027343
+      }
+    },
+    {
+      "id": "mrm-005-subset14",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset14",
+      "outputs": [
+        "# Horner Capital Alpha Fund \u2013 Market Analysis Report\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | P&L |\n|--------|--------|----------------------|-----|\n| Technology | 33.68% | 44.28% | $2,482,427.12 |\n| Healthcare | 29.29% | -2.24% | -$148,675.36 |\n| Energy | 18.34% | -25.38% | -$1,221,195.61 |\n| Financials | 14.08% | 47.12% | $1,017,809.93 |\n| Consumer Discretionary | 4.6% | 5.8% | $55,869.86 |\n\nTechnology and Financials drive portfolio gains; Energy is significantly underwater. Portfolio value-weighted beta stands at 1.449.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 (negative). Price change over market-data window 2025-12-19 to 2026-03-18: -4.39% (down). Volume ratio 1.58.\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16; Price change: -6.66% (down). Volume ratio 0.94.\n- **UNH**: RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; Price change: -24.22% (down). Volume ratio 0.14 (notably depressed).\n\n**WATCH Status:**\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 (negative); Price change: -6.38% (down).\n- **JPM**: SMA-50 48.45 below SMA-200 53.57; Price change: -9.19% (down).\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 (negative); Price change: -22.49% (down). Volume ratio 0.37.\n- **V**: SMA-50 296.96 below SMA-200 334.98; MACD signal -1.466 (negative); Price change: -16.76% (down).\n\n---\n\n## Earnings Pattern \u2013 Q2 2024\n\n**Beats (2):** GS, XOM  \n**Misses (8):** AAPL, CVX, GOOGL, JPM, NVDA, TSLA, UNH, V\n\nMixed revenue performance; EPS results split. Notable: TSLA revenue beat ($60.9B vs $57.0B estimate) but EPS missed ($4.46 vs $4.75). UNH revenue beat ($17.1B vs $16.4B) with EPS miss ($1.88 vs $1.93).\n\n---\n\n## Macro Backdrop\n\n**February 2026 Readings:**\n- Federal Funds Rate: 5.22 (increased 0.59 percentage points)\n- CPI YoY: 4.59 (increased 0.02 percentage points)\n- Core PCE: 2.86 (increased 0.5 percentage points)\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- Unemployment Rate: 3.76 (decreased 0.53 percentage points)\n- ISM Manufacturing PMI: 48.7 (below 50; decreased 1.7 points)\n- VIX: 16.65 (Low regime)\n\n**Regime:** Risk-Off. Curve inversion persists; manufacturing contraction signals economic headwinds despite labor market strength and elevated consumer confidence (108.7, increased 39.5 points).",
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $22,169,522.04**\n\n---\n\n## \u26a0\ufe0f CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day CVaR at 95%: $940,191.16 (4.241% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.411 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $2,973,145.50\n\n**Concentration Breaches (Policy: 30% sector / 15% single-name)**\n- **UNH: 29.29% weight** \u2014 exceeds 15% limit by 14.29 points ($3,168,024.70)\n- **AAPL: 18.7% weight** \u2014 exceeds 15% limit by 3.7 points ($820,272.32)\n- **CVX: 15.07% weight** \u2014 marginally at limit (0.07 point excess)\n- **Technology sector: 33.68%** \u2014 exceeds 30% limit by 3.68 points ($815,838.41)\n\n**Stress Test Catastrophe Risk**\n- 2008 GFC scenario: portfolio loss **-75.36%** (-$16,707,540.06)\n- COVID-19 crash scenario: portfolio loss **-59.13%** (-$13,108,992.97)\n- Tech sector selloff: portfolio loss **-47.77%** (-$10,591,179.25)\n- All five stress scenarios classified severe or catastrophic\n\n---\n\n## PORTFOLIO VaR & TAIL RISK\n\n| Metric | Value |\n|--------|-------|\n| 1-day VaR (95%) | $634,243.92 (2.861%) |\n| 1-day VaR (99%) | $896,809.34 |\n| 10-day VaR (95%) | $2,005,655.38 |\n| Weighted Beta | 1.449 |\n| Risk Level | HIGH |\n\n---\n\n## HISTORICAL PERFORMANCE METRICS\n\n| Metric | Value |\n|--------|-------|\n| Sharpe Ratio (annualized) | 0.277 |\n| Sortino Ratio (annualized) | 0.287 |\n| Annualized Volatility | 23.65% |\n| Max Drawdown | -17.86% |\n| Period | 2024-04-15 to 2026-03-19 |\n\n---\n\n## HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Weight | Key Flags |\n|----------|-----------|--------|-----------|\n| **CVX** | **60/100 CRITICAL** | 15.07% | Beta 1.77x; drawdown -21.66%; at concentration limit |\n| **UNH** | 45/100 HIGH | 29.29% | Beta 1.58x; **14.29 points over limit**; worst 2008 loss -$5.3M |\n| **AAPL** | 45/100 HIGH | 18.7% | Beta 1.77x; **3.7 points over limit**; worst tech selloff loss -$4.6M |\n| **TSLA** | 35/100 HIGH | \u2014 | Very high beta 2.19x; amplified market exposure |\n| **XOM** | 40/100 HIGH | \u2014 | Drawdown -29.09%; analyst consensus Sell |\n\n---\n\n## MACRO ENVIRONMENT & REGIME\n\n**Current Conditions (Feb 2026):**\n- VIX: 16.65 (Low regime)\n- Fed Funds Rate: 5.22% (held steady)\n- 10Y-2Y Spread: **-1.14 percentage points (inverted curve)**\n- ISM Manufacturing PMI: 48.7 (below 50 \u2014 contraction)\n- CPI YoY: 4.59% (rising trend)\n- Market Regime: **Risk-Off**\n\n**Implication:** Inverted yield curve, manufacturing contraction, and rising inflation amid steady",
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**CVX**: hedge or reduce \u2013 CRITICAL risk (60/100); -21.66% return since average cost; elevated beta 1.77; RSI 75.9 overbought; breaches single-name limit by 0.07 points ($15,518.67).\n\n**UNH**: trim \u2013 HIGH risk (45/100); largest position at 29.29% weight, exceeds 15.0% limit by 14.29 points ($3,168,024.70); elevated beta 1.58; RSI 74.1 overbought; -2.24% return since average cost.\n\n**AAPL**: trim \u2013 HIGH risk (45/100); 18.7% weight exceeds 15.0% limit by 3.7 points ($820,272.32); elevated beta 1.77; RSI 29.4 oversold; SMA-50 464.01 below SMA-200 508.46; technical status ALERT.\n\n**XOM**: reduce \u2013 HIGH risk (40/100); -29.09% return since average cost; analyst consensus Sell; technical status OK but severe drawdown warrants review.\n\n**TSLA**: hold \u2013 HIGH risk (35/100); very high beta 2.19; RSI 25.0 oversold; price down -22.49% over market-data window; technical status WATCH. Position modest at 4.6% weight; modest gain (+5.8%) provides some offset.\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Technology sector**: 33.68% vs 30.0% policy limit \u2013 excess 3.68 points ($815,838.41).\n\n**Single-name breaches**:\n- UNH: 29.29% vs 15.0% limit \u2013 excess 14.29 points ($3,168,024.70)\n- AAPL: 18.7% vs 15.0% limit \u2013 excess 3.7 points ($820,272.32)\n- CVX: 15.07% vs 15.0% limit \u2013 excess 0.07 points ($15,518.67)\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **XOM**: -$297,429.86 unrealized loss (-29.09% return since average cost)\n- **CVX**: -$923,765.75 unrealized loss (-21.66% return since average cost)\n- **UNH**: -$148,675.36 unrealized loss (-2.24% return since average cost)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 68,
+            "matched": 68,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 58,
+            "matched": 58,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 48,
+            "matched": 48,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 47587.5,
+      "error": null,
+      "trace_id": "3d901a90373e4132",
+      "usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 11810,
+        "output_tokens": 2629,
+        "cost_usd": 0.02745
+      }
+    },
+    {
+      "id": "mrm-005-subset17",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset17",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 36.82% | 36.6% | $2,498,931.87 |\n| Healthcare | 34.72% | -6.43% | -$287,641.97 |\n| Energy | 18.43% | -25.38% | -$1,221,195.61 |\n| Financials | 10.03% | 13.01% | -$471,704.89 |\n\nTechnology drives portfolio gains; Energy and Healthcare drag performance. Portfolio value-weighted beta: 1.281.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **CVX**: RSI-14 75.9 overbought; SMA-50 87.88 below SMA-200 104.16; price down 6.66% over 2025-12-19 to 2026-03-18.\n- **UNH** (29.43% weight): RSI-14 74.1 overbought; SMA-50 150.02 below SMA-200 169.7; price down 24.22% over 2025-12-19 to 2026-03-18; volume ratio 0.14 (severely depressed).\n\n**WATCH Status:**\n- **GS**: RSI-14 23.0 oversold; MACD signal -1.081 negative; price down 6.38%.\n- **MA**: SMA-50 85.19 below SMA-200 92.83; price down 9.81%; volume ratio 0.68.\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative; price down 3.54%.\n- **V**: SMA-50 296.96 below SMA-200 334.98; MACD signal -1.466 negative; price down 16.76%; volume ratio 0.31.\n\n---\n\n## Earnings Summary (Q2 2024)\n\n**Beats:** GS (revenue $90.2B vs $88.4B; EPS $7.97 vs $7.86), MSFT (revenue $82.4B vs $78.4B; EPS $6.54 vs $6.15), XOM (revenue $65.0B vs $64.3B; EPS $4.07 vs $3.95).\n\n**Misses:** CVX (revenue $117.6B vs $124.4B; EPS $3.06 beat $2.95), GOOGL (revenue $78.0B vs $80.8B; EPS $7.94 beat $7.62), JNJ (revenue $94.9B beat $93.9B; EPS $0.69 equal $0.69), MA (revenue $31.0B vs $31.6B; EPS $2.12 beat $1.95), ORCL (revenue $51.4B vs $52.8B; EPS $5.64 vs $5.92), UNH (revenue $17.1B beat $16.4B; EPS $1.88 vs $1.93), V (revenue $16.6B vs $17.1B; EPS $5.3 beat $5.14).\n\n---\n\n## Macro Backdrop (February 2026)\n\n**Regime:** Risk-Off. Inverted yield curve: 10Y-2Y spread -1.14 percentage points. VIX regime: Low (16.65).\n\n**Month-over-Month Changes:**\n- Federal Funds Rate increased 0.59 percentage points to 5.22\n- Core PCE increased 0.5 percentage points to 2.86\n- 2Y Treasury Yield increased 1.04 percentage points to 5.28\n- Unemployment Rate decreased 0.53 percentage points to 3.76\n- GDP Growth QoQ increased 3.12 percentage points to 2.92\n- ISM Manufacturing PMI decreased 1.7 points to 48",
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $22,069,685.01**\n\n---\n\n## \u26a0\ufe0f CRITICAL FINDINGS\n\n**CVaR/Expected Shortfall at 95% confidence: $829,497.62 (3.759% of portfolio value) \u2014 CRITICAL RISK LEVEL**\n- Tail ratio CVaR/VaR of 1.414 indicates elevated fat-tail risk\n- 10-day CVaR exposure: $2,623,101.81\n- Parametric 1-day VaR 95%: $558,057.46 (2.529%)\n\n**Concentration Policy Breaches (Multiple):**\n- **Technology sector: 36.82%** (limit 30.0%, excess 6.82 points / $1,505,152.52)\n- **Healthcare sector: 34.72%** (limit 30.0%, excess 4.72 points / $1,041,689.13)\n- **Single-name overweights:**\n  - UNH: 29.43% (limit 15.0%, excess 14.43 points / $3,184,655.55)\n  - MSFT: 25.62% (limit 15.0%, excess 10.62 points / $2,343,800.55)\n  - CVX: 15.14% (limit 15.0%, excess 0.14 points / $30,897.56)\n\n---\n\n## 1. PORTFOLIO VAR & TAIL RISK\n\n| Metric | Value |\n|--------|-------|\n| 1-day VaR (95%) | $558,057.46 |\n| 1-day CVaR (95%) | $829,497.62 |\n| 10-day VaR (95%) | $1,764,732.64 |\n| 10-day CVaR (95%) | $2,623,101.81 |\n| Tail Ratio (CVaR/VaR) | 1.414 |\n| Weighted Beta | 1.281 |\n\n**Risk Level: HIGH (VaR) / CRITICAL (CVaR)**\n\n---\n\n## 2. HISTORICAL PERFORMANCE & VOLATILITY\n\n| Metric | Value |\n|--------|-------|\n| Sharpe Ratio | -0.049 |\n| Sortino Ratio | -0.049 |\n| Annualized Volatility | 21.66% |\n| Max Drawdown | -16.55% |\n| Unrealized P&L | $518,389.40 |\n| Positions with Losses | 5 (total: -$2,096,524.90) |\n\n**Assessment:** Negative risk-adjusted returns; high volatility relative to risk-free rate (5.22%).\n\n---\n\n## 3. STRESS TEST RESULTS\n\n**Worst-Case Scenario: 2008 Global Financial Crisis (-40% market shock)**\n- Portfolio loss: -$14,700,601.70 (-66.61%)\n- Severity: CATASTROPHIC\n- Largest losses: UNH (-$5,335,551.25), CVX (-$3,075,406.76), MSFT (-$2,381,390.82)\n\n**Other Severe Scenarios:**\n- COVID-19 Crash (-34%): -$11,534,318.26 (-52.26%)\n- Tech Sector Selloff (-30%): -$8,138,374.99 (-36.88%)\n- Rate Shock +200bps (-15%): -$4,664,614.00 (-21.14%)\n\n**4 of 5 scenarios classified CATASTROPHIC or SEVERE.**\n\n---\n\n## 4. HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Level | Key Flags |\n|----------|-----------|-------|-----------|\n| **CVX** | **60/100** | **CRITICAL** | Beta 1.77x; -21.66% drawdown; 15.14% concentration |\n| **MA** | 50/100 | HIGH | Beta 1.59x; -31.65% unrealized loss |\n| **UNH** |",
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**CVX**: hedge or reduce \u2013 CRITICAL risk score 60/100; elevated beta 1.77x; notable drawdown -21.66% return since average cost; high concentration 15.14%; technical status ALERT (RSI-14 75.9 overbought; SMA-50 87.88 below SMA-200 104.16).\n\n**UNH**: reduce \u2013 HIGH risk score 45/100; elevated beta 1.58x; high concentration 29.43% of portfolio; technical status ALERT (RSI-14 74.1 overbought; price change over the market-data window 2025-12-19 to 2026-03-18 -24.22% down).\n\n**MA**: trim \u2013 HIGH risk score 50/100; elevated beta 1.59x; severe drawdown -31.65% return since average cost; technical status WATCH (SMA-50 85.19 below SMA-200 92.83).\n\n**XOM**: reduce \u2013 HIGH risk score 40/100; severe drawdown -29.09% return since average cost; analyst consensus Sell.\n\n---\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector breaches:**\n- Technology 36.82% exceeds 30.0% limit by 6.82 points ($1,505,152.52)\n- Healthcare 34.72% exceeds 30.0% limit by 4.72 points ($1,041,689.13)\n\n**Single-name breaches:**\n- UNH 29.43% exceeds 15.0% limit by 14.43 points ($3,184,655.55)\n- MSFT 25.62% exceeds 15.0% limit by 10.62 points ($2,343,800.55)\n- CVX 15.14% exceeds 15.0% limit by 0.14 points ($30,897.56)\n\n---\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\nAll positions with unrealized losses since average cost:\n- **MA**: -$587,687.32 (-31.65% return since average cost)\n- **JNJ**: -$138,966.61 (-10.62% return since average cost)\n- **UNH**: -$148,675.36 (-2.24% return since average cost)\n- **XOM**: -$297,429.86 (-29.09% return since average cost)\n- **CVX**: -$923,765.75 (-21.66% return since average cost)"
+      ],
+      "graders": [
+        {
+          "groundedness": 0.96,
+          "numeric_consistency": 0.98,
+          "unsupported_claims": [
+            "ISM Manufacturing PMI decreased 1.7 points to 48"
+          ],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 92,
+            "matched": 92,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 67,
+            "matched": 67,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 45,
+            "matched": 45,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 44451.9,
+      "error": null,
+      "trace_id": "26d12c5a3f8e40ba",
+      "usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 11511,
+        "output_tokens": 2674,
+        "cost_usd": 0.027369
+      }
+    },
+    {
+      "id": "mrm-005-subset19",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset19",
+      "outputs": [
+        "# Market Analysis Report\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19**\n\n---\n\n## 1. Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 52.4% | 40.3% | $4,274,993.87 |\n| Healthcare | 26.2% | -2.24% | -$148,675.36 |\n| Energy | 13.48% | -21.66% | -$923,765.75 |\n| Financials | 3.81% | 35.34% | $115,982.43 |\n| Consumer Discretionary | 4.11% | 5.8% | $55,869.86 |\n\nTechnology dominates at 52.4% weight with strong 40.3% average returns. Energy is the drag, posting -21.66% average returns. Healthcare (26.2% weight) shows modest negative performance at -2.24%.\n\n---\n\n## 2. Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 (negative); price down 4.39% over market-data window 2025-12-19 to 2026-03-18\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16; price down 6.66% over market-data window\n- **UNH**: RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; price down 24.22% over market-data window\n\n**WATCH Status:**\n- **AVGO**: SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 (negative)\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 (negative)\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 (negative)\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 (negative); price down 22.49% over market-data window\n- **V**: SMA-50 296.96 below SMA-200 334.98; MACD signal -1.466 (negative); price down 16.76% over market-data window\n\nVolume concerns: GOOGL (ratio 0.31), TSLA (ratio 0.37), UNH (ratio 0.14) show depressed volume vs 20-day average.\n\n---\n\n## 3. Earnings Pattern (Q2 2024)\n\n**Beats (2 positions):** GS, MSFT  \n**Misses (8 positions):** AAPL, AVGO, CVX, GOOGL, ORCL, TSLA, UNH, V\n\nMixed EPS outcomes: AAPL, AVGO, CVX, GOOGL, ORCL, TSLA, UNH, V missed EPS estimates; GS and MSFT beat. Revenue results similarly split, with AAPL, GS, MSFT, TSLA, UNH beating revenue estimates.\n\n---\n\n## 4. Macro Backdrop\n\n**February 2026 Readings:**\n- Federal Funds Rate: 5.22 (increased 0.59 percentage points)\n- CPI YoY: 4.59 (increased 0.02 percentage points)\n- Core PCE: 2.86 (increased 0.5 percentage points)\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- Unemployment Rate: 3.76 (decreased 0.53 percentage points)\n- ISM Manufacturing PMI: 48.7 (below 50; decreased 1.7 points)",
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $24,786,167.74**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**  \n1-day Monte Carlo CVaR at 95% confidence: $1,015,054.86 (4.095% of portfolio value). Tail ratio of 1.414 indicates elevated fat-tail risk\u2014expected losses in severe downturns substantially exceed VaR estimates.\n\n**Concentration Breaches (All Three Positions)**\n- **UNH**: 26.2% weight vs. 15.0% limit (excess 11.2 points / $2,776,050.79)\n- **MSFT**: 22.81% weight vs. 15.0% limit (excess 7.81 points / $1,935,799.70)\n- **AAPL**: 16.72% weight vs. 15.0% limit (excess 1.72 points / $426,322.09)\n- **Technology sector**: 52.4% vs. 30.0% limit (excess 22.4 points / $5,552,101.57)\n\n**Catastrophic Stress Scenarios**  \nFive stress tests conducted; five classified as severe or catastrophic:\n- **2008 GFC scenario** (-40% market shock): Portfolio loss -$18,022,646.31 (-72.71%)\n- **COVID-19 crash** (-34% shock): Portfolio loss -$14,140,845.56 (-57.05%)\n- **Tech sector selloff** (-30% shock): Portfolio loss -$12,888,600.31 (-52.0%)\n\n---\n\n## QUANTITATIVE RISK METRICS\n\n| Metric | Value | Assessment |\n|--------|-------|------------|\n| **1-day VaR (95%)** | $684,167.38 (2.76%) | HIGH |\n| **1-day CVaR (95%)** | $1,015,054.86 (4.095%) | CRITICAL |\n| **10-day CVaR (95%)** | $3,209,885.31 | CRITICAL |\n| **Portfolio Beta** | 1.398 | Amplified market exposure |\n| **Annualized Volatility** | 22.92% | Elevated |\n| **Sharpe Ratio** | 0.143 | Weak risk-adjusted returns |\n| **Sortino Ratio** | 0.147 | Weak downside-adjusted returns |\n| **Max Drawdown** | -17.87% | Significant historical loss |\n\n---\n\n## HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Weight | Key Flags |\n|----------|-----------|------|--------|-----------|\n| **UNH** | 45/100 (HIGH) | 1.58 | 26.2% | Concentration breach; elevated beta |\n| **AAPL** | 45/100 (HIGH) | 1.77 | 16.72% | Concentration breach; elevated beta |\n| **CVX** | 45/100 (HIGH) | 1.77 | 13.48% | Elevated beta; -21.66% unrealized loss |\n| **TSLA** | 35/100 (HIGH) | 2.19 | \u2014 | Very high beta (amplified exposure) |\n| **GOOGL** | 30/100 (MEDIUM) | 1.41 | \u2014 | Elevated beta; analyst consensus Sell |\n\n**Recommended Actions**: Review position sizes for UNH, AAPL, CVX, TSLA; implement stop-loss orders.\n\n---\n\n## MACRO ENVIRONMENT & REGIME\n\n**Current Conditions (Feb 2026)**\n- **VIX**: 16.65 (Low regime)\n- **Yield curve**: Inverted (-114 bps; 10Y-2Y spread -1.14 percentage points)\n- **Fed Funds Rate**: 5.22% (held steady)\n- **Market regime**: Risk-Off (rule-based classification)\n- **ISM Manufacturing PMI**: 48.7 (below 50; contraction signal)",
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: reduce \u2013 HIGH risk (beta 1.77, concentration 16.72%, technical ALERT with RSI 29.4 oversold and SMA-50 below SMA-200)\n\n**UNH**: reduce \u2013 HIGH risk (beta 1.58, concentration 26.2%, unrealized loss -2.24% return since average cost, technical ALERT with RSI 74.1 overbought)\n\n**CVX**: hedge \u2013 HIGH risk (beta 1.77, unrealized loss -21.66% return since average cost, technical ALERT with RSI 75.9 overbought)\n\n**TSLA**: trim \u2013 HIGH risk (very high beta 2.19, technical WATCH with RSI 25.0 oversold and price down -22.49% over market-data window)\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector breach \u2013 Technology 52.4%** exceeds 30.0% policy limit by 22.4 points ($5,552,101.57 excess).\n\n**Single-name breaches:**\n- **MSFT**: 22.81% weight exceeds 15.0% limit by 7.81 points ($1,935,799.70 excess)\n- **UNH**: 26.2% weight exceeds 15.0% limit by 11.2 points ($2,776,050.79 excess)\n- **AAPL**: 16.72% weight exceeds 15.0% limit by 1.72 points ($426,322.09 excess)\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **UNH**: unrealized loss -$148,675.36 (-2.24% return since average cost)\n- **CVX**: unrealized loss -$923,765.75 (-21.66% return since average cost)\n\n**Total unrealized losses across portfolio: -$1,072,441.11**\n\n---\n\n*Recommend immediate review of Technology sector concentration (52.4%) and largest positions (MSFT 22.81%, UNH 26.2%) against policy limits. CVX drawdown and UNH technical deterioration warrant prompt action.*"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 62,
+            "matched": 62,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 57,
+            "matched": 57,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 37,
+            "matched": 37,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 57885.4,
+      "error": null,
+      "trace_id": "a5f6877afbe846b5",
+      "usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 11510,
+        "output_tokens": 2585,
+        "cost_usd": 0.026878
+      }
+    },
+    {
+      "id": "mrm-005-subset4",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset4",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 50.24% | 42.31% | $4,008,490.71 |\n| Healthcare | 32.37% | -6.43% | -$287,641.97 |\n| Financials | 10.02% | 67.88% | $978,062.81 |\n| Consumer Discretionary | 4.31% | 5.8% | $55,869.86 |\n| Energy | 3.06% | -29.09% | -$297,429.86 |\n\nTechnology dominates at 50.24% weight with strong 42.31% average returns. Financials show exceptional 67.88% gains despite modest 10.02% allocation. Healthcare and Energy lag significantly, with -6.43% and -29.09% average returns respectively.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 negative; price down 4.39% over market-data window 2025-12-19 to 2026-03-18\n- **UNH**: RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; price down 24.22% over market-data window 2025-12-19 to 2026-03-18\n\n**WATCH Status:**\n- **AVGO**: SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 negative\n- **JPM**: SMA-50 48.45 below SMA-200 53.57; price down 9.19% over market-data window 2025-12-19 to 2026-03-18\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative; price down 3.54% over market-data window 2025-12-19 to 2026-03-18\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 negative; price down 22.49% over market-data window 2025-12-19 to 2026-03-18; volume ratio 0.37 well below average\n- **V**: SMA-50 296.96 below SMA-200 334.98; MACD signal -1.466 negative; price down 16.76% over market-data window 2025-12-19 to 2026-03-18\n\n---\n\n## Earnings Summary (Q2 2024)\n\n**Beats:** MSFT (revenue $82.4B vs $78.4B; EPS $6.54 vs $6.15), XOM (revenue $65.0B vs $64.3B; EPS $4.07 vs $3.95)\n\n**Misses:** AAPL (EPS $6.59 vs $6.94), AVGO (revenue $24.7B vs $24.9B), JNJ (EPS $0.69 vs $0.69), JPM (revenue $81.5B vs $84.6B), ORCL (revenue $51.4B vs $52.8B; EPS $5.64 vs $5.92), TSLA (EPS $4.46 vs $4.75), UNH (EPS $1.88 vs $1.93), V (revenue $16.6B vs $17.1B)\n\n---\n\n## Macro Backdrop (February 2026)\n\n**Regime:** Risk-Off. 10Y-2Y spread -1.14 percentage points (inverted curve).\n\n**Key Readings:** Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, ISM Manufacturing PM",
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $23,672,888.33**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day CVaR at 95%: $861,748.49 (3.64% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.414 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $2,725,088.00\n\n**Concentration Breaches (Policy: 30% sector / 15% single-name)**\n- **Technology: 50.24%** (excess +20.24 points; $4,791,392.60 over limit)\n- **Healthcare: 32.37%** (excess +2.37 points; $561,047.45 over limit)\n- **Single-name overweights:**\n  - UNH: 27.43% (excess +12.43 points; $2,942,540.02)\n  - MSFT: 23.88% (excess +8.88 points; $2,102,152.48)\n  - AAPL: 17.51% (excess +2.51 points; $594,189.50)\n\n**Stress Test Catastrophic Scenarios**\n- 2008 GFC (-40% market): Portfolio loss -$15,276,111.64 (-64.53%)\n- COVID-19 crash (-34% market): Portfolio loss -$11,985,872.21 (-50.63%)\n- Tech selloff (-30%): Portfolio loss -$11,289,183.22 (-47.69%)\n\n---\n\n## QUANTITATIVE RISK METRICS\n\n| Metric | Value | Assessment |\n|--------|-------|------------|\n| **1-day VaR (95%)** | $579,904.70 (2.45%) | HIGH |\n| **1-day VaR (99%)** | $819,974.67 | HIGH |\n| **10-day VaR (95%)** | $1,833,819.68 | HIGH |\n| **Portfolio Beta** | 1.241 | Amplified market exposure |\n| **Annualized Volatility** | 20.66% | Elevated |\n| **Sharpe Ratio** | 0.099 | Weak risk-adjusted returns |\n| **Sortino Ratio** | 0.101 | Weak downside-adjusted returns |\n| **Max Drawdown** | -16.46% | Significant historical loss |\n\n---\n\n## HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Weight | Key Flags |\n|----------|-----------|------|--------|-----------|\n| **UNH** | 45/100 | 1.58x | 27.43% | Elevated beta; Severe concentration excess |\n| **AAPL** | 45/100 | 1.77x | 17.51% | Highest beta; High concentration |\n| **TSLA** | 35/100 | 2.19x | \u2014 | Very high beta \u2014 amplified market exposure |\n| **XOM** | 40/100 | \u2014 | \u2014 | Severe drawdown (-29.09%); Sell consensus |\n| **MSFT** | 25/100 | \u2014 | 23.88% | High concentration excess |\n\n---\n\n## STRESS TEST WORST POSITIONS\n\n**2008 GFC scenario (-40% market shock):**\n- UNH: -$5,335,551.25 | AAPL: -$3,815,382.40 | MSFT: -$2,381,390.82\n\n**Tech Sector Selloff (-30%):**\n- AAPL: -$4,622,482.53 | MSFT: -$2,885,146.58\n\n---\n\n## MACRO ENVIRONMENT & REGIME\n\n- **VIX: 16.65** (Low regime) \u2014 complacency risk\n- **Yield curve inverted** (10Y-2Y spread: -1.14 percentage points)\n- **Rule-based regime: Risk-Off**",
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: reduce \u2013 Elevated beta 1.77x, concentration 17.51% exceeds 15.0% limit by 2.51 points, technical status ALERT (RSI-14 29.4 oversold, SMA-50 464.01 below SMA-200 508.46).\n\n**UNH**: reduce \u2013 Elevated beta 1.58x, concentration 27.43% exceeds 15.0% limit by 12.43 points, technical status ALERT (RSI-14 74.1 overbought, SMA-50 150.02 below SMA-200 169.7), unrealized loss -2.24% since average cost.\n\n**XOM**: reduce \u2013 Analyst consensus Sell, severe drawdown -29.09% unrealized loss since average cost, price change over market-data window -10.18% (down).\n\n**TSLA**: hedge \u2013 Very high beta 2.19x amplifies market exposure, technical status WATCH (RSI-14 25.0 oversold, price change over market-data window -22.49% down).\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector breaches:**\n- Technology 50.24% vs 30.0% policy limit; excess 20.24 points ($4,791,392.60)\n- Healthcare 32.37% vs 30.0% policy limit; excess 2.37 points ($561,047.45)\n\n**Single-name breaches:**\n- MSFT 23.88% vs 15.0% limit; excess 8.88 points ($2,102,152.48)\n- UNH 27.43% vs 15.0% limit; excess 12.43 points ($2,942,540.02)\n- AAPL 17.51% vs 15.0% limit; excess 2.51 points ($594,189.50)\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **JNJ**: -$138,966.61 unrealized loss (-10.62% return since average cost)\n- **UNH**: -$148,675.36 unrealized loss (-2.24% return since average cost)\n- **XOM**: -$297,429.86 unrealized loss (-29.09% return since average cost)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 78,
+            "matched": 78,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 60,
+            "matched": 60,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 46,
+            "matched": 46,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 49189.5,
+      "error": null,
+      "trace_id": "3be000c92e2b4b13",
+      "usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 11766,
+        "output_tokens": 2623,
+        "cost_usd": 0.027369
+      }
+    },
+    {
+      "id": "mrm-005-subset5",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "outputs": [],
+      "graders": [],
+      "exact_fact": null,
+      "passed": false,
+      "error": "RuntimeError: grader unavailable: Gemini \u00b7 gemini-3.1-flash-lite: GoogleAPIError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing...",
+      "usage": {
+        "bedrock_calls": 6,
+        "input_tokens": 22634,
+        "output_tokens": 5124,
+        "cost_usd": 0.053079
+      },
+      "retried_after_error": "RuntimeError: grader unavailable: Gemini \u00b7 gemini-3.1-flash-lite: GoogleAPIError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing...",
+      "first_attempt_usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 11317,
+        "output_tokens": 2540,
+        "cost_usd": 0.026419
+      }
+    },
+    {
+      "id": "mrm-005-subset6",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset6",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 52.87% | 42.67% | $4,597,311.77 |\n| Healthcare | 24.82% | -2.24% | -$148,675.36 |\n| Energy | 15.54% | -25.38% | -$1,221,195.61 |\n| Consumer Discretionary | 3.9% | 5.8% | $55,869.86 |\n| Financials | 2.87% | 5.59% | $39,747.12 |\n\nTechnology dominates with 52.87% weight and strong 42.67% average returns. Energy is the drag, posting -25.38% average returns. Healthcare (UNH) shows modest losses at -2.24%.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 (negative); price down 4.39% over 2025-12-19 to 2026-03-18\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16; price down 6.66%\n- **UNH**: RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; price down 24.22%\n\n**WATCH Status:**\n- **AVGO**: SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 (negative)\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 (negative); price down 6.38%\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 (negative); price down 3.54%\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 (negative); price down 22.49%\n\nVolume elevated for AAPL (1.58x), GS (1.42x), MSFT (1.22x), and XOM (1.62x); depressed for TSLA (0.37x), GOOGL (0.31x), and UNH (0.14x).\n\n---\n\n## Earnings Pattern \u2013 Q2 2024\n\n**Beats (2):** MSFT (revenue $82.4B vs $78.4B; EPS $6.54 vs $6.15), XOM (revenue $65.0B vs $64.3B; EPS $4.07 vs $3.95), GS (revenue $90.2B vs $88.4B; EPS $7.97 vs $7.86)\n\n**Misses (7):** AAPL (EPS $6.59 vs $6.94), AVGO (revenue $24.7B vs $24.9B), CVX (revenue $117.6B vs $124.4B), GOOGL (revenue $78.0B vs $80.8B), NVDA (revenue $114.5B vs $114.6B; EPS $2.54 vs $2.73), TSLA (EPS $4.46 vs $4.75), UNH (EPS $1.88 vs $1.93)\n\n---\n\n## Macro Backdrop \u2013 February 2026\n\n**Latest Readings:** Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, ISM Manufacturing PMI 48.7, VIX 16.65\n\n**Month-over-Month Changes (2026-01",
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $26,166,477.31**\n\n---\n\n## \u26a0\ufe0f CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day 95% CVaR: $1,053,301.42 (4.025% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.413 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $3,330,831.53\n\n**Concentration Breaches (All Three Major Positions)**\n- Technology sector: 52.87% vs 30.0% policy limit (excess: 22.87 points)\n- MSFT: 21.61% vs 15.0% limit (excess: 6.61 points)\n- UNH: 24.82% vs 15.0% limit (excess: 9.82 points)\n- AAPL: 15.84% vs 15.0% limit (excess: 0.84 points)\n\n**Catastrophic Stress Scenarios**\n- 2008 GFC scenario: portfolio loss -71.52% (-$18,713,089.43)\n- COVID-19 crash scenario: portfolio loss -56.11% (-$14,682,577.86)\n- Tech sector selloff: portfolio loss -52.14% (-$13,642,028.97)\n\n---\n\n## 1. PORTFOLIO VAR & TAIL RISK\n\n| Metric | Value |\n|--------|-------|\n| 1-day 95% VaR | $710,377.66 (2.715%) |\n| 1-day 99% VaR | $1,004,461.06 |\n| 10-day 95% VaR | $2,246,411.40 |\n| Weighted Beta | 1.375 |\n| Risk Level | HIGH |\n\n---\n\n## 2. HISTORICAL PERFORMANCE METRICS\n\n| Metric | Value |\n|--------|-------|\n| Annualized Sharpe Ratio | 0.17 |\n| Sortino Ratio | 0.174 |\n| Annualized Volatility | 22.61% |\n| Maximum Drawdown | -17.49% |\n\n---\n\n## 3. STRESS TEST RESULTS\n\n**Worst-Case Scenarios (5 tested; 5 severe/catastrophic):**\n\n| Scenario | Market Shock | Portfolio P&L | Severity |\n|----------|--------------|---------------|----------|\n| 2008 GFC | -40.0% | -$18,713,089.43 (-71.52%) | CATASTROPHIC |\n| COVID-19 Crash | -34.0% | -$14,682,577.86 (-56.11%) | CATASTROPHIC |\n| Tech Selloff | -30.0% | -$13,642,028.97 (-52.14%) | CATASTROPHIC |\n| Rate Shock +200bps | -15.0% | -$5,937,807.22 (-22.69%) | SEVERE |\n| Flash Crash | -10.0% | -$5,398,006.57 (-20.63%) | SEVERE |\n\n**Positions Driving Losses (2008 GFC):** UNH (-$5,335,551.25), AAPL (-$3,815,382.40), CVX (-$3,075,406.76), MSFT (-$2,381,390.82), NVDA (-$1,228,486.46)\n\n---\n\n## 4. HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Level | Key Flags |\n|----------|-----------|-------|-----------|\n| **UNH** | 45/100 | HIGH | Beta 1.58x; Concentration 24.82% |\n| **AAPL** | 45/100 | HIGH | Beta 1.77x; Concentration 15.84% |\n| **CVX** | 45/100 | HIGH | Beta 1.77x; Drawdown -21.66%; Concentration 12.77% |",
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: trim \u2013 HIGH risk (beta 1.77, concentration 15.84%, technical ALERT with RSI 29.4 oversold)\n\n**UNH**: reduce \u2013 HIGH risk (beta 1.58, concentration 24.82%, largest single-name breach, technical ALERT with RSI 74.1 overbought)\n\n**XOM**: reduce \u2013 HIGH risk (Analyst consensus: Sell; -29.09% unrealized loss; Analyst rating: Sell)\n\n**CVX**: hedge \u2013 HIGH risk (beta 1.77, -21.66% unrealized loss, technical ALERT with RSI 75.9 overbought)\n\n**TSLA**: hold \u2013 HIGH risk (very high beta 2.19, technical WATCH with RSI 25.0 oversold; position small at 3.9%)\n\n---\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector breach \u2013 Technology:**  \nPortfolio weight 52.87% exceeds 30.0% policy limit by 22.87 points ($5,984,273.36 excess).\n\n**Single-name breaches:**\n- **MSFT**: 21.61% weight exceeds 15.0% limit by 6.61 points ($1,729,604.15 excess)\n- **UNH**: 24.82% weight exceeds 15.0% limit by 9.82 points ($2,569,548.07 excess)\n- **AAPL**: 15.84% weight exceeds 15.0% limit by 0.84 points ($219,798.41 excess)\n\n---\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **XOM**: -$297,429.86 unrealized loss (-29.09% return since average cost)\n- **CVX**: -$923,765.75 unrealized loss (-21.66% return since average cost)\n- **UNH**: -$148,675.36 unrealized loss (-2.24% return since average cost)\n\n**Total unrealized losses across 3 positions: -$1,369,870.97**\n\n---\n\n**Summary:** Rebalance Technology sector and reduce single-name concentration in MSFT and UNH. Consider harvesting Energy sector losses (XOM, CVX) while addressing HIGH risk flags. Monitor AAPL technical deterioration."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 88,
+            "matched": 88,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 64,
+            "matched": 64,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 36,
+            "matched": 36,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 154323.1,
+      "error": null,
+      "trace_id": "3490c52e60494a10",
+      "usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 11855,
+        "output_tokens": 2628,
+        "cost_usd": 0.027495
+      }
+    },
+    {
+      "id": "mrm-005-subset7",
+      "component": "MRM-005",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset7",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 51.05% | 44.54% | $4,448,352.67 |\n| Healthcare | 29.18% | -6.43% | -$287,641.97 |\n| Financials | 13.12% | 19.51% | $314,140.18 |\n| Consumer Discretionary | 3.88% | 5.8% | $55,869.86 |\n| Energy | 2.76% | -29.09% | -$297,429.86 |\n\nTechnology dominates at 51.05% weight with strong 44.54% average returns. Healthcare (29.18%) lags with -6.43% average returns. Energy (2.76%) faces headwinds at -29.09%.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 (negative). Price change over market-data window 2025-12-19 to 2026-03-18: -4.39% (down).\n- **UNH** (largest position, 24.73%): RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7. Price change over market-data window 2025-12-19 to 2026-03-18: -24.22% (down).\n\n**WATCH Status:**\n- **JPM**: SMA-50 48.45 below SMA-200 53.57. Price change: -9.19% (down).\n- **MA**: SMA-50 85.19 below SMA-200 92.83. Price change: -9.81% (down).\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 (negative). Price change: -3.54% (down).\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 (negative). Price change: -22.49% (down).\n\nVolume elevated for AAPL (ratio 1.58), JNJ (ratio 1.69), ORCL (ratio 1.45), XOM (ratio 1.62); depressed for TSLA (ratio 0.37), UNH (ratio 0.14), NVDA (ratio 0.59).\n\n---\n\n## Earnings Summary \u2013 Q2 2024\n\n**Beats (2):** MSFT (revenue $82.4B vs $78.4B; EPS $6.54 vs $6.15); XOM (revenue $65.0B vs $64.3B; EPS $4.07 vs $3.95).\n\n**Misses (8):** AAPL (EPS $6.59 vs $6.94); JNJ (EPS $0.69 vs $0.69); JPM (revenue $81.5B vs $84.6B); MA (revenue $31.0B vs $31.6B); NVDA (EPS $2.54 vs $2.73); ORCL (revenue $51.4B vs $52.8B; EPS $5.64 vs $5.92); TSLA (EPS $4.46 vs $4.75); UNH (EPS $1.88 vs $1.93).\n\n---\n\n## Macro Backdrop \u2013 February 2026\n\n**Latest Readings:** Federal Funds Rate 5.22; CPI YoY 4.59; Core PCE 2.86; 10Y Treasury Yield 4.14; 2Y Treasury Yield 5.28; Unemployment Rate 3.76; ISM Manufacturing PMI 48.7; VIX 16.65.\n\n**Month-over-Month Changes (2026-01 to",
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $26,262,806.13**\n\n---\n\n## \u26a0\ufe0f CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day 95% CVaR: $966,190.35 (3.679% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.403 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $3,055,362.17\n\n**Concentration Breaches (Policy: 30% sector / 15% single-name)**\n- Technology sector: 51.05% (excess: 21.05 points / $5,528,320.69)\n- MSFT: 21.53% (excess: 6.53 points / $1,714,961.24)\n- UNH: 24.73% (excess: 9.73 points / $2,555,371.04)\n- AAPL: 15.78% (excess: 0.78 points / $204,849.89)\n\n---\n\n## 1. PORTFOLIO VALUE-AT-RISK & TAIL METRICS\n\n| Metric | Value |\n|--------|-------|\n| 1-day VaR (95%) | $650,776.65 (2.478% of value) |\n| 1-day VaR (99%) | $920,186.32 |\n| 10-day VaR (95%) | $2,057,936.46 |\n| 1-day CVaR (95%) | $966,190.35 (3.679% of value) |\n| 10-day CVaR (95%) | $3,055,362.17 |\n| Weighted Portfolio Beta | 1.255 |\n| Tail Ratio | 1.403 |\n\n**Risk Assessment:** HIGH parametric VaR; CRITICAL Monte Carlo CVaR with pronounced tail risk.\n\n---\n\n## 2. HISTORICAL PERFORMANCE RISK\n\n| Metric | Value |\n|--------|-------|\n| Sharpe Ratio (annualized) | 0.023 |\n| Sortino Ratio (annualized) | 0.023 |\n| Annualized Volatility | 20.73% |\n| Maximum Drawdown | -16.54% |\n\n**Period:** 2024-04-15 to 2026-03-19 | Risk-free rate: 5.22% (Feb 2026 Fed Funds)\n\n---\n\n## 3. STRESS TEST RESULTS\n\n**Worst-Case Scenario: 2008 Global Financial Crisis (-40% market shock)**\n- Portfolio loss: -$17,143,052.66 (-65.28%)\n- Severity: CATASTROPHIC\n- Top loss drivers: UNH (-$5,335,551.25), AAPL (-$3,815,382.40), MSFT (-$2,381,390.82)\n\n**Other Severe Scenarios:**\n- COVID-19 Crash (-34% shock): -$13,450,702.86 (-51.22%)\n- Tech Sector Selloff (-30% shock): -$12,696,682.90 (-48.34%)\n- Rate Shock +200bps (-15% shock): -$5,439,622.48 (-20.71%)\n\n**4 of 5 scenarios classified CATASTROPHIC or SEVERE.**\n\n---\n\n## 4. HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Flags |\n|----------|-----------|------|-------|\n| **AAPL** | 45/100 (HIGH) | 1.77x | Elevated beta; High concentration (15.78%) |\n| **UNH** | 45/100 (HIGH) | 1.58x | Elevated beta; **Highest concentration (24.73%)** |\n| **MA** | 50/100 (HIGH) | 1.59x | Elevated beta; Severe drawdown (-31.65%) |\n| **TSLA** | 35/100 (HIGH) | 2.19x | **Very high",
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: hedge \u2013 elevated beta (1.77) and concentration (15.78%) with technical ALERT (RSI 29.4 oversold, SMA-50 below SMA-200).\n\n**MA**: reduce \u2013 severe drawdown (-31.65% return since average cost) and HIGH risk score (50/100) despite Strong Buy rating; technical status WATCH.\n\n**UNH**: trim \u2013 largest single-name position (24.73% weight, excess 9.73 points) with HIGH risk score (45/100) and technical ALERT (RSI 74.1 overbought, SMA-50 below SMA-200); unrealized loss -2.24% return since average cost.\n\n**XOM**: reduce \u2013 severe drawdown (-29.09% return since average cost), analyst consensus Sell, and HIGH risk score (40/100); unrealized loss -$297,429.86.\n\n**TSLA**: hold \u2013 very high beta (2.19) and technical WATCH status (RSI 25.0 oversold, -22.49% price change over market-data window 2025-12-19 to 2026-03-18), but modest gain (+5.8% return since average cost) limits urgency.\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector \u2013 Technology**: Portfolio weight 51.05% exceeds 30.0% policy limit by 21.05 points ($5,528,320.69). Rebalance via AAPL, MSFT reductions.\n\n**Single names**:\n- **MSFT**: 21.53% weight exceeds 15.0% limit by 6.53 points ($1,714,961.24).\n- **UNH**: 24.73% weight exceeds 15.0% limit by 9.73 points ($2,555,371.04).\n- **AAPL**: 15.78% weight exceeds 15.0% limit by 0.78 points ($204,849.89).\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **MA**: -$587,687.32 unrealized loss (-31.65% return since average cost)\n- **JNJ**: -$138,966.61 unrealized loss (-10.62% return since average cost)\n- **UNH**: -$148,675.36 unrealized loss (-2.24% return since average cost)\n- **XOM**: -$297,429.86 unrealized loss (-29.09% return since average cost)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 85,
+            "matched": 85,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 62,
+            "matched": 62,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        },
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 38,
+            "matched": 38,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 46316.2,
+      "error": null,
+      "trace_id": "8104433c74284233",
+      "usage": {
+        "bedrock_calls": 3,
+        "input_tokens": 12040,
+        "output_tokens": 2668,
+        "cost_usd": 0.027918
+      }
+    }
+  ],
+  "components": {
+    "MRM-005": {
+      "n_items": 10,
+      "passed": 9,
+      "pass_rate": 0.9,
+      "mean_groundedness": 0.9614,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 0.9,
+      "errors": 1,
+      "status": "APPROVED",
+      "usage": {
+        "bedrock_calls": 33,
+        "input_tokens": 128285,
+        "output_tokens": 28671,
+        "cost_usd": 0.298804
+      }
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "max_cost_usd": 1.0,
+  "pricing": {
+    "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "usd_per_1m_tokens": {
+      "input": 1.1,
+      "output": 5.5
+    },
+    "source": "AWS Pricing API, us.* inference profile, on-demand"
+  },
+  "usage": {
+    "bedrock_calls": 33,
+    "input_tokens": 128285,
+    "output_tokens": 28671,
+    "cost_usd": 0.298804
+  },
+  "finished_at": "2026-09-30T17:13:54+00:00"
+}

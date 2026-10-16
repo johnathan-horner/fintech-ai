@@ -3,7 +3,7 @@ FinTech AI - live-call guard (framework independent).
 
 ``run_guarded(live_fn, demo_fn)`` runs a live AI request and falls back to a
 deterministic demo output when:
-  * no credentials are configured,
+  * no provider is configured (no Bedrock credentials and no Gemini key),
   * a per-session request cap is reached (the cap is tracked by the caller),
   * model governance blocks the call (``GovernanceBlocked``),
   * the provider returns HTTP 429 / RESOURCE_EXHAUSTED (every model call goes
@@ -93,6 +93,11 @@ def sanitize_error(exc: BaseException) -> str:
     return f"{type(exc).__name__}: {msg}" if msg else type(exc).__name__
 
 
+def _short(text: str, n: int = 240) -> str:
+    text = _KEY_PATTERN.sub("[REDACTED]", text).replace("\n", " ")
+    return text if len(text) <= n else text[: n - 3] + "..."
+
+
 def run_guarded(
     live_fn: Callable[[], dict],
     demo_fn: Callable[[str], dict],
@@ -122,7 +127,7 @@ def run_guarded(
     if credentials_present is None:
         credentials_present = config.has_credentials()
     if not credentials_present:
-        return demo("No Gemini API key configured")
+        return demo("No LLM provider configured (no AWS credentials for Bedrock, no Gemini API key)")
 
     try:
         payload = live_fn()
@@ -136,8 +141,13 @@ def run_guarded(
     except GovernanceBlocked as exc:
         return demo(f"Blocked by model governance: {exc}", blocked=True)
     except Exception as exc:
+        name = type(exc).__name__
+        if name == "EmbeddingUnavailable":
+            return demo(_short(str(exc)))
+        if name == "ProviderChainFailed":
+            return demo("All live providers failed - " + _short(str(exc), 300))
         if is_rate_limit_error(exc):
-            return demo("Gemini free-tier rate limit / quota reached (HTTP 429, retried once)")
+            return demo("Rate limit / quota reached (HTTP 429, retried once)")
         return demo(f"Live AI call failed ({sanitize_error(exc)})")
 
 

@@ -20,11 +20,11 @@ import json
 import os
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from src.llm import config
 from src.llm.guard import GovernanceBlocked
-from src.mrm.approvals import approvals_mtime, approvals_path, load_approvals
+from src.mrm.approvals import approvals_mtime, approvals_path, as_list, load_approvals
 from src.utils.data import DATA_DIR
 
 INVENTORY_PATH = os.path.join(DATA_DIR, "mrm_inventory.json")
@@ -287,22 +287,27 @@ FINTECH_AI_MODELS = [
 
 #  Current (running) version of each component
 
-def current_version(inventory_id: str) -> dict:
-    """model_id + prompt versions that would run right now for a component."""
+def current_version(inventory_id: str, provider: Optional[str] = None) -> dict:
+    """model_id + prompt versions that would run for a component on ``provider`` (default gemini)."""
     from src.prompts import registry
-    from src.prompts.templates import COMPONENT_PROMPTS
+    from src.prompts.templates import component_prompts
 
+    prompts = registry.refs(component_prompts(inventory_id, provider or "gemini"))
+    if inventory_id not in LLM_COMPONENTS:
+        return {"model_id": "src/utils/metrics.py", "prompt_versions": prompts, "provider": "code"}
+    provider = provider or "gemini"
     if inventory_id == "MRM-001":
-        mid = (
-            f"{config.model_id('chat')}+hyde:{config.model_id('hyde')}"
-            f"+emb:{config.model_id('embedding')}"
-        )
-    elif inventory_id in LLM_COMPONENTS:
-        mid = config.model_id("chat")
+        mid = (f"{config.model_id('chat', provider)}+hyde:{config.model_id('hyde', provider)}"
+               f"+emb:{config.model_id('embedding')}")
     else:
-        mid = "src/utils/metrics.py"
-    prompts = registry.refs(COMPONENT_PROMPTS.get(inventory_id, []))
-    return {"model_id": mid, "prompt_versions": prompts, "provider": config.get_provider()}
+        mid = config.model_id("chat", provider)
+    return {"model_id": mid, "prompt_versions": prompts, "provider": provider}
+
+
+def current_versions(inventory_id: str) -> Dict[str, dict]:
+    if inventory_id not in LLM_COMPONENTS:
+        return {"code": current_version(inventory_id)}
+    return {p: current_version(inventory_id, p) for p in config.provider_order()}
 
 
 def _add_months(date_str: str, months: int) -> str:
@@ -310,46 +315,57 @@ def _add_months(date_str: str, months: int) -> str:
     return (d + timedelta(days=round(months * 30.44))).strftime("%Y-%m-%d")
 
 
+_STATUS_RANK = {"APPROVED": 0, "CONDITIONAL": 1, "FAILED": 2}
+
+
 #  Inventory Manager
 
 class ModelInventory:
     """
     SR 11-7 compliant model inventory.
-    Tracks all models, their risk tiers, validation status, and lifecycle.
+    Tracks all models, their risk tiers, validation status per provider, and lifecycle.
     """
 
     def __init__(self, approvals: Optional[dict] = None):
         self.approvals = load_approvals() if approvals is None else approvals
         self.models = {}
         for m in FINTECH_AI_MODELS:
+            mid = m["model_id"]
             model = dict(m)
-            approval = self.approvals.get(m["model_id"])
-            if approval:
-                model["approved_version"] = {
-                    k: approval.get(k)
-                    for k in ("model_id", "prompt_versions", "approved_at", "approved_by", "evidence", "status", "metrics")
-                }
-                model["validation_status"] = APPROVAL_TO_VALIDATION_STATUS[approval["status"]]
-                model["validation_date"] = (approval.get("approved_at") or "")[:10] or None
-                model["next_validation_due"] = (
-                    _add_months(approval["approved_at"], m["validation_frequency_months"])
-                    if approval.get("approved_at") else None
-                )
+            records = as_list(self.approvals.get(mid))
+            versions = current_versions(mid)
+            per_provider = {p: check_approval(mid, v["model_id"], v["prompt_versions"], self.approvals, provider=p)
+                            for p, v in versions.items()}
+            allowed = [(p, r) for p, r in per_provider.items() if r["allowed"]]
+            matching = [r for r in records if any(_matches(mid, r, p, v) for p, v in versions.items())]
+            model["current_versions"] = versions
+            model["current_version"] = next(iter(versions.values()))
+            model["approved_versions"] = [
+                {k: r.get(k) for k in ("provider", "model_id", "prompt_versions", "approved_at", "approved_by",
+                                       "evidence", "status", "metrics")}
+                for r in records
+            ]
+            model["provider_status"] = per_provider
+            model["version_mismatch"] = bool(records) and not matching
+            best = sorted(matching, key=lambda r: (_STATUS_RANK.get(r["status"], 9), -_ts(r)))
+            appr = best[0] if best else (records[-1] if records else None)
+            model["approved_version"] = (
+                {k: appr.get(k) for k in ("provider", "model_id", "prompt_versions", "approved_at", "approved_by",
+                                          "evidence", "status", "metrics")} if appr else None)
+            if allowed:
+                statuses = [r["status"] for _, r in allowed]
+                model["validation_status"] = (ValidationStatus.APPROVED if "APPROVED" in statuses
+                                              else ValidationStatus.CONDITIONAL)
+            elif matching:
+                model["validation_status"] = ValidationStatus.FAILED
             else:
-                model["approved_version"] = None
                 model["validation_status"] = ValidationStatus.PENDING
-                model["validation_date"] = None
-                model["next_validation_due"] = None
-            model["current_version"] = current_version(m["model_id"])
-            appr = model["approved_version"]
-            model["version_mismatch"] = bool(appr) and (
-                appr.get("model_id") != model["current_version"]["model_id"]
-                or sorted(appr.get("prompt_versions") or []) != sorted(model["current_version"]["prompt_versions"])
+            model["validation_date"] = ((appr or {}).get("approved_at") or "")[:10] or None
+            model["next_validation_due"] = (
+                _add_months(appr["approved_at"], m["validation_frequency_months"])
+                if appr and appr.get("approved_at") else None
             )
-            if model["version_mismatch"]:
-                # The approval covers an older model/prompt version: re-validation required.
-                model["validation_status"] = ValidationStatus.PENDING
-            self.models[m["model_id"]] = model
+            self.models[mid] = model
 
     def get_all(self) -> list:
         return list(self.models.values())
@@ -404,45 +420,65 @@ class ModelInventory:
         print(f"Model inventory exported to {path}")
 
 
+def _ts(record: dict) -> float:
+    try:
+        return datetime.fromisoformat((record.get("approved_at") or "")[:19]).timestamp()
+    except ValueError:
+        return 0.0
+
+
+def _matches(inventory_id: str, record: dict, provider: str, version: dict) -> bool:
+    same_provider = inventory_id not in LLM_COMPONENTS or record.get("provider", "gemini") == provider
+    return (same_provider and record.get("model_id") == version["model_id"]
+            and sorted(record.get("prompt_versions") or []) == sorted(version["prompt_versions"] or []))
+
+
 #  Approval gate
 
-def check_approval(inventory_id: str, model_id: str, prompt_versions: List[str], approvals: Optional[dict] = None) -> dict:
+def check_approval(inventory_id: str, model_id: str, prompt_versions: List[str], approvals: Optional[dict] = None,
+                   provider: str = "gemini") -> dict:
     """
-    Decide whether ``inventory_id`` may call ``model_id`` with ``prompt_versions``.
-    Returns {"allowed": bool, "status": str, "reason": str}.
+    Decide whether ``inventory_id`` may call ``model_id`` on ``provider`` with ``prompt_versions``.
+    Approvals are keyed by (component, provider, model_id, prompt_versions).
+    Returns {"allowed": bool, "status": str, "reason": str, "record": dict|None}.
     """
     approvals = load_approvals() if approvals is None else approvals
-    rec = approvals.get(inventory_id)
-    if not rec:
-        return {"allowed": False, "status": "NOT_VALIDATED",
-                "reason": f"{inventory_id} is not yet validated (no approval record from the eval harness)"}
+    records = as_list(approvals.get(inventory_id))
+    label = config.provider_label(provider, model_id.split("+")[0]) if inventory_id in LLM_COMPONENTS else "code"
+    version = {"model_id": model_id, "prompt_versions": prompt_versions}
+    matching = sorted((r for r in records if _matches(inventory_id, r, provider, version)), key=_ts, reverse=True)
+    if not matching:
+        same_provider = [r for r in records if inventory_id not in LLM_COMPONENTS or r.get("provider") == provider]
+        if not same_provider:
+            return {"allowed": False, "status": "NOT_VALIDATED", "record": None,
+                    "reason": f"{inventory_id} is not yet validated for {label} (no approval record from the eval harness)"}
+        latest = max(same_provider, key=_ts)
+        return {"allowed": False, "status": "VERSION_MISMATCH", "record": None,
+                "reason": (f"{inventory_id} running version ({model_id}, prompts {sorted(prompt_versions or [])}) "
+                           f"differs from approved ({latest.get('model_id')}, prompts "
+                           f"{sorted(latest.get('prompt_versions') or [])})")}
+    rec = matching[0]
     status = rec.get("status")
     if status not in ("APPROVED", "CONDITIONAL"):
-        return {"allowed": False, "status": status,
-                "reason": f"{inventory_id} validation status is {status} (eval run {rec.get('evidence')})"}
-    if rec.get("model_id") != model_id:
-        return {"allowed": False, "status": "VERSION_MISMATCH",
-                "reason": f"{inventory_id} running model '{model_id}' differs from approved '{rec.get('model_id')}'"}
-    if sorted(rec.get("prompt_versions") or []) != sorted(prompt_versions or []):
-        return {"allowed": False, "status": "VERSION_MISMATCH",
-                "reason": (f"{inventory_id} running prompts {sorted(prompt_versions or [])} differ from approved "
-                           f"{sorted(rec.get('prompt_versions') or [])}")}
-    return {"allowed": True, "status": status,
-            "reason": f"{inventory_id} {status} (eval run {rec.get('evidence')})"}
+        return {"allowed": False, "status": status, "record": rec,
+                "reason": f"{inventory_id} on {label} validation status is {status} (eval run {rec.get('evidence')})"}
+    return {"allowed": True, "status": status, "record": rec,
+            "reason": f"{inventory_id} {status} for {label} (eval run {rec.get('evidence')})"}
 
 
-def require_approved(inventory_id: str, model_id: str, prompt_versions: List[str], approvals: Optional[dict] = None) -> dict:
+def require_approved(inventory_id: str, model_id: str, prompt_versions: List[str], approvals: Optional[dict] = None,
+                     provider: str = "gemini") -> dict:
     """Run BEFORE any model call. Raises GovernanceBlocked when not allowed."""
-    result = check_approval(inventory_id, model_id, prompt_versions, approvals)
+    result = check_approval(inventory_id, model_id, prompt_versions, approvals, provider=provider)
     if not result["allowed"]:
         raise GovernanceBlocked(result["reason"])
     return result
 
 
-def require_current_approved(inventory_id: str) -> dict:
-    """require_approved() for the version that is configured right now."""
-    cur = current_version(inventory_id)
-    return require_approved(inventory_id, cur["model_id"], cur["prompt_versions"])
+def require_current_approved(inventory_id: str, provider: str = "gemini") -> dict:
+    """require_approved() for the version that would run on ``provider``."""
+    cur = current_version(inventory_id, provider)
+    return require_approved(inventory_id, cur["model_id"], cur["prompt_versions"], provider=provider)
 
 
 # Singleton (rebuilt when approvals.json changes)
@@ -452,7 +488,7 @@ _inventory_mtime = None
 
 def get_inventory() -> ModelInventory:
     global _inventory, _inventory_mtime
-    mtime = (approvals_path(), approvals_mtime())
+    mtime = (approvals_path(), approvals_mtime(), tuple(config.provider_order()))
     if _inventory is None or mtime != _inventory_mtime:
         _inventory = ModelInventory()
         _inventory_mtime = mtime

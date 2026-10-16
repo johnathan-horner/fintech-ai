@@ -98,7 +98,8 @@ def latest_macro_source() -> dict:
     return _src(sorted(docs, key=lambda d: d.metadata["date"])[-1])
 
 
-def market_sources(portfolio: dict) -> List[dict]:
+def market_sources(portfolio: dict, provider: str = "gemini") -> List[dict]:
+    """Market agent inputs. provider="bedrock" adds the explicit Haiku labels (src/agents/haiku_context.py)."""
     held = _held(portfolio)
     pdocs = load_portfolio_documents(portfolio)
     out = [_src(d) for d in pdocs if d.metadata["type"] in ("fund_summary", "sector_summary")]
@@ -113,6 +114,10 @@ def market_sources(portfolio: dict) -> List[dict]:
     out.append(derived_volume_source(portfolio))
     out.append(derived_earnings_flags_source(portfolio))
     out.append(derived_macro_source())
+    if provider == "bedrock":
+        from src.agents.haiku_context import label_agent_sources
+
+        return label_agent_sources(out, portfolio)
     return out
 
 
@@ -133,7 +138,8 @@ def risk_sources(portfolio: dict, top_n: int = 8) -> List[dict]:
     return out
 
 
-def portfolio_sources(portfolio: dict) -> List[dict]:
+def portfolio_sources(portfolio: dict, provider: str = "gemini") -> List[dict]:
+    """Portfolio agent inputs. provider="bedrock" adds the explicit Haiku labels."""
     rdocs = load_risk_documents(portfolio)
     pdocs = load_portfolio_documents(portfolio)
     flagged = {
@@ -147,6 +153,10 @@ def portfolio_sources(portfolio: dict) -> List[dict]:
     out += [_src(d) for d in pdocs if d.metadata["type"] == "position" and d.metadata["ticker"] in (flagged | losers)]
     out += [_src(d) for d in load_market_documents() if d.metadata["ticker"] in (flagged | losers)]
     out.append(derived_concentration_source(portfolio))
+    if provider == "bedrock":
+        from src.agents.haiku_context import label_agent_sources
+
+        return label_agent_sources(out, portfolio)
     return out
 
 

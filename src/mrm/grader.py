@@ -170,30 +170,61 @@ def format_sources(sources: List[dict]) -> str:
     return "\n\n".join(f"[{s['source_id']}] {s['text']}" for s in sources)
 
 
-def grade_output(output: str, sources: List[dict], llm=None) -> dict:
+def grade_output(
+    output: str,
+    sources: List[dict],
+    llm=None,
+    *,
+    answer_provider: Optional[str] = None,
+    answer_model: Optional[str] = None,
+    grader_provider: Optional[str] = None,
+    grader_model: Optional[str] = None,
+) -> dict:
     """
-    Grade ``output`` against ``sources`` (list of {"source_id", "text"}) with the
-    independent grader model plus the deterministic numeric check. ``llm`` defaults
-    to the configured grader model.
+    Grade ``output`` against ``sources`` (list of {"source_id", "text"}) with an independent
+    grader model plus the deterministic numeric check.
 
-    If the grader call fails (e.g. HTTP 503 "high demand" after retries, or 429) the
-    output is NOT dropped: the result carries verdict "UNGRADED", ``grader_error`` and
-    the numeric check only, so callers can label it (and the eval harness treats it as
-    an errored item).
+    The grader is ALWAYS a different model from the one that produced the output
+    (src/llm/router.grader_candidates): Haiku answered -> Gemini grader; Gemini answered ->
+    Haiku (if Bedrock is available) else the Gemini grader model if it differs. With no
+    different model available, or if every candidate fails (e.g. HTTP 503 after retries),
+    the output is kept and marked verdict "UNGRADED" - it is never self-graded.
+    ``llm`` (tests / eval harness) injects a grader; pass ``grader_model`` to label it.
     """
+    from src.llm.provider import get_chat_model
+    from src.llm.router import grader_candidates
+
     prompt = registry.get("grader")
     num = numeric_check(output, [s["text"] for s in sources])
-    base = {"numeric_check": num, "grader_model": config.model_id("grader"), "grader_prompt": prompt.ref}
-    try:
-        msg = call_llm(llm or _grader_llm(), prompt.format(sources=format_sources(sources), output=output))
-        raw = message_text(msg)
-    except Exception as exc:
+    text = prompt.format(sources=format_sources(sources), output=output)
+
+    if llm is not None:
+        candidates = [(grader_provider, grader_model, llm)]
+    else:
+        candidates = [(p, m, None) for p, m in grader_candidates(answer_provider or "gemini", answer_model or "")]
+    candidates = [c for c in candidates if not (c[1] and answer_model and c[1] == answer_model)]
+
+    def ungraded(reason: str, rate_limited: bool = False) -> dict:
         return {"groundedness": None, "numeric_consistency": None, "unsupported_claims": [],
-                "llm_verdict": None, "verdict": "UNGRADED", "parse_error": False,
-                "grader_error": sanitize_error(exc), "grader_rate_limited": is_rate_limit_error(exc), **base}
-    llm_result = parse_grader_json(raw)
-    verdict = "PASS" if llm_result["verdict"] == "PASS" and not num["mismatches"] else "FLAG"
-    return {**llm_result, "llm_verdict": llm_result["verdict"], "verdict": verdict, **base}
+                "llm_verdict": None, "verdict": "UNGRADED", "parse_error": False, "grader_error": reason,
+                "grader_rate_limited": rate_limited, "numeric_check": num, "grader_provider": None,
+                "grader_model": None, "grader_prompt": prompt.ref}
+
+    if not candidates:
+        return ungraded("no grader model different from the answering model is available")
+    errors, rate_limited = [], False
+    for prov, mid, model in candidates:
+        try:
+            raw = message_text(call_llm(model or get_chat_model("grader", prov), text))
+        except Exception as exc:
+            errors.append(f"{config.provider_label(prov, mid)}: {sanitize_error(exc)}")
+            rate_limited = rate_limited or is_rate_limit_error(exc)
+            continue
+        llm_result = parse_grader_json(raw)
+        verdict = "PASS" if llm_result["verdict"] == "PASS" and not num["mismatches"] else "FLAG"
+        return {**llm_result, "llm_verdict": llm_result["verdict"], "verdict": verdict, "numeric_check": num,
+                "grader_provider": prov, "grader_model": mid, "grader_prompt": prompt.ref}
+    return ungraded("; ".join(errors), rate_limited)
 
 
 def deterministic_grade(output: str, sources: List[dict]) -> dict:
@@ -201,11 +232,7 @@ def deterministic_grade(output: str, sources: List[dict]) -> dict:
     num = numeric_check(output, [s["text"] for s in sources])
     return {"groundedness": None, "numeric_consistency": num["score"], "unsupported_claims": [],
             "llm_verdict": None, "verdict": "PASS" if not num["mismatches"] else "FLAG",
-            "numeric_check": num, "grader_model": None, "grader_prompt": None,
+            "numeric_check": num, "grader_provider": None, "grader_model": None, "grader_prompt": None,
             "note": "LLM grader not run (demo output); deterministic numeric check only"}
 
 
-def _grader_llm():
-    from src.llm.provider import get_chat_model
-
-    return get_chat_model("grader")

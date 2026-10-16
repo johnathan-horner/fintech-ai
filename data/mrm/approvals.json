@@ -1,110 +1,369 @@
 {
   "approvals": {
-    "MRM-001": {
-      "approved_at": "2026-09-29T21:25:10+00:00",
-      "approved_by": "eval-harness (scripts/run_eval.py)",
-      "evidence": "heldout-20260929T210703Z",
-      "grader_model": "gemini-3.1-flash-lite",
-      "metrics": {
-        "exact_fact_accuracy": 0.9524,
-        "grader_pass_rate": 1.0,
-        "mean_groundedness": 1.0,
-        "n_items": 23,
-        "pass_rate": 0.9565
+    "MRM-001": [
+      {
+        "approved_at": "2026-09-29T21:25:10+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260929T210703Z",
+        "grader_model": "gemini-3.1-flash-lite",
+        "metrics": {
+          "exact_fact_accuracy": 0.9524,
+          "grader_pass_rate": 1.0,
+          "mean_groundedness": 1.0,
+          "n_items": 23,
+          "pass_rate": 0.9565
+        },
+        "model_id": "gemini-3.5-flash-lite+hyde:gemini-3.1-flash-lite+emb:gemini-embedding-001",
+        "prompt_versions": [
+          "hyde_passage@1.0.0#abb1a9d5",
+          "rag_answer@1.0.0#b6aacf6d"
+        ],
+        "provider": "gemini",
+        "status": "APPROVED"
       },
-      "model_id": "gemini-3.5-flash-lite+hyde:gemini-3.1-flash-lite+emb:gemini-embedding-001",
-      "prompt_versions": [
-        "hyde_passage@1.0.0#abb1a9d5",
-        "rag_answer@1.0.0#b6aacf6d"
-      ],
-      "status": "APPROVED"
-    },
-    "MRM-002": {
-      "approved_at": "2026-09-30T00:50:56+00:00",
-      "approved_by": "eval-harness (scripts/run_eval.py)",
-      "evidence": "heldout-20260930T004656Z",
-      "grader_model": "gemini-3.1-flash-lite",
-      "metrics": {
-        "exact_fact_accuracy": null,
-        "grader_pass_rate": 1.0,
-        "mean_groundedness": 1.0,
-        "n_items": 10,
-        "pass_rate": 1.0
+      {
+        "approved_at": "2026-09-30T15:18:29+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T142057Z-bedrock",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": 0.9524,
+          "grader_pass_rate": 0.8261,
+          "mean_groundedness": 0.973,
+          "n_items": 23,
+          "pass_rate": 0.7826
+        },
+        "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0+hyde:us.anthropic.claude-haiku-4-5-20251001-v1:0+emb:gemini-embedding-001",
+        "prompt_versions": [
+          "hyde_passage@1.0.0#abb1a9d5",
+          "rag_answer@1.0.0#b6aacf6d"
+        ],
+        "provider": "bedrock",
+        "status": "CONDITIONAL",
+        "usage": {
+          "bedrock_calls": 46,
+          "cost_usd": 0.056022,
+          "input_tokens": 20319,
+          "output_tokens": 6122
+        }
       },
-      "model_id": "gemini-3.5-flash-lite",
-      "prompt_versions": [
-        "market_analysis@1.2.0#f046466c"
-      ],
-      "status": "APPROVED"
-    },
-    "MRM-003": {
-      "approved_at": "2026-09-30T01:15:41+00:00",
-      "approved_by": "eval-harness (scripts/run_eval.py)",
-      "evidence": "heldout-20260930T010751Z",
-      "grader_model": "gemini-3.1-flash-lite",
-      "metrics": {
-        "exact_fact_accuracy": null,
-        "grader_pass_rate": 1.0,
-        "mean_groundedness": 1.0,
-        "n_items": 10,
-        "pass_rate": 1.0
+      {
+        "approved_at": "2026-09-30T16:33:07+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T160709Z-bedrock",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": 0.9524,
+          "grader_pass_rate": 1.0,
+          "mean_groundedness": 1.0,
+          "n_items": 23,
+          "pass_rate": 0.9565
+        },
+        "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0+hyde:us.anthropic.claude-haiku-4-5-20251001-v1:0+emb:gemini-embedding-001",
+        "prompt_versions": [
+          "hyde_passage@1.0.0#abb1a9d5",
+          "rag_answer_haiku@1.0.0#293ac7f8"
+        ],
+        "provider": "bedrock",
+        "status": "APPROVED",
+        "usage": {
+          "bedrock_calls": 46,
+          "cost_usd": 0.065394,
+          "input_tokens": 32629,
+          "output_tokens": 5364
+        }
+      }
+    ],
+    "MRM-002": [
+      {
+        "approved_at": "2026-09-30T00:50:56+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T004656Z",
+        "grader_model": "gemini-3.1-flash-lite",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 1.0,
+          "mean_groundedness": 1.0,
+          "n_items": 10,
+          "pass_rate": 1.0
+        },
+        "model_id": "gemini-3.5-flash-lite",
+        "prompt_versions": [
+          "market_analysis@1.2.0#f046466c"
+        ],
+        "provider": "gemini",
+        "status": "APPROVED"
       },
-      "model_id": "gemini-3.5-flash-lite",
-      "prompt_versions": [
-        "risk_report@1.2.0#7ca70726"
-      ],
-      "status": "APPROVED"
-    },
-    "MRM-004": {
-      "approved_at": "2026-09-30T01:15:41+00:00",
-      "approved_by": "eval-harness (scripts/run_eval.py)",
-      "evidence": "heldout-20260930T010751Z",
-      "grader_model": "gemini-3.1-flash-lite",
-      "metrics": {
-        "exact_fact_accuracy": null,
-        "grader_pass_rate": 1.0,
-        "mean_groundedness": 1.0,
-        "n_items": 10,
-        "pass_rate": 1.0
+      {
+        "approved_at": "2026-09-30T15:24:00+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T151833Z-bedrock",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 0.5,
+          "mean_groundedness": 0.969,
+          "n_items": 10,
+          "pass_rate": 0.5
+        },
+        "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "prompt_versions": [
+          "market_analysis@1.2.0#f046466c"
+        ],
+        "provider": "bedrock",
+        "status": "FAILED",
+        "usage": {
+          "bedrock_calls": 10,
+          "cost_usd": 0.10926,
+          "input_tokens": 51912,
+          "output_tokens": 9483
+        }
       },
-      "model_id": "gemini-3.5-flash-lite",
-      "prompt_versions": [
-        "portfolio_recommendations@1.2.0#c5fa95b1"
-      ],
-      "status": "APPROVED"
-    },
-    "MRM-005": {
-      "approved_at": "2026-09-30T00:58:36+00:00",
-      "approved_by": "eval-harness (scripts/run_eval.py)",
-      "evidence": "heldout-20260930T005058Z",
-      "grader_model": "gemini-3.1-flash-lite",
-      "metrics": {
-        "exact_fact_accuracy": null,
-        "grader_pass_rate": 1.0,
-        "mean_groundedness": 0.9987,
-        "n_items": 10,
-        "pass_rate": 1.0
+      {
+        "approved_at": "2026-09-30T16:40:20+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T163311Z-bedrock",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 1.0,
+          "mean_groundedness": 0.991,
+          "n_items": 10,
+          "pass_rate": 1.0
+        },
+        "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "prompt_versions": [
+          "market_analysis_haiku@1.0.0#09294fbd"
+        ],
+        "provider": "bedrock",
+        "status": "APPROVED",
+        "usage": {
+          "bedrock_calls": 10,
+          "cost_usd": 0.125366,
+          "input_tokens": 63574,
+          "output_tokens": 10079
+        }
+      }
+    ],
+    "MRM-003": [
+      {
+        "approved_at": "2026-09-30T01:15:41+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T010751Z",
+        "grader_model": "gemini-3.1-flash-lite",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 1.0,
+          "mean_groundedness": 1.0,
+          "n_items": 10,
+          "pass_rate": 1.0
+        },
+        "model_id": "gemini-3.5-flash-lite",
+        "prompt_versions": [
+          "risk_report@1.2.0#7ca70726"
+        ],
+        "provider": "gemini",
+        "status": "APPROVED"
       },
-      "model_id": "gemini-3.5-flash-lite",
-      "prompt_versions": [
-        "market_analysis@1.2.0#f046466c",
-        "portfolio_recommendations@1.2.0#c5fa95b1",
-        "risk_report@1.2.0#7ca70726"
-      ],
-      "status": "APPROVED"
-    },
-    "MRM-006": {
-      "approved_at": "2026-09-29T21:25:10+00:00",
-      "approved_by": "eval-harness (scripts/run_eval.py)",
-      "evidence": "heldout-20260929T210703Z",
-      "metrics": {
-        "basel_zone": "GREEN",
-        "period": "2024-04-15 to 2026-03-19"
+      {
+        "approved_at": "2026-09-30T15:31:43+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T152404Z-bedrock",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 0.9,
+          "mean_groundedness": 0.996,
+          "n_items": 10,
+          "pass_rate": 0.9
+        },
+        "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "prompt_versions": [
+          "risk_report@1.2.0#7ca70726"
+        ],
+        "provider": "bedrock",
+        "status": "APPROVED",
+        "usage": {
+          "bedrock_calls": 10,
+          "cost_usd": 0.08328,
+          "input_tokens": 24509,
+          "output_tokens": 10240
+        }
+      }
+    ],
+    "MRM-004": [
+      {
+        "approved_at": "2026-09-30T01:15:41+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T010751Z",
+        "grader_model": "gemini-3.1-flash-lite",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 1.0,
+          "mean_groundedness": 1.0,
+          "n_items": 10,
+          "pass_rate": 1.0
+        },
+        "model_id": "gemini-3.5-flash-lite",
+        "prompt_versions": [
+          "portfolio_recommendations@1.2.0#c5fa95b1"
+        ],
+        "provider": "gemini",
+        "status": "APPROVED"
       },
-      "model_id": "src/utils/metrics.py",
-      "prompt_versions": [],
-      "status": "APPROVED"
-    }
+      {
+        "approved_at": "2026-09-30T15:37:26+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T153146Z-bedrock",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 0.8,
+          "mean_groundedness": 0.995,
+          "n_items": 10,
+          "pass_rate": 0.8
+        },
+        "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "prompt_versions": [
+          "portfolio_recommendations@1.2.0#c5fa95b1"
+        ],
+        "provider": "bedrock",
+        "status": "CONDITIONAL",
+        "usage": {
+          "bedrock_calls": 10,
+          "cost_usd": 0.058556,
+          "input_tokens": 24983,
+          "output_tokens": 5650
+        }
+      },
+      {
+        "approved_at": "2026-09-30T16:56:32+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T164023Z-bedrock",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 1.0,
+          "mean_groundedness": 1.0,
+          "n_items": 10,
+          "pass_rate": 1.0
+        },
+        "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "prompt_versions": [
+          "portfolio_recommendations_haiku@1.0.0#45848a4d"
+        ],
+        "provider": "bedrock",
+        "status": "APPROVED",
+        "usage": {
+          "bedrock_calls": 10,
+          "cost_usd": 0.061868,
+          "input_tokens": 28229,
+          "output_tokens": 5603
+        }
+      }
+    ],
+    "MRM-005": [
+      {
+        "approved_at": "2026-09-30T00:58:36+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T005058Z",
+        "grader_model": "gemini-3.1-flash-lite",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 1.0,
+          "mean_groundedness": 0.9987,
+          "n_items": 10,
+          "pass_rate": 1.0
+        },
+        "model_id": "gemini-3.5-flash-lite",
+        "prompt_versions": [
+          "market_analysis@1.2.0#f046466c",
+          "portfolio_recommendations@1.2.0#c5fa95b1",
+          "risk_report@1.2.0#7ca70726"
+        ],
+        "provider": "gemini",
+        "status": "APPROVED"
+      },
+      {
+        "approved_at": "2026-09-30T15:50:27+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260930T153729Z-bedrock",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 0.5,
+          "mean_groundedness": 0.9887,
+          "n_items": 10,
+          "pass_rate": 0.5
+        },
+        "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "prompt_versions": [
+          "market_analysis@1.2.0#f046466c",
+          "portfolio_recommendations@1.2.0#c5fa95b1",
+          "risk_report@1.2.0#7ca70726"
+        ],
+        "provider": "bedrock",
+        "status": "FAILED",
+        "usage": {
+          "bedrock_calls": 30,
+          "cost_usd": 0.253539,
+          "input_tokens": 101980,
+          "output_tokens": 25702
+        }
+      },
+      {
+        "approved_at": "2026-10-16T06:48:13+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20261016T064021Z-bedrock",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": null,
+          "grader_pass_rate": 0.9,
+          "mean_groundedness": 0.9913,
+          "n_items": 10,
+          "pass_rate": 0.9
+        },
+        "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "prompt_versions": [
+          "market_analysis_haiku@1.0.0#09294fbd",
+          "portfolio_recommendations_haiku@1.0.0#45848a4d",
+          "risk_report@1.2.0#7ca70726"
+        ],
+        "provider": "bedrock",
+        "status": "APPROVED",
+        "usage": {
+          "bedrock_calls": 30,
+          "cost_usd": 0.272165,
+          "input_tokens": 116968,
+          "output_tokens": 26091
+        }
+      }
+    ],
+    "MRM-006": [
+      {
+        "approved_at": "2026-09-29T21:25:10+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20260929T210703Z",
+        "metrics": {
+          "basel_zone": "GREEN",
+          "period": "2024-04-15 to 2026-03-19"
+        },
+        "model_id": "src/utils/metrics.py",
+        "prompt_versions": [],
+        "provider": "gemini",
+        "status": "APPROVED"
+      }
+    ]
   },
+  "format": "v2: {component: [records keyed by provider, model_id, prompt_versions]}",
   "note": "Written by scripts/run_eval.py from measured evaluation runs. Do not edit by hand."
 }

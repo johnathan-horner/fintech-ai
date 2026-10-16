@@ -18,7 +18,7 @@ from src.rag.vector_store import INDEX_DIR, build_index, index_status  # noqa: E
 
 
 def main() -> None:
-    if not config.has_credentials():
+    if not config.gemini_available():
         sys.exit("No Gemini API key configured (set GEMINI_API_KEY). Nothing built.")
     status = index_status()
     if status["status"] == "ok" and "--force" not in sys.argv:

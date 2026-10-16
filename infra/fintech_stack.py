@@ -1,12 +1,12 @@
 """
 FinTech AI - AWS CDK stack (PRODUCTION target architecture - code only).
 
-This describes the paid production deployment: Amazon Bedrock (Claude +
-Titan embeddings) behind API Gateway/Lambda, a Bedrock Guardrail, KMS
-encryption, CloudTrail with 7-year audit retention, EventBridge schedule.
-It is synthesized in CI/locally with `cdk synth` only; the free demo runs on
-Gemini and does NOT use any of these resources. Never `cdk deploy` without a
-cost review.
+This describes the paid production deployment: Amazon Bedrock Claude Haiku 4.5
+(bedrock:InvokeModel on the us.* inference profile only) behind API Gateway/Lambda,
+a Bedrock Guardrail, KMS encryption, CloudTrail with 7-year audit retention and an
+EventBridge schedule. It is synthesized with `cdk synth` only; the live demo calls
+Bedrock directly with its own credentials and does NOT use any of these resources
+(Guardrail, KMS, CloudTrail are CDK-only). Never `cdk deploy` without a cost review.
 
 The stack is environment-agnostic (no account/region lookups), so synth needs
 no AWS credentials.
@@ -37,7 +37,11 @@ from constructs import Construct
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
-from src.llm.config import BEDROCK_MODELS  # noqa: E402  (single source of truth for model ids)
+from src.llm.config import BEDROCK_MODELS, HAIKU_45, HAIKU_45_FOUNDATION_MODEL  # noqa: E402  (single source of truth)
+
+# Regions the us.* Claude Haiku 4.5 inference profile routes to.
+HAIKU_PROFILE_REGION = "us-east-1"
+HAIKU_ROUTED_REGIONS = ("us-east-1", "us-east-2", "us-west-2")
 
 with open(os.path.join(HERE, "retention_config.json")) as f:
     RETENTION = json.load(f)
@@ -46,12 +50,6 @@ GUARDRAIL_BLOCKED_TOPICS = {
     "InsiderTrading": "Requests to trade on or obtain material non-public information.",
     "MarketManipulation": "Requests to manipulate prices, e.g. pump and dump, spoofing or front running.",
 }
-
-
-def _foundation_model_id(model_or_profile: str) -> str:
-    """'us.anthropic.claude-...' (inference profile) -> 'anthropic.claude-...' (foundation model)."""
-    parts = model_or_profile.split(".", 1)
-    return parts[1] if parts[0] in ("us", "eu", "apac", "global") else model_or_profile
 
 
 class FinTechAIStack(Stack):
@@ -140,16 +138,17 @@ class FinTechAIStack(Stack):
             assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
             managed_policies=[iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSLambdaBasicExecutionRole")],
         )
-        model_ids = sorted({BEDROCK_MODELS["chat"], BEDROCK_MODELS["grader"], BEDROCK_MODELS["hyde"]})
-        profile_arns = [f"arn:{Aws.PARTITION}:bedrock:{Aws.REGION}:{Aws.ACCOUNT_ID}:inference-profile/{m}"
-                        for m in model_ids if m != _foundation_model_id(m)]
-        # Cross-region inference profiles route to the foundation model in any US region.
-        fm_arns = [f"arn:{Aws.PARTITION}:bedrock:*::foundation-model/{_foundation_model_id(m)}" for m in model_ids]
-        fm_arns.append(f"arn:{Aws.PARTITION}:bedrock:{Aws.REGION}::foundation-model/{BEDROCK_MODELS['embedding']}")
+        # Claude Haiku 4.5 only: bedrock:InvokeModel (authorizes the non-streaming Converse API) on the
+        # us.* inference profile and the foundation model in the 3 regions it routes to. Streaming
+        # (InvokeModelWithResponseStream) and the global.* profile are intentionally not granted.
+        # ("bedrock:Converse" is not a valid IAM action.)
+        profile_arns = [f"arn:{Aws.PARTITION}:bedrock:{HAIKU_PROFILE_REGION}:{Aws.ACCOUNT_ID}:inference-profile/{HAIKU_45}"]
+        fm_arns = [f"arn:{Aws.PARTITION}:bedrock:{r}::foundation-model/{HAIKU_45_FOUNDATION_MODEL}"
+                   for r in HAIKU_ROUTED_REGIONS]
         lambda_role.add_to_policy(iam.PolicyStatement(
-            sid="BedrockInvokeApprovedModels",
-            actions=["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
-            resources=sorted(profile_arns) + sorted(fm_arns),
+            sid="BedrockInvokeHaiku45",
+            actions=["bedrock:InvokeModel"],
+            resources=profile_arns + fm_arns,
         ))
         lambda_role.add_to_policy(iam.PolicyStatement(
             sid="BedrockApplyGuardrail",
@@ -166,7 +165,6 @@ class FinTechAIStack(Stack):
             "LLM_PROVIDER": "bedrock",
             "BEDROCK_CHAT_MODEL": BEDROCK_MODELS["chat"],
             "BEDROCK_GRADER_MODEL": BEDROCK_MODELS["grader"],
-            "BEDROCK_EMBEDDING_MODEL": BEDROCK_MODELS["embedding"],
             "GUARDRAIL_ID": guardrail.attr_guardrail_id,
             "GUARDRAIL_VERSION": guardrail_version.attr_version,
         }

@@ -92,20 +92,32 @@ def run_ai_request(
 
 # -- Rendering ------------------------------------------------------------------
 
-def render_badge(mode: str, reason: Optional[str] = None) -> None:
+def output_label(mode: str, reason: Optional[str] = None, trace: Optional[dict] = None,
+                 fallback: Optional[str] = None) -> str:
+    """'Live AI · Bedrock · Claude Haiku 4.5' / 'Live AI · Gemini · <model> (fallback: ...)' / 'Demo mode (...)'."""
     if mode == "live":
-        st.markdown(
-            '<span style="background:#14532d;color:#bbf7d0;border-radius:6px;padding:2px 10px;'
-            'font-size:0.78rem;font-weight:600;">Live AI</span>',
-            unsafe_allow_html=True,
-        )
-        return
-    blocked = mode == "blocked" or (reason or "").startswith("Blocked by model governance")
-    color = ("#7f1d1d", "#fecaca") if blocked else ("#78350f", "#fde68a")
-    label = "Demo mode" + (f" — {html.escape(reason)}" if reason else "")
+        trace = trace or {}
+        model = trace.get("answer_model") or (trace.get("model_id") or "").split("+")[0]
+        label = f"Live AI \u00b7 {config.provider_label(trace.get('provider'), model)}"
+        fb = fallback or trace.get("fallback_reason")
+        if fb:
+            label += f" (fallback: {fb[:180] + ('...' if len(fb) > 180 else '')})"
+        return label
+    return "Demo mode" + (f" ({reason})" if reason else "")
+
+
+def render_badge(mode: str, reason: Optional[str] = None, trace: Optional[dict] = None,
+                 fallback: Optional[str] = None) -> None:
+    text = html.escape(output_label(mode, reason, trace, fallback))
+    if mode == "live":
+        colors = ("#14532d", "#bbf7d0")
+    elif mode == "blocked" or (reason or "").startswith("Blocked by model governance"):
+        colors = ("#7f1d1d", "#fecaca")
+    else:
+        colors = ("#78350f", "#fde68a")
     st.markdown(
-        f'<span style="background:{color[0]};color:{color[1]};border-radius:6px;padding:2px 10px;'
-        f'font-size:0.78rem;font-weight:600;">{label}</span>',
+        f'<span style="background:{colors[0]};color:{colors[1]};border-radius:6px;padding:2px 10px;'
+        f'font-size:0.78rem;font-weight:600;">{text}</span>',
         unsafe_allow_html=True,
     )
 
@@ -117,29 +129,42 @@ def grader_caption(grader: Optional[dict]) -> str:
     num_txt = f"numeric check {num.get('matched', 0)}/{num.get('checked', 0)} matched"
     if num.get("mismatches"):
         num_txt += f" (unmatched: {', '.join(num['mismatches'][:5])})"
-    if grader.get("grader_error"):
-        return (f"Grader unavailable ({grader['grader_model']}: {grader['grader_error'][:80]}) \u00b7 verdict "
-                f"**UNGRADED** \u00b7 {num_txt}")
+    if grader.get("verdict") == "UNGRADED" or grader.get("grader_error"):
+        return (f"Grader unavailable ({(grader.get('grader_error') or '')[:120]}) \u00b7 verdict **UNGRADED** "
+                f"\u00b7 {num_txt}")
     if grader.get("grader_model"):
         g = grader.get("groundedness")
         nc = grader.get("numeric_consistency")
         g_txt = f"{g:.2f}" if isinstance(g, (int, float)) else "n/a"
         nc_txt = f"{nc:.2f}" if isinstance(nc, (int, float)) else "n/a"
-        return (f"Grader ({grader['grader_model']}): groundedness {g_txt} · numeric consistency {nc_txt} "
-                f"· verdict **{grader.get('verdict')}** · {num_txt}")
-    return f"Grader: LLM grader not run (demo output) · {num_txt} · verdict **{grader.get('verdict')}**"
+        who = config.provider_label(grader.get("grader_provider"), grader["grader_model"])
+        return (f"Grader ({who}): groundedness {g_txt} \u00b7 numeric consistency {nc_txt} "
+                f"\u00b7 verdict **{grader.get('verdict')}** \u00b7 {num_txt}")
+    return f"Grader: LLM grader not run (demo output) \u00b7 {num_txt} \u00b7 verdict **{grader.get('verdict')}**"
 
 
-def render_output(text: str, mode: str, reason: Optional[str], grader: Optional[dict], trace: Optional[dict]) -> None:
-    """Badge + body + grader + trace expander for one AI output."""
+def render_output(text: str, mode: str, reason: Optional[str], grader: Optional[dict], trace: Optional[dict],
+                  fallback: Optional[str] = None) -> None:
+    """Badge (provider + model that actually answered) + body + grader + trace expander."""
     from src.guardrails.bedrock_guardrails import filter_pii
 
-    render_badge(mode, reason)
+    render_badge(mode, reason, trace if mode == "live" else None, fallback)
     st.markdown(md_money(filter_pii(text or "")))
     st.caption(md_money(grader_caption(grader)))
     if trace:
-        with st.expander(f"Trace {trace.get('trace_id', '')} · {trace.get('inventory_id', '')}"):
+        with st.expander(f"Trace {trace.get('trace_id', '')} \u00b7 {trace.get('inventory_id', '')}"):
             st.json(trace)
+
+
+def provider_status_lines() -> list:
+    """Sidebar lines: which providers are configured right now."""
+    return [
+        f"Bedrock ({config.display_name(config.HAIKU_45)}): "
+        + ("configured" if config.bedrock_available() else "not configured"),
+        f"Gemini ({config.model_id('chat', 'gemini')}): "
+        + ("configured" if config.gemini_available() else "not configured"),
+        "Demo mode: always available",
+    ]
 
 
 # -- Cached heavy resources -------------------------------------------------------

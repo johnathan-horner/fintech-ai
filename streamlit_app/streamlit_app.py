@@ -2,9 +2,9 @@
 FinTech AI -- Streamlit Cloud Entry Point
 
 Quant metrics are always computed from the bundled synthetic data.
-AI features use Google Gemini (free tier) when st.secrets["gemini"]["api_key"]
-is set, gated by model governance, capped at 10 live requests per session and
-falling back to labelled, data-derived demo output otherwise.
+AI features: Amazon Bedrock Claude Haiku 4.5 (st.secrets["aws"]) first, Google Gemini
+free tier (st.secrets["gemini"]["api_key"]) as fallback, labelled data-derived demo output
+last - gated by model governance and capped at 10 live requests per session.
 """
 
 import os
@@ -39,13 +39,14 @@ LIVE_AVAILABLE = config.has_credentials()
 with st.sidebar:
     st.markdown("# FinTech AI")
     st.markdown("**Hedge Fund Intelligence Platform**")
+    from streamlit_app.live_ai import provider_status_lines  # noqa: E402
+
     if LIVE_AVAILABLE:
         st.success("Live AI available")
-        st.caption(f"{config.get_provider().title()} · chat {config.model_id('chat')} · "
-                   f"grader {config.model_id('grader')}")
     else:
         st.warning("Demo mode")
-        st.caption("No Gemini API key configured · AI sections show data-derived templates")
+    for line in provider_status_lines():
+        st.caption(line)
     st.markdown("---")
     page = st.radio(
         "Navigation",
@@ -63,12 +64,15 @@ with st.sidebar:
     from streamlit_app.live_ai import MAX_LIVE_REQUESTS_PER_SESSION, requests_used  # noqa: E402
 
     with st.expander("System"):
-        st.caption(f"Live AI requests this session: {requests_used()}/{MAX_LIVE_REQUESTS_PER_SESSION}")
-        st.caption(f"Traced outputs this session: {len(st.session_state.get('trace_log', []))}")
+        counter_slot = st.empty()  # filled after the page ran, so the count includes this run's request
+        trace_slot = st.empty()
+        st.caption(f"Provider chain: Bedrock {config.display_name(config.HAIKU_45)} -> Gemini "
+                   f"{config.model_id('chat', 'gemini')} -> demo mode")
         st.caption(f"Embeddings: {config.model_id('embedding')} · re-ranker: ms-marco-MiniLM-L-6-v2 (local ONNX)")
+        st.caption("Bedrock Guardrails, KMS and CloudTrail: defined in infra/ (CDK) only - not used by this live demo")
         st.caption(config.free_tier_label())
     st.caption("Built by Johnathan Horner")
-    st.caption("LangGraph | FAISS | Gemini free tier (demo) | Bedrock (production target)")
+    st.caption("LangGraph | FAISS | Bedrock Claude Haiku 4.5 | Gemini fallback")
     st.caption("SR 11-7 MRM Framework")
 
 if LIVE_AVAILABLE:
@@ -76,7 +80,7 @@ if LIVE_AVAILABLE:
             f"live use is gated by model approvals and capped at {MAX_LIVE_REQUESTS_PER_SESSION} requests per session.")
 else:
     st.info("**Demo mode** -- synthetic portfolio data; quant metrics are computed live, AI sections show "
-            "deterministic templates filled from the data (no Gemini API key configured).")
+            "deterministic templates filled from the data (no Bedrock credentials and no Gemini API key configured).")
 
 from streamlit_app.demo_pages import (  # noqa: E402
     page_chat, page_market, page_mrm, page_portfolio, page_portfolio_management, page_risk,
@@ -97,3 +101,6 @@ elif page == "Model Risk Management":
 
 st.markdown("---")
 st.caption(config.free_tier_label())
+
+counter_slot.caption(f"Live AI requests this session: {requests_used()}/{MAX_LIVE_REQUESTS_PER_SESSION}")
+trace_slot.caption(f"Traced outputs this session: {len(st.session_state.get('trace_log', []))}")

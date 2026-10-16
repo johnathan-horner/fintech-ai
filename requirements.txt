@@ -1,4 +1,5 @@
 # Streamlit Cloud (streamlit_app/streamlit_app.py) - only what the app imports.
+# boto3/botocore: Bedrock converse (Claude Haiku 4.5), imported lazily.
 # faiss-cpu 1.10.0 is the newest release with wheels for both Linux and macOS x86_64.
 streamlit==1.64.0
 pandas==3.0.6
@@ -8,3 +9,5 @@ langchain-core==1.6.6
 langchain-google-genai==4.4.0
 faiss-cpu==1.10.0
 fastembed==0.8.1
+boto3==1.43.105
+botocore==1.43.105

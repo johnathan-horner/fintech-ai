@@ -99,7 +99,7 @@ def test_reports_generate_from_real_state():
     pkg = generate_full_exam_package(traces=[])
     assert pkg["sr_11_7_compliance_attestation"]["independent_validation_function"] is True
     card = generate_model_card("MRM-006")
-    assert card["model_card"]["running_version"]["model_id"] == "src/utils/metrics.py"
+    assert card["model_card"]["running_versions"]["code"]["model_id"] == "src/utils/metrics.py"
 
 
 def test_change_request_counts_as_pending():

@@ -13,6 +13,9 @@ def isolated_env(tmp_path, monkeypatch):
     from src.mrm.governance import model_governance
 
     monkeypatch.setattr(config, "_read_secret", lambda section, key: None)
+    # Behave like Streamlit without [aws] secrets: Bedrock is skipped and the developer's
+    # local AWS credential chain is never used in tests.
+    monkeypatch.setattr(config, "_in_streamlit_runtime", lambda: True)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     for var in ("LLM_PROVIDER", "LLM_CHAT_MODEL", "LLM_GRADER_MODEL", "LLM_HYDE_MODEL", "LLM_EMBEDDING_MODEL"):
         monkeypatch.delenv(var, raising=False)

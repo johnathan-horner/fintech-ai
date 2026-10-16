@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from src.agents.base import run_llm_agent
+from src.agents.base import run_agent_component
 from src.agents.context import action_items, portfolio_sources
 
 INVENTORY_ID = "MRM-004"
@@ -24,13 +24,17 @@ def run_portfolio_management(
     grader_llm=None,
     approvals: Optional[dict] = None,
     enforce_approval: bool = True,
+    provider: Optional[str] = None,
+    providers: Optional[list] = None,
+    grader_provider: Optional[str] = None,
+    grader_model: Optional[str] = None,
     grade: bool = True,
     **_ignored,
 ) -> dict:
-    sources = portfolio_sources(portfolio_data)
-    res = run_llm_agent(
-        INVENTORY_ID, "portfolio_recommendations", sources,
+    res = run_agent_component(
+        INVENTORY_ID, "portfolio_recommendations", lambda prov: portfolio_sources(portfolio_data, prov),
         llm=llm, grader_llm=grader_llm, approvals=approvals, enforce_approval=enforce_approval,
+        provider=provider, providers=providers, grader_provider=grader_provider, grader_model=grader_model,
         grade=grade,
     )
     return {
@@ -38,6 +42,9 @@ def run_portfolio_management(
         "action_items": action_items(portfolio_data),
         "grader": res["grader"],
         "trace": res["trace"],
-        "sources": sources,
+        "sources": res["sources"],
         "error": None,
+        "provider": res.get("provider"),
+        "answer_model": res.get("answer_model"),
+        "fallback_reason": res.get("fallback_reason"),
     }

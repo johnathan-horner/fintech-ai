@@ -1,0 +1,469 @@
+{
+  "run_id": "heldout-20260930T163311Z-bedrock",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-09-30T16:33:11+00:00",
+  "provider": "bedrock",
+  "models": {
+    "chat": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "grader": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "hyde": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "embedding": "gemini-embedding-001"
+  },
+  "grader": {
+    "provider": "gemini",
+    "model_id": "gemini-3.1-flash-lite"
+  },
+  "versions": {
+    "MRM-002": {
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "prompt_versions": [
+        "market_analysis_haiku@1.0.0#09294fbd"
+      ],
+      "provider": "bedrock"
+    }
+  },
+  "throttle_s": 15.0,
+  "items": [
+    {
+      "id": "mrm-002-subset10",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset10",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 57.75% | 42.08% | $4,714,855.83 |\n| Healthcare | 25.86% | -2.24% | -$148,675.36 |\n| Financials | 9.44% | 67.88% | $978,062.81 |\n| Consumer Discretionary | 4.06% | 5.8% | $55,869.86 |\n| Energy | 2.89% | -29.09% | -$297,429.86 |\n\nTechnology dominates at 57.75% weight with strong 42.08% average returns. Financials show exceptional 67.88% gains despite modest 9.44% allocation. Energy is the drag, posting -29.09% average returns. Healthcare (UNH) trails at -2.24%.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold \u226430); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 negative. Price down 4.39% over market-data window 2025-12-19 to 2026-03-18. Volume ratio 1.58.\n- **UNH**: RSI-14 74.1 (overbought \u226570); SMA-50 150.02 below SMA-200 169.7; MACD signal 0.88. Price down 24.22% over market-data window. Volume ratio 0.14 (notably depressed).\n\n**WATCH Status:**\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative. Down 3.54%. Volume ratio 1.22.\n- **JPM**: SMA-50 48.45 below SMA-200 53.57. Down 9.19%. Volume ratio 1.28.\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 negative. Down 22.49% (largest decline). Volume ratio 0.37.\n- **V**: SMA-50 296.96 below SMA-200 334.98; MACD signal -1.466 negative. Down 16.76%. Volume ratio 0.31.\n\n---\n\n## Earnings Pattern \u2013 Q2 2024\n\n**Beats (2 of 10):** MSFT (revenue $82.4B vs $78.4B; EPS $6.54 vs $6.15); XOM (revenue $65.0B vs $64.3B; EPS $4.07 vs $3.95).\n\n**Misses (8 of 10):** AAPL (EPS $6.59 vs $6.94), GOOGL (revenue $78.0B vs $80.8B), JPM (revenue $81.5B vs $84.6B), NVDA (revenue $114.5B vs $114.6B; EPS $2.54 vs $2.73), ORCL (revenue $51.4B vs $52.8B; EPS $5.64 vs $5.92), TSLA (EPS $4.46 vs $4.75), UNH (EPS $1.88 vs $1.93), V (revenue $16.6B vs $17.1B).\n\nBroad earnings disappointment; only two positions beat consensus.\n\n---\n\n## Macro Backdrop \u2013 February 2026\n\n**Latest Readings:** Federal Funds Rate 5.22; CPI YoY 4.59; Core PCE 2.86; 10Y Treasury Yield 4.14; 2Y Treasury Yield 5.28; Unemployment Rate 3.76; ISM Manufacturing PMI 48.7; VIX 16.65.\n\n**Month-over-Month Changes (2026-01 to 2026-02):**"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 87,
+            "matched": 87,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 12431.8,
+      "error": null,
+      "trace_id": "bcea6947fac44e19",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6388,
+        "output_tokens": 1024,
+        "cost_usd": 0.012659
+      }
+    },
+    {
+      "id": "mrm-002-subset12",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset12",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund (HF-ALPHA-001)\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 40.41% | 42.66% | $2,369,408.06 |\n| Financials | 23.93% | 14.87% | $353,887.30 |\n| Energy | 23.18% | -25.38% | -$1,221,195.61 |\n| Healthcare | 6.66% | -10.62% | -$138,966.61 |\n| Consumer Discretionary | 5.81% | 5.8% | $55,869.86 |\n\nTechnology drives portfolio gains; Energy is the primary drag. Portfolio value-weighted beta stands at 1.382.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 (negative). Price change over market-data window 2025-12-19 to 2026-03-18: -4.39% (down). Volume ratio 1.58.\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16. Price change over market-data window 2025-12-19 to 2026-03-18: -6.66% (down). Volume ratio 0.94.\n\n**WATCH Status:**\n- **AVGO**: SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 (negative). Price change: +4.68% (up). Volume ratio 1.01.\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 (negative). Price change: -6.38% (down). Volume ratio 1.42.\n- **JPM**: SMA-50 48.45 below SMA-200 53.57. Price change: -9.19% (down). Volume ratio 1.28.\n- **MA**: SMA-50 85.19 below SMA-200 92.83. Price change: -9.81% (down). Volume ratio 0.68.\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 (negative). Price change: -22.49% (down). Volume ratio 0.37.\n\n---\n\n## Earnings Summary (Q2 2024)\n\n**Beats:** GS (revenue +$1.8B, EPS +$0.11); XOM (revenue +$0.7B, EPS +$0.12).\n\n**Misses:** AAPL (EPS -$0.35 despite revenue +$6.2B); AVGO (revenue -$0.2B, EPS +$0.33); CVX (revenue -$6.8B, EPS +$0.11); JNJ (EPS flat at $0.69); JPM (revenue -$3.1B, EPS +$0.11); MA (revenue -$0.6B, EPS +$0.17); NVDA (revenue -$0.1B, EPS -$0.19); TSLA (EPS -$0.29 despite revenue +$3.9B).\n\n---\n\n## Macro Backdrop (2026-02)\n\n**Latest Readings:** Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, ISM Manufacturing PMI 48.7, VIX 16.65.\n\n**Month-over-Month Changes:** Federal Funds Rate increased 0.59 percentage points; CPI YoY increased 0.02 percentage points; Core PCE increased 0.5 percentage points; 2Y Treasury Yield"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 78,
+            "matched": 78,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 25217.6,
+      "error": null,
+      "trace_id": "882e560bb3734791",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6371,
+        "output_tokens": 1024,
+        "cost_usd": 0.01264
+      }
+    },
+    {
+      "id": "mrm-002-subset13",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset13",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 36.34% | 36.6% | $2,498,931.87 |\n| Healthcare | 34.27% | -6.43% | -$287,641.97 |\n| Energy | 14.94% | -21.66% | -$923,765.75 |\n| Financials | 9.9% | 13.01% | -$471,704.89 |\n| Consumer Discretionary | 4.56% | 5.8% | $55,869.86 |\n\nTechnology drives portfolio gains (+36.6%), while Energy (-21.66%) and Healthcare (-6.43%) drag performance. Portfolio beta stands at 1.348, with four positions exceeding 1.5: CVX, MA, TSLA, UNH.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16; price down 6.66% over 2025-12-19 to 2026-03-18\n- **UNH**: RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; price down 24.22% over 2025-12-19 to 2026-03-18; volume ratio 0.14\n\n**WATCH Status:**\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 negative; price down 6.38%\n- **MA**: SMA-50 85.19 below SMA-200 92.83; price down 9.81%; volume ratio 0.68\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative; price down 3.54%\n- **TSLA**: RSI-14 25.0 (oversold); MACD signal -2.422 negative; price down 22.49%; volume ratio 0.37\n- **V**: SMA-50 296.96 below SMA-200 334.98; MACD signal -1.466 negative; price down 16.76%\n\n---\n\n## Earnings Pattern \u2013 Q2 2024\n\n**Beats (2):** GS, MSFT  \n**Misses (8):** CVX, GOOGL, JNJ, MA, ORCL, TSLA, UNH, V\n\nRevenue misses dominated: CVX (-$6.8B), GOOGL (-$2.8B), MA (-$0.6B), ORCL (-$1.4B), V (-$0.5B). EPS results mixed; notable beats: MSFT (+$0.39), MA (+$0.17), V (+$0.16). ORCL EPS missed by $0.28.\n\n---\n\n## Macro Backdrop\n\n**February 2026 Readings:**\n- Federal Funds Rate: 5.22 (increased 0.59 percentage points)\n- CPI YoY: 4.59 (increased 0.02 percentage points)\n- Core PCE: 2.86 (increased 0.5 percentage points)\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- Unemployment Rate: 3.76 (decreased 0.53 percentage points)\n- ISM Manufacturing PMI: 48.7 (decreased 1.7 points; below 50)\n- VIX: 16.65 (decreased 12.37 points; Low regime)\n\n**Regime:** Risk-Off. Inverted yield curve persists amid rising rates and elevated Core PCE, though equity volatility has compressed and labor markets remain resilient."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 70,
+            "matched": 70,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 22158.4,
+      "error": null,
+      "trace_id": "9bdeec5926a64d6c",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6369,
+        "output_tokens": 992,
+        "cost_usd": 0.012462
+      }
+    },
+    {
+      "id": "mrm-002-subset16",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset16",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return (since cost) | Unrealized P&L |\n|--------|--------|------------------------|-----------------|\n| Technology | 67.16% | 39.63% | $4,868,339.93 |\n| Energy | 14.75% | -21.66% | -$923,765.75 |\n| Financials | 12.93% | 38.13% | $941,574.62 |\n| Healthcare | 5.16% | -10.62% | -$138,966.61 |\n\nTechnology dominates the portfolio at 67.16% weight with strong gains (39.63% average return). Energy is the drag, posting -21.66% average return. Financials contribute solid gains at 38.13%. Portfolio beta stands at 1.191 (value-weighted), with AAPL and CVX exceeding 1.5 beta.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold \u226430); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 negative. Price change over market-data window 2025-12-19 to 2026-03-18: -4.39% (down). Volume ratio 1.58.\n- **CVX**: RSI-14 75.9 (overbought \u226570); SMA-50 87.88 below SMA-200 104.16. Price change over market-data window 2025-12-19 to 2026-03-18: -6.66% (down). Volume ratio 0.94.\n\n**WATCH Status:**\n- **AVGO**: SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 negative. Price +4.68% (up). Volume ratio 1.01.\n- **GS**: RSI-14 23.0 (oversold \u226430); MACD signal -1.081 negative. Price -6.38% (down). Volume ratio 1.42.\n- **JPM**: SMA-50 48.45 below SMA-200 53.57. Price -9.19% (down). Volume ratio 1.28.\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative. Price -3.54% (down). Volume ratio 1.22.\n\n---\n\n## Earnings Summary (Q2 2024)\n\n**Beats:** MSFT (revenue $82.4B vs $78.4B; EPS $6.54 vs $6.15), GS (revenue $90.2B vs $88.4B; EPS $7.97 vs $7.86).\n\n**Misses:** AAPL (EPS $6.59 vs $6.94), AVGO (revenue $24.7B vs $24.9B), CVX (revenue $117.6B vs $124.4B), GOOGL (revenue $78.0B vs $80.8B), JNJ (EPS $0.69 vs $0.69), JPM (revenue $81.5B vs $84.6B), NVDA (revenue $114.5B vs $114.6B; EPS $2.54 vs $2.73), ORCL (revenue $51.4B vs $52.8B; EPS $5.64 vs $5.92).\n\n---\n\n## Macro Backdrop (February 2026)\n\n**Latest Readings:** Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, ISM Manufacturing PMI 48.7, VIX 16.65.\n\n**Month-over-Month Changes (2026-01 to 2026-02):**\n- Federal Funds Rate increased 0.59 percentage points\n-"
+      ],
+      "graders": [
+        {
+          "groundedness": 0.96,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [
+            "Federal Funds Rate increased 0.59 percentage points"
+          ],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 84,
+            "matched": 84,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 11251.9,
+      "error": null,
+      "trace_id": "2ab5fcd491a146f3",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6329,
+        "output_tokens": 1024,
+        "cost_usd": 0.012594
+      }
+    },
+    {
+      "id": "mrm-002-subset17",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset17",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund (HF-ALPHA-001)\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return (since cost) | Unrealized P&L |\n|--------|--------|------------------------|-----------------|\n| Technology | 36.82% | 36.6% | $2,498,931.87 |\n| Healthcare | 34.72% | -6.43% | -$287,641.97 |\n| Energy | 18.43% | -25.38% | -$1,221,195.61 |\n| Financials | 10.03% | 13.01% | -$471,704.89 |\n\nTechnology drives portfolio gains; Energy and Healthcare drag performance. Portfolio beta of 1.281 indicates elevated systematic risk.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **CVX**: RSI-14 75.9 overbought; SMA-50 87.88 below SMA-200 104.16; price down 6.66% over market-data window 2025-12-19 to 2026-03-18.\n- **UNH** (29.43% weight): RSI-14 74.1 overbought; SMA-50 150.02 below SMA-200 169.7; price down 24.22% over market-data window 2025-12-19 to 2026-03-18; volume ratio 0.14.\n\n**WATCH Status:**\n- **GS**: RSI-14 23.0 oversold; MACD signal -1.081 negative; price down 6.38%.\n- **MA**: SMA-50 85.19 below SMA-200 92.83; price down 9.81%; volume ratio 0.68.\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative; price down 3.54%.\n- **V**: SMA-50 296.96 below SMA-200 334.98; MACD signal -1.466 negative; price down 16.76%; volume ratio 0.31.\n\n---\n\n## Q2 2024 Earnings Pattern\n\n**Beats (2):** GS, MSFT, XOM  \n**Misses (7):** CVX, GOOGL, JNJ, MA, ORCL, UNH, V\n\nRevenue misses dominate (CVX -$6.8B, GOOGL -$2.8B, MA -$0.6B, ORCL -$1.4B, UNH +$0.7B, V -$0.5B). EPS results mixed: CVX +$0.11, GOOGL +$0.32, MA +$0.17, MSFT +$0.39, XOM +$0.12 beat; ORCL -$0.28, UNH -$0.05 miss.\n\n---\n\n## Macro Backdrop\n\n**February 2026 Readings:**\n- Federal Funds Rate: 5.22 (increased 0.59 percentage points)\n- CPI YoY: 4.59 (increased 0.02 percentage points)\n- Core PCE: 2.86 (increased 0.5 percentage points)\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- ISM Manufacturing PMI: 48.7 (decreased 1.7 points; below 50)\n- Unemployment Rate: 3.76 (decreased 0.53 percentage points)\n- GDP Growth QoQ: 2.92 (increased 3.12 percentage points)\n- VIX: 16.65 (Low regime)\n\n**Regime:** Risk-Off. Inverted yield curve, manufacturing contraction, and rising Core PCE amid rate hold signal caution despite improved consumer confidence (+39.5 points) and GDP rebound."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 67,
+            "matched": 67,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 13114.4,
+      "error": null,
+      "trace_id": "05cd3f7a02894ec3",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6261,
+        "output_tokens": 980,
+        "cost_usd": 0.012277
+      }
+    },
+    {
+      "id": "mrm-002-subset19",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset19",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 52.4% | 40.3% | $4,274,993.87 |\n| Healthcare | 26.2% | -2.24% | -$148,675.36 |\n| Energy | 13.48% | -21.66% | -$923,765.75 |\n| Consumer Discretionary | 4.11% | 5.8% | $55,869.86 |\n| Financials | 3.81% | 35.34% | $115,982.43 |\n\nTechnology dominates the portfolio at 52.4% weight with strong 40.3% average returns. Energy is the largest drag at -21.66% average return. Financials show solid 35.34% performance despite modest 3.81% allocation.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 (negative); price down 4.39% over market-data window 2025-12-19 to 2026-03-18\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16; price down 6.66% over market-data window\n- **UNH**: RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; price down 24.22% over market-data window\n\n**WATCH Status:** AVGO, GS, MSFT, TSLA, V show mixed signals (SMA crossovers, negative MACD, or oversold RSI).\n\n**Volume:** AAPL (ratio 1.58), GS (ratio 1.42), ORCL (ratio 1.45), MSFT (ratio 1.22) show elevated volume. UNH (ratio 0.14), TSLA (ratio 0.37), GOOGL (ratio 0.31), V (ratio 0.31) show depressed volume.\n\n---\n\n## Earnings Pattern \u2013 Q2 2024\n\n**Beats (2):** GS, MSFT  \n**Misses (8):** AAPL, AVGO, CVX, GOOGL, ORCL, TSLA, UNH, V\n\nMixed results dominate. Revenue misses: CVX, GOOGL, ORCL, V. EPS beats despite revenue misses: AVGO, CVX, GOOGL. TSLA and UNH beat revenue but missed EPS.\n\n---\n\n## Macro Backdrop \u2013 February 2026\n\n**Latest Readings:**\n- Federal Funds Rate: 5.22\n- CPI YoY: 4.59\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- ISM Manufacturing PMI: 48.7 (below 50)\n- VIX: 16.65\n\n**Month-over-Month Changes (2026-01 to 2026-02):**\n- Federal Funds Rate increased 0.59 percentage points\n- Core PCE increased 0.5 percentage points\n- 2Y Treasury Yield increased 1.04 percentage points\n- Unemployment Rate decreased 0.53 percentage points\n- GDP Growth QoQ increased 3.12 percentage points\n- ISM Manufacturing PMI decreased 1.7 points\n- Consumer Confidence Index increased 39.5 points\n- VIX decreased 12.37 points\n\n**Regime:** Risk-Off. Inverted yield curve persists; manufacturing contraction (PMI 48.7); rising rates and inflation pressures offset by strong GDP growth and confidence recovery."
+      ],
+      "graders": [
+        {
+          "groundedness": 0.95,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [
+            "TSLA and UNH beat revenue but missed EPS."
+          ],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 55,
+            "matched": 55,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 31586.9,
+      "error": null,
+      "trace_id": "8564d8fc11bd4747",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6423,
+        "output_tokens": 980,
+        "cost_usd": 0.012455
+      }
+    },
+    {
+      "id": "mrm-002-subset3",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset3",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return (since cost) | Unrealized P&L |\n|--------|--------|------------------------|-----------------|\n| Technology | 48.83% | 46.49% | $4,443,827.67 |\n| Healthcare | 28.52% | -6.43% | -$287,641.97 |\n| Energy | 15.13% | -25.38% | -$1,221,195.61 |\n| Financials | 7.52% | -13.03% | -$547,940.20 |\n\nTechnology drives portfolio gains; Energy and Financials drag performance. Portfolio beta of 1.362 indicates elevated systematic risk.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status (3 positions):**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 (negative). Price change over market-data window 2025-12-19 to 2026-03-18: -4.39% (down).\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16. Price change: -6.66% (down).\n- **UNH** (largest position, 24.17% weight): RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7. Price change: -24.22% (down). Volume ratio 0.14 signals weak conviction.\n\n**WATCH Status (3 positions):**\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 (negative). Price change: -6.38% (down).\n- **MA**: SMA-50 85.19 below SMA-200 92.83. Price change: -9.81% (down).\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 (negative). Price change: -3.54% (down).\n\n---\n\n## Earnings Pattern \u2013 Q2 2024\n\n**Beats (2):** GS (revenue $90.2B vs $88.4B; EPS $7.97 vs $7.86); MSFT (revenue $82.4B vs $78.4B; EPS $6.54 vs $6.15); XOM (revenue $65.0B vs $64.3B; EPS $4.07 vs $3.95).\n\n**Misses (7):** AAPL (EPS $6.59 vs $6.94); CVX (revenue $117.6B vs $124.4B); GOOGL (revenue $78.0B vs $80.8B); JNJ (EPS $0.69 vs $0.69); MA (revenue $31.0B vs $31.6B); NVDA (revenue $114.5B vs $114.6B; EPS $2.54 vs $2.73); UNH (EPS $1.88 vs $1.93).\n\n---\n\n## Macro Backdrop\n\n**February 2026 Readings:**\n- Federal Funds Rate: 5.22 (increased 0.59 percentage points)\n- CPI YoY: 4.59 (increased 0.02 percentage points)\n- Core PCE: 2.86 (increased 0.5 percentage points)\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- Unemployment Rate: 3.76 (decreased 0.53 percentage points)\n- ISM Manufacturing PMI: 48.7 (below 50; decreased 1.7 points)\n\n**Regime:** Risk-Off. Inverted yield curve, rising rates, and contracting manufacturing signal economic headwinds despite improved consumer confidence (+39.5 points) and VIX decline (-12.37 points to 16.65)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 80,
+            "matched": 80,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 22589.8,
+      "error": null,
+      "trace_id": "c120d0527924495e",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6307,
+        "output_tokens": 1024,
+        "cost_usd": 0.01257
+      }
+    },
+    {
+      "id": "mrm-002-subset4",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset4",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return Since Cost | Unrealized P&L |\n|--------|--------|----------------------|-----------------|\n| Technology | 50.24% | 42.31% | $4,008,490.71 |\n| Healthcare | 32.37% | -6.43% | -$287,641.97 |\n| Financials | 10.02% | 67.88% | $978,062.81 |\n| Consumer Discretionary | 4.31% | 5.8% | $55,869.86 |\n| Energy | 3.06% | -29.09% | -$297,429.86 |\n\nTechnology dominates at 50.24% weight with strong 42.31% average returns. Financials show exceptional 67.88% gains despite modest 10.02% allocation. Healthcare and Energy lag significantly, with -6.43% and -29.09% average returns respectively.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 negative; price down 4.39% over market-data window 2025-12-19 to 2026-03-18\n- **UNH** (27.43% portfolio weight): RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; price down 24.22% over market-data window 2025-12-19 to 2026-03-18\n\n**WATCH Status:**\n- **AVGO, MSFT, JPM, V, TSLA**: All show SMA-50 below SMA-200 and/or negative MACD signals\n- **TSLA**: RSI-14 25.0 (oversold); price down 22.49% over market-data window 2025-12-19 to 2026-03-18; volume ratio 0.37 (well below 20-day average)\n- **UNH, V, TSLA**: Volume ratios 0.14, 0.31, 0.37 indicate significantly reduced trading activity\n\n---\n\n## Earnings Pattern \u2013 Q2 2024\n\n**Beats (2 of 10):** MSFT, XOM\n\n**Misses (8 of 10):** AAPL, AVGO, JNJ, JPM, ORCL, TSLA, UNH, V\n\nRevenue performance mixed: AAPL, JNJ, TSLA, UNH, XOM beat; AVGO, JPM, ORCL, V missed. EPS results similarly split. Management guidance predominantly below or in-line for next quarter (AAPL, JPM, MSFT, TSLA guided below; AVGO, ORCL, UNH, V guided in-line; JNJ guided above).\n\n---\n\n## Macro Backdrop \u2013 February 2026\n\n**Latest Readings:**\n- Federal Funds Rate: 5.22\n- CPI YoY: 4.59\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- ISM Manufacturing PMI: 48.7 (below 50)\n- VIX: 16.65\n\n**Month-over-Month Changes (2026-01 to 2026-02):**\n- Federal Funds Rate increased 0.59 percentage points\n- Core PCE increased 0.5 percentage points\n- 2Y Treasury Yield increased 1.04 percentage points\n- GDP Growth QoQ increased 3.12 percentage points\n- ISM Manufacturing PMI decreased 1.7 points\n- Consumer Confidence Index increased 39.5 points\n- VIX decreased 12.37 points\n\n**Regime:** Risk-Off. Inverted yield curve persists; manufacturing contraction continues despite strong GDP and confidence rebound. Rising rates and sticky inflation create headwinds."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 49,
+            "matched": 49,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 13483.4,
+      "error": null,
+      "trace_id": "44413544f9444369",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6378,
+        "output_tokens": 1006,
+        "cost_usd": 0.012549
+      }
+    },
+    {
+      "id": "mrm-002-subset8",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset8",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return (since cost) | Unrealized P&L |\n|--------|--------|------------------------|-----------------|\n| Technology | 44.27% | 34.69% | $3,245,762.03 |\n| Healthcare | 30.65% | -6.43% | -$287,641.97 |\n| Financials | 11.71% | 38.13% | $941,574.62 |\n| Energy | 13.36% | -21.66% | -$923,765.75 |\n\nTechnology and Financials drive portfolio gains. Healthcare and Energy drag performance, with Energy showing the steepest drawdown.\n\n---\n\n## Technical Signals \u2013 Positions of Concern\n\n**ALERT Status:**\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16; price down 6.66% over market-data window 2025-12-19 to 2026-03-18.\n- **UNH**: RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; price down 24.22% over market-data window 2025-12-19 to 2026-03-18; volume ratio 0.14 (severely depressed).\n\n**WATCH Status:**\n- **AVGO**: SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 negative.\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 negative; volume ratio 1.42.\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative.\n- **JPM**: SMA-50 48.45 below SMA-200 53.57.\n\n---\n\n## Earnings Summary (Q2 2024)\n\n**Beats:** MSFT (revenue $82.4B vs $78.4B; EPS $6.54 vs $6.15), GS (revenue $90.2B vs $88.4B; EPS $7.97 vs $7.86).\n\n**Misses:** AVGO (revenue $24.7B vs $24.9B; EPS beat $4.69 vs $4.36), CVX (revenue $117.6B vs $124.4B; EPS beat $3.06 vs $2.95), GOOGL (revenue $78.0B vs $80.8B; EPS beat $7.94 vs $7.62), JNJ (revenue beat $94.9B vs $93.9B; EPS $0.69 vs $0.69), JPM (revenue $81.5B vs $84.6B; EPS beat $4.81 vs $4.7), NVDA (revenue $114.5B vs $114.6B; EPS $2.54 vs $2.73), ORCL (revenue $51.4B vs $52.8B; EPS $5.64 vs $5.92), UNH (revenue beat $17.1B vs $16.4B; EPS $1.88 vs $1.93).\n\n---\n\n## Macro Backdrop (February 2026)\n\n**Latest Readings:** Federal Funds Rate 5.22, CPI YoY 4.59, Core PCE 2.86, 10Y Treasury Yield 4.14, 2Y Treasury Yield 5.28, Unemployment Rate 3.76, ISM Manufacturing PMI 48.7, VIX 16.65.\n\n**Month-over-Month Changes:** Federal Funds Rate increased 0.59 percentage points; CPI YoY increased 0.02 percentage points; Core PCE increased 0.5 percentage points; 2Y Treasury Yield increased 1.04 percentage points; Unemployment Rate decreased 0.53 percentage points; GDP Growth QoQ increased 3.12 percentage points; ISM Manufacturing PMI decreased 1"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 86,
+            "matched": 86,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 116850.4,
+      "error": null,
+      "trace_id": "26732b56fa4445da",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6316,
+        "output_tokens": 1024,
+        "cost_usd": 0.01258
+      }
+    },
+    {
+      "id": "mrm-002-subset9",
+      "component": "MRM-002",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset9",
+      "outputs": [
+        "# Market Analysis Report \u2013 Horner Capital Alpha Fund\n**As of 2026-03-19**\n\n---\n\n## Sector Exposure & Performance\n\n| Sector | Weight | Avg Return (since cost) | Unrealized P&L |\n|--------|--------|------------------------|-----------------|\n| Technology | 50.41% | 40.3% | $4,274,993.87 |\n| Healthcare | 29.75% | -6.43% | -$287,641.97 |\n| Energy | 12.97% | -21.66% | -$923,765.75 |\n| Consumer Discretionary | 3.96% | 5.8% | $55,869.86 |\n| Financials | 2.91% | 5.59% | $39,747.12 |\n\nTechnology dominates at 50.41% weight with strong 40.3% average returns. Healthcare and Energy drag performance at -6.43% and -21.66% respectively. Portfolio beta stands at 1.395 (value-weighted), with AAPL, CVX, TSLA, and UNH exceeding 1.5 beta.\n\n---\n\n## Technical Signals \u2013 Concerning Positions\n\n**ALERT Status:**\n- **AAPL**: RSI-14 29.4 (oversold); SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 negative; price down -4.39% over 2025-12-19 to 2026-03-18 window\n- **CVX**: RSI-14 75.9 (overbought); SMA-50 87.88 below SMA-200 104.16; price down -6.66% over window\n- **UNH**: RSI-14 74.1 (overbought); SMA-50 150.02 below SMA-200 169.7; price down -24.22% over window; volume ratio 0.14 (depressed)\n\n**WATCH Status:**\n- **AVGO**: SMA-50 411.47 below SMA-200 439.76; MACD signal -1.383 negative\n- **GS**: RSI-14 23.0 (oversold); MACD signal -1.081 negative\n- **MSFT**: SMA-50 65.21 below SMA-200 71.77; MACD signal -1.896 negative\n- **TSLA**: RSI-14 25.0 (oversold); price down -22.49% over window; volume ratio 0.37 (depressed)\n\n---\n\n## Earnings Pattern \u2013 Q2 2024\n\n**Beats (2):** GS, MSFT  \n**Misses (8):** AAPL, AVGO, CVX, GOOGL, JNJ, ORCL, TSLA, UNH\n\nRevenue performance mixed: AAPL, MSFT, TSLA, JNJ, UNH beat; AVGO, CVX, GOOGL, ORCL missed. EPS results similarly split, with MSFT and GS posting double beats while AAPL, ORCL, TSLA, UNH missed on earnings.\n\n---\n\n## Macro Backdrop\n\n**February 2026 Readings:**\n- Federal Funds Rate: 5.22 (increased 0.59 percentage points)\n- CPI YoY: 4.59 (increased 0.02 percentage points)\n- Core PCE: 2.86 (increased 0.5 percentage points)\n- 10Y-2Y Spread: -1.14 percentage points (inverted curve)\n- Unemployment Rate: 3.76 (decreased 0.53 percentage points)\n- ISM Manufacturing PMI: 48.7 (decreased 1.7 points; below 50)\n- VIX: 16.65 (decreased 12.37 points)\n\n**Regime:** Risk-Off. Curve inversion persists amid rising rates and elevated Core PCE. Manufacturing contraction signals economic softness despite improved consumer confidence (+39.5 points) and labor market strength."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 60,
+            "matched": 60,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 22672.0,
+      "error": null,
+      "trace_id": "db4bccb692184863",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 6432,
+        "output_tokens": 1001,
+        "cost_usd": 0.012581
+      }
+    }
+  ],
+  "components": {
+    "MRM-002": {
+      "n_items": 10,
+      "passed": 10,
+      "pass_rate": 1.0,
+      "mean_groundedness": 0.991,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED",
+      "usage": {
+        "bedrock_calls": 10,
+        "input_tokens": 63574,
+        "output_tokens": 10079,
+        "cost_usd": 0.125366
+      }
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "max_cost_usd": 1.0,
+  "pricing": {
+    "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "usd_per_1m_tokens": {
+      "input": 1.1,
+      "output": 5.5
+    },
+    "source": "AWS Pricing API, us.* inference profile, on-demand"
+  },
+  "usage": {
+    "bedrock_calls": 10,
+    "input_tokens": 63574,
+    "output_tokens": 10079,
+    "cost_usd": 0.125366
+  },
+  "finished_at": "2026-09-30T16:40:20+00:00"
+}

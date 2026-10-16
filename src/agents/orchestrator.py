@@ -54,7 +54,8 @@ def _fallback_section(inventory_id: str, demo: dict, reason: str, blocked: bool)
 
 def _live_section(result: dict, text_key: str) -> dict:
     return {"mode": "live", "reason": None, "text": result[text_key], "sources": result["sources"],
-            "grader": result["grader"], "trace": result["trace"]}
+            "grader": result["grader"], "trace": result["trace"], "provider": result.get("provider"),
+            "answer_model": result.get("answer_model"), "fallback_reason": result.get("fallback_reason")}
 
 
 def _run_section(inventory_id: str, live_fn, demo_fn, errors: List[str]) -> dict:
@@ -70,8 +71,11 @@ def _run_section(inventory_id: str, live_fn, demo_fn, errors: List[str]) -> dict
         return _fallback_section(inventory_id, demo_fn(), reason, False)
 
 
-def build_orchestrator(llm=None, grader_llm=None, approvals: Optional[dict] = None, enforce_approval: bool = True):
-    kw = dict(llm=llm, grader_llm=grader_llm, approvals=approvals, enforce_approval=enforce_approval)
+def build_orchestrator(llm=None, grader_llm=None, approvals: Optional[dict] = None, enforce_approval: bool = True,
+                       provider: Optional[str] = None, providers: Optional[List[str]] = None,
+                       grader_provider: Optional[str] = None, grader_model: Optional[str] = None):
+    kw = dict(llm=llm, grader_llm=grader_llm, approvals=approvals, enforce_approval=enforce_approval,
+              provider=provider, providers=providers, grader_provider=grader_provider, grader_model=grader_model)
 
     def market_node(state: OrchestratorState) -> dict:
         errors = list(state.get("errors") or [])
@@ -128,26 +132,57 @@ def run_full_analysis(
     grader_llm=None,
     approvals: Optional[dict] = None,
     enforce_approval: bool = True,
+    provider: Optional[str] = None,
+    providers: Optional[List[str]] = None,
+    grader_provider: Optional[str] = None,
+    grader_model: Optional[str] = None,
 ) -> dict:
-    """Run the pipeline. Raises GovernanceBlocked if MRM-005 itself is not approved."""
-    started = time.perf_counter()
-    cur = current_version(INVENTORY_ID)
-    if enforce_approval:
-        approval = require_approved(INVENTORY_ID, cur["model_id"], cur["prompt_versions"], approvals)
-    else:
-        approval = {"status": "EVALUATION_RUN", "reason": "approval gate bypassed by the eval harness"}
+    """
+    Run the pipeline. MRM-005 is gated per provider: the orchestrator may only use providers
+    for which its own version is approved (Bedrock Haiku 4.5 first, then Gemini); each section
+    then falls back along that list. Raises GovernanceBlocked when no provider is approved.
+    """
+    from src.llm import config
+    from src.llm.router import ProviderChainFailed
+    from src.mrm.model_inventory import check_approval
 
-    graph = build_orchestrator(llm, grader_llm, approvals, enforce_approval)
+    started = time.perf_counter()
+    single = llm is not None or provider is not None
+    candidates = [provider or "gemini"] if single else (providers if providers is not None
+                                                        else config.available_providers())
+    if not candidates:
+        raise ProviderChainFailed("no LLM provider configured (no AWS credentials for Bedrock, no Gemini key)")
+    allowed, reasons = [], []
+    for prov in candidates:
+        cur_p = current_version(INVENTORY_ID, prov)
+        if enforce_approval:
+            chk = check_approval(INVENTORY_ID, cur_p["model_id"], cur_p["prompt_versions"], approvals, provider=prov)
+            if not chk["allowed"]:
+                reasons.append(f"{config.provider_label(prov, cur_p['model_id'])} not used: {chk['reason']}")
+                continue
+        allowed.append(prov)
+    if not allowed:
+        raise GovernanceBlocked("; ".join(reasons))
+    cur = current_version(INVENTORY_ID, allowed[0])
+    approval = ({"status": "EVALUATION_RUN", "reason": "approval gate bypassed by the eval harness"}
+                if not enforce_approval else
+                check_approval(INVENTORY_ID, cur["model_id"], cur["prompt_versions"], approvals, provider=allowed[0]))
+
+    graph = build_orchestrator(llm, grader_llm, approvals, enforce_approval,
+                               provider=allowed[0] if single else None, providers=None if single else allowed,
+                               grader_provider=grader_provider, grader_model=grader_model)
     result = graph.invoke({"portfolio_data": portfolio_data, "errors": []})
     sections = {k: result[k] for k in SECTION_KEYS}
     trace = TraceRecord(
-        inventory_id=INVENTORY_ID, provider=cur["provider"], model_id=cur["model_id"],
+        inventory_id=INVENTORY_ID, provider=cur["provider"], model_id=cur["model_id"], answer_model=cur["model_id"],
+        fallback_reason="; ".join(reasons) or None,
         prompt_versions=cur["prompt_versions"], mode="live",
         source_ids=sorted({sid for s in sections.values() for sid in s["trace"]["source_ids"]}),
         grader={"sections": {k: s["grader"].get("verdict") for k, s in sections.items()}},
         approval_status=approval["status"], approval_reason=approval["reason"],
         latency_ms=round((time.perf_counter() - started) * 1000, 1),
         extra={"section_modes": {k: s["mode"] for k, s in sections.items()},
+               "section_providers": {k: s.get("provider") for k, s in sections.items()},
                "section_traces": [s["trace"]["trace_id"] for s in sections.values()]},
     )
     return {
