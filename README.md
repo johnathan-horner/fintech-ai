@@ -5,7 +5,9 @@
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Status (2026-10-16):** The live demo (branch `main`, commit 53127fa) answers with Google Gemini. This branch makes Amazon Bedrock Claude Haiku 4.5 the primary model. All five AI components passed held-out validation on Haiku, so after this branch is merged to `main`, live answers will come from Bedrock, with Gemini as the fallback.
+**Status: Live.** The public demo works today (checked 2026-10-23; the free Streamlit host puts it to sleep when idle and it wakes on the first visit). The live demo runs branch `main`, which answers with Google Gemini. This branch makes Amazon Bedrock Claude Haiku 4.5 the primary model; all five AI components passed held-out validation on Haiku, so once this branch is merged, live answers will come from Bedrock with Gemini as the fallback.
+
+Independent reference project by Shoot It Analytics LLC. Built with public or synthetic data.
 
 Live demo: https://fintech-ai-horner.streamlit.app
 
@@ -25,6 +27,42 @@ Every AI output carries:
 - a trace record with the inventory ID, model, prompt versions and approval status.
 
 Live AI is capped at 10 requests per browser session. When live AI is not available, the app shows deterministic output built from the same computed numbers.
+
+## Why I built this
+
+**The problem.** Banks and investment firms that put language models near investment decisions
+are expected to manage them like any other model: an inventory, independent validation, ongoing
+monitoring and a record of what each model said and why (Federal Reserve guidance SR 26-2,
+formerly SR 11-7). Most AI demos skip all of that, and the numbers a model writes cannot be traced
+to source data.
+
+**What I set out to prove.** Whether a multi-agent analysis assistant can run under model risk
+management controls in code: every number computed before the model sees it, every model and prompt
+version approved by a held-out evaluation before it may answer, and every answer graded and traced.
+
+**Key design decisions**
+- **Data:** a synthetic 15-position portfolio and synthetic price history, bundled in the repo.
+- **Numbers come from code:** VaR, Monte Carlo CVaR (10,000 seeded simulations), stress tests and
+  risk scores are computed first; agents are told not to compute numbers and a deterministic check
+  rejects numbers not in their inputs.
+- **Approval gate:** a model and prompt version may answer only after passing the held-out
+  evaluation; the gate checks the exact version before each call.
+- **Independent grading:** every answer is graded by a model from a different vendor.
+- **Cost:** a 10-request cap per browser session, the cheapest capable models, and a dry-run cost
+  estimate before any evaluation run.
+
+**Results.** On the held-out split with Bedrock Claude Haiku 4.5: the RAG chat passed 22 of 23
+questions (95.2% exact-fact accuracy) and all five AI components were approved. The out-of-sample
+VaR backtest over 254 days had 2 to 3 exceptions with Kupiec p-values 0.72 to 0.78 (Basel green
+zone). Details below.
+
+**Limits.** Synthetic data only; never used with real portfolios, clients or trading. Not
+investment advice, and not a certified or regulated product. The controls follow the structure of
+SR 26-2 but have not been reviewed by an independent validation team.
+
+**What I'd do next in a real deployment.** Connect licensed market data, have the firm's model
+validation team review the inventory and test results, deploy the CDK stack in the firm's AWS account
+with Bedrock Guardrails, and run the monitoring job on a schedule with alerts.
 
 ## Architecture
 
@@ -76,6 +114,8 @@ All result files are in `data/eval/results/`. Earlier Haiku runs with the shared
 
 VaR backtest (MRM-006): out-of-sample 99% VaR on a rolling 250-day window over seeded synthetic prices, 254 test days, 2 to 3 exceptions depending on method, Kupiec p-values 0.72 to 0.78, Basel GREEN (run `heldout-20260929T210703Z`).
 
+Re-checked on 2026-10-23: running `portfolio_backtest()` from `src/mrm/validation/model_validator.py` reproduces these backtest numbers (historical 3 exceptions, p = 0.778; parametric and beta-proxy 2 exceptions, p = 0.724), and the full test suite passes (118 tests).
+
 ## How to run it
 
 Requires Python 3.11.
@@ -104,7 +144,15 @@ python scripts/run_eval.py --split heldout --provider bedrock --components MRM-0
 
 The MCP server needs its own environment: `pip install -r requirements-mcp.txt && python mcp_server.py`. Its 6 tools return values computed from the bundled data.
 
-## What's planned next
+## Limits
+
+- Synthetic portfolio and prices. Results on real markets would differ.
+- The held-out evaluation set is small (23 RAG questions, 10 items for each agent and the orchestrator).
+- The grader is itself a language model and can be wrong; a deterministic numeric check backs it up.
+- The live demo still answers with Gemini until this branch is merged.
+- The AWS CDK stack in `infra/` passes `cdk synth` but has never been deployed.
+
+## What's next
 
 These are not built yet:
 
@@ -118,7 +166,7 @@ These are not built yet:
 - LangChain LCEL chains
 - Titan embeddings for the production path
 - Full exit and new-position recommendations (today the portfolio agent recommends reduce, trim, hedge, hold or add)
-- Formal SR 11-7 attestation by an independent validation team (today the repo implements the framework in code)
+- Formal SR 26-2 (formerly SR 11-7) attestation by an independent validation team (today the repo implements the framework in code)
 
 ## More detail
 
