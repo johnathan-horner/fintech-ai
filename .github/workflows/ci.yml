@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, "rebuild/**" ]
   pull_request:
     branches: [ main ]
 
@@ -55,3 +55,14 @@ jobs:
         run: |
           pip install -r requirements.txt
           npx -y aws-cdk@2 synth --no-notices -q
+
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scan full git history with gitleaks
+        run: |
+          curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz | tar xz gitleaks
+          ./gitleaks git . --log-opts="--all" --redact --no-banner
