@@ -76,7 +76,8 @@ def health_check():
     from src.llm import config
 
     return {"status": "healthy", "service": "FinTech AI", "version": "2.0.0",
-            "provider": config.get_provider(), "live_ai_configured": config.has_credentials()}
+            "provider_chain": config.provider_order() + ["demo"],
+            "providers_configured": config.available_providers(), "live_ai_configured": config.has_credentials()}
 
 
 @app.post("/chat", response_model=ChatResponse)

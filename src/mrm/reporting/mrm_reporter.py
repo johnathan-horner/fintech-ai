@@ -31,10 +31,13 @@ def _recommendations(inv) -> List[str]:
             recs.append(f"{m['model_id']} ({m['name']}) FAILED validation - remediate and re-run the eval before use.")
         elif m["validation_status"] == ValidationStatus.CONDITIONAL:
             recs.append(f"{m['model_id']} ({m['name']}) is CONDITIONAL - raise pass rate to >= 0.85 for full approval.")
-        cur, appr = m.get("current_version"), m.get("approved_version")
-        if appr and cur and (appr.get("model_id") != cur["model_id"]
-                             or sorted(appr.get("prompt_versions") or []) != sorted(cur["prompt_versions"])):
-            recs.append(f"{m['model_id']} running version differs from the approved version - re-run the eval.")
+        if m.get("version_mismatch"):
+            recs.append(f"{m['model_id']} running version differs from every approved version - re-run the eval.")
+        for prov, gate in (m.get("provider_status") or {}).items():
+            if prov != "code" and not gate["allowed"] and m["validation_status"] in (
+                    ValidationStatus.APPROVED, ValidationStatus.CONDITIONAL):
+                recs.append(f"{m['model_id']} has no current approval on {prov}: {gate['reason']} "
+                            f"(live calls skip {prov} and use the next provider).")
     if not recs:
         recs.append("All models hold a current approval for the running version; continue scheduled monitoring.")
     return recs
@@ -158,8 +161,10 @@ def generate_model_card(model_id: str) -> dict:
         "model_card": {
             "model_id": model["model_id"],
             "model_name": model["name"],
-            "running_version": model.get("current_version"),
-            "approved_version": model.get("approved_version"),
+            "running_versions": model.get("current_versions"),
+            "approved_versions": model.get("approved_versions"),
+            "provider_status": {p: {k: v for k, v in g.items() if k != "record"}
+                                for p, g in (model.get("provider_status") or {}).items()},
             "generated_at": datetime.today().isoformat(),
             "classification": "INTERNAL - CONFIDENTIAL",
         },

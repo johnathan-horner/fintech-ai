@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from src.agents.base import run_llm_agent
+from src.agents.base import run_agent_component
 from src.agents.context import risk_sources
 from src.utils.metrics import full_risk_report, score_position_risk
 
@@ -49,12 +49,18 @@ def run_risk_assessment(
     grader_llm=None,
     approvals: Optional[dict] = None,
     enforce_approval: bool = True,
+    provider: Optional[str] = None,
+    providers: Optional[list] = None,
+    grader_provider: Optional[str] = None,
+    grader_model: Optional[str] = None,
 ) -> dict:
     state = compute_risk_state(portfolio_data)
     sources = risk_sources(portfolio_data)
-    res = run_llm_agent(
+    res = run_agent_component(
         INVENTORY_ID, "risk_report", sources,
         llm=llm, grader_llm=grader_llm, approvals=approvals, enforce_approval=enforce_approval,
+        provider=provider, providers=providers, grader_provider=grader_provider, grader_model=grader_model,
     )
     return {"risk_report": res["text"], **state, "grader": res["grader"], "trace": res["trace"],
-            "sources": sources, "error": None}
+            "sources": sources, "error": None, "provider": res.get("provider"),
+            "answer_model": res.get("answer_model"), "fallback_reason": res.get("fallback_reason")}

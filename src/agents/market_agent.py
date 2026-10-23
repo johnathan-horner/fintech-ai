@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from src.agents.base import run_llm_agent
+from src.agents.base import run_agent_component
 from src.agents.context import market_sources, technical_alerts
 from src.utils.metrics import portfolio_kpis
 
@@ -24,11 +24,15 @@ def run_market_analysis(
     grader_llm=None,
     approvals: Optional[dict] = None,
     enforce_approval: bool = True,
+    provider: Optional[str] = None,
+    providers: Optional[list] = None,
+    grader_provider: Optional[str] = None,
+    grader_model: Optional[str] = None,
 ) -> dict:
-    sources = market_sources(portfolio_data)
-    res = run_llm_agent(
-        INVENTORY_ID, "market_analysis", sources,
+    res = run_agent_component(
+        INVENTORY_ID, "market_analysis", lambda prov: market_sources(portfolio_data, prov),
         llm=llm, grader_llm=grader_llm, approvals=approvals, enforce_approval=enforce_approval,
+        provider=provider, providers=providers, grader_provider=grader_provider, grader_model=grader_model,
     )
     return {
         "market_analysis": res["text"],
@@ -36,6 +40,9 @@ def run_market_analysis(
         "technical_alerts": technical_alerts(portfolio_data),
         "grader": res["grader"],
         "trace": res["trace"],
-        "sources": sources,
+        "sources": res["sources"],
         "error": None,
+        "provider": res.get("provider"),
+        "answer_model": res.get("answer_model"),
+        "fallback_reason": res.get("fallback_reason"),
     }

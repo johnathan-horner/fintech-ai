@@ -1,0 +1,471 @@
+{
+  "run_id": "heldout-20260930T152404Z-bedrock",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-09-30T15:24:04+00:00",
+  "provider": "bedrock",
+  "models": {
+    "chat": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "grader": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "hyde": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "embedding": "gemini-embedding-001"
+  },
+  "grader": {
+    "provider": "gemini",
+    "model_id": "gemini-3.1-flash-lite"
+  },
+  "versions": {
+    "MRM-003": {
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "prompt_versions": [
+        "risk_report@1.2.0#7ca70726"
+      ],
+      "provider": "bedrock"
+    }
+  },
+  "throttle_s": 20.0,
+  "items": [
+    {
+      "id": "mrm-003-full",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "full",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $32,355,808.19**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR/Expected Shortfall at 95% confidence is CRITICAL:**\n- 1-day CVaR: $1,193,699.22 (3.689% of portfolio value)\n- 10-day CVaR: $3,774,808.38\n- Tail ratio (CVaR/VaR): 1.34 indicates moderate but material tail risk amplification\n\n**Concentration Policy Breaches (Multiple):**\n- **Technology sector: 47.03%** vs. 30.0% policy limit (excess: 17.03 points / $5,510,194.13)\n- **UNH: 20.07%** vs. 15.0% limit (excess: 5.07 points / $1,640,439.48)\n- **MSFT: 17.47%** vs. 15.0% limit (excess: 2.47 points / $799,188.46)\n\n**Catastrophic Stress Scenarios:**\n- 2008 GFC scenario: portfolio loss -$21,840,515.25 (-67.5%)\n- COVID-19 crash scenario: portfolio loss -$17,136,404.27 (-52.96%)\n- Tech sector selloff: portfolio loss -$15,213,528.63 (-47.02%)\n\n---\n\n## 1. PORTFOLIO VALUE-AT-RISK & TAIL METRICS\n\n| Metric | Value |\n|--------|-------|\n| **1-day VaR (95%)** | $829,099.56 (2.562% of value) |\n| **10-day VaR (95%)** | $2,621,843.02 |\n| **1-day VaR (99%)** | $1,172,331.66 |\n| **1-day CVaR (95%)** | $1,193,699.22 (3.689% of value) |\n| **Tail Ratio** | 1.34 (Moderate) |\n| **Portfolio Beta** | 1.298 (weighted) |\n| **Risk Level** | HIGH |\n\n---\n\n## 2. HISTORICAL PERFORMANCE METRICS\n\n| Metric | Value |\n|--------|-------|\n| **Sharpe Ratio (annualized)** | 0.065 |\n| **Sortino Ratio (annualized)** | 0.066 |\n| **Annualized Volatility** | 21.09% |\n| **Maximum Drawdown** | -16.29% |\n| **Period** | 2024-04-15 to 2026-03-19 |\n\n---\n\n## 3. STRESS TEST RESULTS\n\n**Worst-Case Scenario: 2008 Global Financial Crisis (-40% market shock)**\n- Portfolio P&L: **-$21,840,515.25 (-67.5%)**\n- Top loss drivers: UNH (-$5,335,551.25), AAPL (-$3,815,382.40), CVX (-$3,075,406.76), MSFT (-$2,381,390.82)\n\n**Other Severe Scenarios:**\n- COVID-19 crash (-34% shock): -$17,136,404.27 (-52.96%)\n- Tech sector selloff (-30% shock): -$15,213,528.63 (-47.02%)\n- Rate shock +200bps (-15% shock): -$6,930,163.49 (-21.42%)\n\n---\n\n## 4. HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Flags |\n|----------|-----------|------|-------|\n| **MA** | 50/100 (HIGH) | 1.59x | Severe drawdown (-31.65%); add stop-loss |\n| **UNH** | 45/100 (HIGH) | 1.58x | High concentration (20.07%); add stop-loss |\n| **CVX** | 45/100 (HIGH) | 1.77x | Drawdown (-21"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 62,
+            "matched": 62,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 11538.1,
+      "error": null,
+      "trace_id": "b67e4a23981b4a34",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2449,
+        "output_tokens": 1024,
+        "cost_usd": 0.008326
+      }
+    },
+    {
+      "id": "mrm-003-subset12",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset12",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $17,541,320.43**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day 95% CVaR: $707,066.06 (4.031% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.415 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $2,235,939.19\n\n**Concentration Breaches (Policy Limits Exceeded)**\n- **Technology sector:** 40.41% vs 30.0% limit (+10.41 points; $1,826,051.46 excess)\n- **AAPL:** 23.63% vs 15.0% limit (+8.63 points; $1,513,815.95 excess)\n- **CVX:** 19.05% vs 15.0% limit (+4.05 points; $710,423.48 excess)\n\n**Stress Test Catastrophic Scenarios**\n- 2008 GFC scenario: \u221271.85% portfolio loss (\u2212$12,603,096.67)\n- COVID-19 crash scenario: \u221256.37% portfolio loss (\u2212$9,888,583.54)\n- Tech sector selloff: \u221250.4% portfolio loss (\u2212$8,840,182.03)\n\n---\n\n## PORTFOLIO VALUE-AT-RISK\n\n| Metric | 1-Day 95% | 1-Day 99% | 10-Day 95% |\n|--------|-----------|-----------|-----------|\n| **Parametric VaR** | $478,432.94 (2.727%) | $676,495.45 | $1,512,937.80 |\n| **Monte Carlo CVaR** | $499,860.87 | \u2014 | $2,235,939.19 |\n\n**Risk Level: HIGH** (parametric); **CRITICAL** (CVaR)\n\n---\n\n## HISTORICAL PERFORMANCE & VOLATILITY\n\n| Metric | Value |\n|--------|-------|\n| **Sharpe Ratio** | 0.156 |\n| **Sortino Ratio** | 0.16 |\n| **Annualized Volatility** | 22.72% |\n| **Max Drawdown** | \u221217.62% |\n| **Portfolio Beta** | 1.382 |\n\n*Period: 2024-04-15 to 2026-03-19; Risk-free rate: 5.22%*\n\n---\n\n## HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Flags | Unrealized Loss |\n|----------|-----------|------|-------|-----------------|\n| **CVX** | **60/100 CRITICAL** | 1.77 | High concentration (19.05%); \u221221.66% drawdown | \u2212$1,947,849.54 (4 positions) |\n| **MA** | 50/100 HIGH | 1.59 | Elevated beta; \u221231.65% drawdown | \u2014 |\n| **AAPL** | 45/100 HIGH | 1.77 | Extreme concentration (23.63%); elevated beta | \u2014 |\n| **XOM** | 40/100 HIGH | \u2014 | \u221229.09% drawdown; Sell consensus | \u2014 |\n| **TSLA** | 35/100 HIGH | 2.19 | Very high beta (amplified exposure) | \u2014 |\n\n**Recommended Actions:** CVX\u2014consider immediate exit or hedge. AAPL, MA, TSLA\u2014review position size and add stop-loss.\n\n---\n\n## STRESS TEST WORST POSITIONS\n\n**2008 GFC (\u221240% market shock):**  \nAAPL \u2212$3,815,382.40 | CVX \u2212$3,075,406.76 | NVDA \u2212$1,228,486.46 | TSLA \u2212$1,161,317.50 | MA \u2212$1,049,094.82\n\n**Tech Sector Selloff (\u221230% shock):**  \nAAPL \u2212$4,622,482"
+      ],
+      "graders": [
+        {
+          "groundedness": 0.96,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [
+            "AAPL\u2014review position size and add stop-loss.",
+            "MA\u2014review position size and add stop-loss.",
+            "TSLA\u2014review position size and add stop-loss."
+          ],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 57,
+            "matched": 57,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 17757.4,
+      "error": null,
+      "trace_id": "daffcbafadc04dab",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2403,
+        "output_tokens": 1024,
+        "cost_usd": 0.008275
+      }
+    },
+    {
+      "id": "mrm-003-subset13",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset13",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $22,364,444.64**\n\n---\n\n## \u26a0\ufe0f CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day 95% CVaR: $883,932.51 (3.952% of portfolio value)\n- Tail ratio 1.408 indicates elevated fat-tail risk; expected shortfall significantly exceeds VaR\n- 10-day CVaR: $2,795,240.02\n\n**Concentration Breaches (Policy: 30% sector / 15% single-name)**\n- **UNH: 29.04% weight** (excess 14.04 points; $3,139,968.03 over limit)\n- **MSFT: 25.28% weight** (excess 10.28 points; $2,299,064.91 over limit)\n- **Technology sector: 36.34%** (excess 6.34 points; $1,417,905.79 over limit)\n- **Healthcare sector: 34.27%** (excess 4.27 points; $954,961.79 over limit)\n\n**Stress Test Catastrophe Risk**\n- 2008 GFC scenario: portfolio loss -$15,680,955.86 (-70.12%)\n- COVID-19 crash scenario: portfolio loss -$12,303,519.22 (-55.01%)\n- Tech sector selloff scenario: portfolio loss -$8,455,104.80 (-37.81%)\n- UNH, CVX, MSFT drive all worst-case losses\n\n---\n\n## 1. PORTFOLIO VALUE-AT-RISK & TAIL METRICS\n\n| Metric | Value |\n|--------|-------|\n| 1-day VaR (95%) | $595,273.21 (2.662% of AUM) |\n| 10-day VaR (95%) | $1,882,419.17 |\n| 1-day VaR (99%) | $841,705.46 |\n| **1-day CVaR (95%)** | **$883,932.51 (3.952% of AUM)** |\n| **10-day CVaR (95%)** | **$2,795,240.02** |\n| **Tail Ratio (CVaR/VaR)** | **1.408** |\n| Weighted Portfolio Beta | 1.348 |\n\n**Assessment:** HIGH parametric VaR; CRITICAL CVaR with elevated tail risk. Beta amplifies market moves.\n\n---\n\n## 2. HISTORICAL RISK METRICS\n\n| Metric | Value |\n|--------|-------|\n| Sharpe Ratio (annualized) | -0.029 |\n| Sortino Ratio (annualized) | -0.029 |\n| Annualized Volatility | 22.45% |\n| Maximum Drawdown | -16.85% |\n| Unrealized P&L | $871,689.12 |\n| Positions with Losses | 4 (total -$1,799,095.04) |\n\n**Assessment:** Negative risk-adjusted returns; high volatility with significant drawdown history.\n\n---\n\n## 3. STRESS TEST SCENARIOS\n\n| Scenario | Market Shock | Portfolio P&L | Severity | Top Loss Driver |\n|----------|--------------|---------------|----------|-----------------|\n| 2008 GFC | -40.0% | -$15,680,955.86 (-70.12%) | **CATASTROPHIC** | UNH -$5,335,551.25 |\n| COVID-19 Crash | -34.0% | -$12,303,519.22 (-55.01%) | **CATASTROPHIC** | UNH -$4,186,355.59 |\n| Tech Selloff | -30.0% | -$8,455,104.80 (-37.81%) | **CATASTROPHIC** | MSFT -$2,885,146.58 |\n| Rate Shock +200bps | -15.0% | -$4,975,687.92 (-22.25%) | SEVERE |"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 62,
+            "matched": 62,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 11247.4,
+      "error": null,
+      "trace_id": "d563d7d72fbb4da7",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2426,
+        "output_tokens": 1024,
+        "cost_usd": 0.008301
+      }
+    },
+    {
+      "id": "mrm-003-subset17",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset17",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $22,069,685.01**\n\n---\n\n## \u26a0\ufe0f CRITICAL FINDINGS\n\n**CVaR/Expected Shortfall Risk: CRITICAL**\n- 1-day 95% CVaR: $829,497.62 (3.759% of portfolio value)\n- Tail ratio CVaR/VaR: 1.414 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $2,623,101.81\n\n**Concentration Breaches (vs. Policy Limits)**\n- **Single-name violations:** UNH 29.43% (limit 15.0%, excess 14.43 points); MSFT 25.62% (excess 10.62 points); CVX 15.14% (excess 0.14 points)\n- **Sector violations:** Technology 36.82% (limit 30.0%, excess 6.82 points); Healthcare 34.72% (excess 4.72 points)\n- Combined excess concentration: $6,546,143.23\n\n**Stress Test Catastrophe Scenarios**\n- 2008 GFC: Portfolio loss -$14,700,601.70 (-66.61%)\n- COVID-19 crash: -$11,534,318.26 (-52.26%)\n- Tech selloff: -$8,138,374.99 (-36.88%)\n- Four of five scenarios classified CATASTROPHIC or SEVERE\n\n---\n\n## PORTFOLIO RISK METRICS\n\n| Metric | Value | Assessment |\n|--------|-------|------------|\n| **1-day VaR (95%)** | $558,057.46 (2.529%) | HIGH |\n| **1-day VaR (99%)** | $789,083.07 | HIGH |\n| **Weighted Beta** | 1.281 | Elevated |\n| **Annualized Volatility** | 21.66% | High |\n| **Sharpe Ratio** | -0.049 | Negative |\n| **Sortino Ratio** | -0.049 | Negative |\n| **Max Drawdown** | -16.55% | Significant |\n\n---\n\n## HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Flags | Action |\n|----------|-----------|------|-------|--------|\n| **CVX** | **60/100 CRITICAL** | 1.77 | High concentration (15.14%), drawdown -21.66% | **Consider immediate exit or hedge** |\n| **MA** | 50/100 HIGH | 1.59 | Elevated beta, drawdown -31.65% | Review size; add stop-loss |\n| **UNH** | 45/100 HIGH | 1.58 | Concentration 29.43%, elevated beta | Review size; add stop-loss |\n| **XOM** | 40/100 HIGH | \u2014 | Drawdown -29.09%, analyst sell | Review size; add stop-loss |\n| **GOOGL** | 30/100 MEDIUM | 1.41 | Elevated beta | Monitor closely |\n\n---\n\n## STRESS TEST WORST POSITIONS\n\n**2008 GFC scenario (-40% market shock):**  \nUNH -$5,335,551.25 | CVX -$3,075,406.76 | MSFT -$2,381,390.82\n\n**Tech Sector Selloff (-30%):**  \nMSFT -$2,885,146.58 | UNH -$1,723,793.48 | GOOGL -$971,011.53\n\n---\n\n## MACRO ENVIRONMENT & REGIME\n\n- **VIX:** 16.65 (Low regime)\n- **Yield Curve:** Inverted (-114 bps; 10Y-2Y spread -1.14)\n- **Fed Funds Rate:** 5.22% (held steady)\n- **ISM Manufacturing PMI:** 48.7 (below 50; contraction signal)\n- **Market Regime:** Risk-Off\n- **CPI Trend:** Rising (4.59% YoY)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "FLAG",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 58,
+            "matched": 57,
+            "mismatches": [
+              "$6,546,143.23"
+            ],
+            "score": 0.9828
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": false,
+      "latency_ms": 36723.6,
+      "error": null,
+      "trace_id": "1bbc98bd57c748fd",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2458,
+        "output_tokens": 1024,
+        "cost_usd": 0.008336
+      }
+    },
+    {
+      "id": "mrm-003-subset19",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset19",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $24,786,167.74**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day 95% CVaR: $1,015,054.86 (4.095% of portfolio value)\n- 10-day 95% CVaR: $3,209,885.31\n- Tail ratio (CVaR/VaR): 1.414 \u2014 **elevated tail risk** indicates fat-tailed loss distribution\n\n**Concentration Breaches \u2014 All Three Limits Exceeded**\n- **Technology sector: 52.4%** vs 30.0% policy limit (excess: 22.4 points / $5,552,101.57)\n- **MSFT: 22.81%** vs 15.0% limit (excess: 7.81 points / $1,935,799.70)\n- **UNH: 26.2%** vs 15.0% limit (excess: 11.2 points / $2,776,050.79)\n- **AAPL: 16.72%** vs 15.0% limit (excess: 1.72 points / $426,322.09)\n\n**Catastrophic Stress Scenarios**\n- 2008 GFC scenario: portfolio loss -$18,022,646.31 (-72.71%)\n- COVID-19 crash scenario: portfolio loss -$14,140,845.56 (-57.05%)\n- Tech sector selloff: portfolio loss -$12,888,600.31 (-52.0%)\n\n---\n\n## QUANTITATIVE RISK METRICS\n\n| Metric | Value | Assessment |\n|--------|-------|------------|\n| 1-day 95% VaR | $684,167.38 (2.76%) | HIGH |\n| 1-day 99% VaR | $967,400.20 | HIGH |\n| Portfolio Beta (weighted) | 1.398 | Amplified market exposure |\n| Annualized Volatility | 22.92% | Elevated |\n| Sharpe Ratio | 0.143 | Weak risk-adjusted returns |\n| Sortino Ratio | 0.147 | Weak downside-adjusted returns |\n| Max Drawdown | -17.87% | Significant historical loss |\n\n---\n\n## HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Weight | Key Flags |\n|----------|-----------|------|--------|-----------|\n| **UNH** | 45/100 (HIGH) | 1.58 | 26.2% | Concentration breach; elevated beta |\n| **AAPL** | 45/100 (HIGH) | 1.77 | 16.72% | Concentration breach; elevated beta |\n| **CVX** | 45/100 (HIGH) | 1.77 | 13.48% | Elevated beta; -21.66% unrealized loss |\n| **TSLA** | 35/100 (HIGH) | 2.19 | \u2014 | **Very high beta** \u2014 amplified market exposure |\n| **GOOGL** | 30/100 (MEDIUM) | 1.41 | \u2014 | Elevated beta; analyst consensus Sell |\n\n---\n\n## STRESS TEST SUMMARY\n\nFive scenarios tested; five classified as severe or catastrophic. **Worst positions across all scenarios:**\n- UNH: losses ranging -$1.69M to -$5.34M\n- AAPL: losses ranging -$1.10M to -$4.62M\n- CVX: losses ranging -$0.89M to -$3.08M\n\n---\n\n## MACRO ENVIRONMENT & REGIME\n\n**Current Conditions (Feb 2026):**\n- VIX: 16.65 (Low regime)\n- Yield curve: **Inverted** (10Y-2Y spread: -1.14 percentage points)\n- Fed Funds: 5.22% (held steady)\n- CPI YoY: 4.59% (rising trend)\n- ISM Manufacturing PMI: 48.7 (below 50"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 59,
+            "matched": 59,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 115965.9,
+      "error": null,
+      "trace_id": "6d04175032df424f",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2461,
+        "output_tokens": 1024,
+        "cost_usd": 0.008339
+      }
+    },
+    {
+      "id": "mrm-003-subset3",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset3",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $26,870,333.66**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day CVaR at 95%: $1,071,268.63 (3.987% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.41 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $3,387,648.84\n\n**Concentration Breaches (Policy: 30% sector / 15% single-name)**\n- Technology sector: 48.83% (excess +18.83 points; $5,059,683.83 over limit)\n- MSFT: 21.04% (excess +6.04 points)\n- UNH: 24.17% (excess +9.17 points; largest position)\n- AAPL: 15.43% (excess +0.43 points)\n\n**Catastrophic Stress Scenarios**\n- 2008 GFC (-40% market): Portfolio loss -$19,025,463.89 (-70.8%)\n- COVID-19 crash (-34%): Portfolio loss -$14,927,671.67 (-55.55%)\n- Tech selloff (-30%): Portfolio loss -$13,455,821.10 (-50.08%)\n\n---\n\n## PORTFOLIO VaR & TAIL RISK\n\n| Metric | Value |\n|--------|-------|\n| 1-day VaR (95%) | $722,235.88 (2.688%) |\n| 1-day VaR (99%) | $1,021,228.36 |\n| 10-day VaR (95%) | $2,283,910.39 |\n| Weighted Beta | 1.362 |\n| Risk Level | HIGH |\n\n---\n\n## HISTORICAL PERFORMANCE METRICS\n\n| Metric | Value |\n|--------|-------|\n| Annualized Sharpe | 0.081 |\n| Annualized Sortino | 0.083 |\n| Annualized Volatility | 22.39% |\n| Max Drawdown | -16.67% |\n\n---\n\n## HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Weight | Key Flags |\n|----------|-----------|------|--------|-----------|\n| **UNH** | 45/100 (HIGH) | 1.58 | 24.17% | Elevated beta; concentration breach; worst performer in GFC (-$5.3M) |\n| **AAPL** | 45/100 (HIGH) | 1.77 | 15.43% | Highest beta; concentration breach; GFC loss -$3.8M |\n| **CVX** | 45/100 (HIGH) | 1.77 | 12.44% | Elevated beta; -21.66% unrealized loss; Sell consensus |\n| **MA** | 50/100 (HIGH) | 1.59 | \u2014 | Highest risk score; -31.65% unrealized loss |\n| **XOM** | 40/100 (HIGH) | \u2014 | \u2014 | -29.09% unrealized loss; Sell consensus |\n\n---\n\n## STRESS TEST SUMMARY\n\nFive scenarios tested; five classified as severe or catastrophic. **Worst positions across all scenarios:** UNH, AAPL, CVX, MSFT, NVDA.\n\n- **Rate Shock (+200bps):** -$6,036,926.04 (-22.47%) \u2014 SEVERE\n- **Flash Crash (-10%):** -$5,488,114.58 (-20.42%) \u2014 SEVERE\n\n---\n\n## MACRO ENVIRONMENT & REGIME\n\n**Current Conditions (Feb 2026):**\n- VIX: 16.65 (Low regime)\n- Fed Funds: 5.22% (held steady)\n- 10Y-2Y Spread: -1.14 points (inverted curve)\n- ISM Manufacturing PMI: 48.7 (below 50; contraction signal)\n- C"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 60,
+            "matched": 60,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 11692.3,
+      "error": null,
+      "trace_id": "7dc2be1a65104900",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2483,
+        "output_tokens": 1024,
+        "cost_usd": 0.008363
+      }
+    },
+    {
+      "id": "mrm-003-subset4",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset4",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $23,672,888.33**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day CVaR at 95%: $861,748.49 (3.64% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.414 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $2,725,088.00\n\n**Concentration Breaches \u2014 All Policy Limits Exceeded**\n- **Technology sector:** 50.24% vs 30.0% limit (+20.24 points; $4,791,392.60 excess)\n- **Healthcare sector:** 32.37% vs 30.0% limit (+2.37 points; $561,047.45 excess)\n- **Single-name overweights:**\n  - UNH: 27.43% vs 15.0% limit (+12.43 points; $2,942,540.02 excess) \u2014 **HIGHEST RISK**\n  - MSFT: 23.88% vs 15.0% limit (+8.88 points; $2,102,152.48 excess)\n  - AAPL: 17.51% vs 15.0% limit (+2.51 points; $594,189.50 excess)\n\n---\n\n## QUANTITATIVE RISK METRICS\n\n| Metric | Value | Assessment |\n|--------|-------|------------|\n| **1-day VaR (95%)** | $579,904.70 (2.45%) | HIGH |\n| **1-day VaR (99%)** | $819,974.67 | HIGH |\n| **10-day VaR (95%)** | $1,833,819.68 | HIGH |\n| **Portfolio Beta** | 1.241 | Amplified market exposure |\n| **Annualized Volatility** | 20.66% | Elevated |\n| **Sharpe Ratio** | 0.099 | Poor risk-adjusted returns |\n| **Sortino Ratio** | 0.101 | Poor downside-adjusted returns |\n| **Max Drawdown** | -16.46% | Significant historical loss |\n\n---\n\n## STRESS TEST RESULTS \u2014 CATASTROPHIC SCENARIOS\n\n| Scenario | Market Shock | Portfolio P&L | Severity |\n|----------|--------------|---------------|----------|\n| **2008 GFC** | -40.0% | -$15,276,111.64 (-64.53%) | **CATASTROPHIC** |\n| **COVID-19 Crash** | -34.0% | -$11,985,872.21 (-50.63%) | **CATASTROPHIC** |\n| **Tech Sector Selloff** | -30.0% | -$11,289,183.22 (-47.69%) | **CATASTROPHIC** |\n| **Rate Shock +200bps** | -15.0% | -$4,847,227.73 (-20.48%) | SEVERE |\n| **Flash Crash (-10%)** | -10.0% | -$4,406,570.66 (-18.61%) | SIGNIFICANT |\n\n**Worst-hit positions across scenarios:** UNH, AAPL, MSFT, TSLA consistently drive losses.\n\n---\n\n## HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Weight | Key Flags |\n|----------|-----------|------|--------|-----------|\n| **UNH** | 45/100 | 1.58x | 27.43% | Elevated beta; **Extreme concentration** |\n| **AAPL** | 45/100 | 1.77x | 17.51% | Elevated beta; High concentration |\n| **TSLA** | 35/100 | 2.19x | \u2014 | **Very high beta** \u2014 amplified market exposure |\n| **XOM** | 40/100 | \u2014 | \u2014 | Severe drawdown (-29.09%); Sell consensus |\n| **MSFT** | 25/100 | \u2014"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 61,
+            "matched": 61,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 13309.9,
+      "error": null,
+      "trace_id": "9b61f3103d9148ae",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2478,
+        "output_tokens": 1024,
+        "cost_usd": 0.008358
+      }
+    },
+    {
+      "id": "mrm-003-subset6",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset6",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $26,166,477.31**\n\n---\n\n## \u26a0\ufe0f CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day CVaR at 95%: $1,053,301.42 (4.025% of portfolio value)\n- Tail ratio CVaR/VaR elevated at 1.413, indicating fat-tail exposure\n- 10-day CVaR: $3,330,831.53\n\n**Concentration Breaches (All Three Major Positions)**\n- Technology sector: 52.87% vs. 30.0% policy limit (**+22.87 points excess**)\n- MSFT: 21.61% vs. 15.0% limit (**+6.61 points excess**)\n- UNH: 24.82% vs. 15.0% limit (**+9.82 points excess**)\n- AAPL: 15.84% vs. 15.0% limit (**+0.84 points excess**)\n\n**Catastrophic Stress Scenarios**\n- 2008 GFC scenario: portfolio loss -$18,713,089.43 (-71.52%)\n- COVID-19 crash scenario: portfolio loss -$14,682,577.86 (-56.11%)\n- Tech sector selloff: portfolio loss -$13,642,028.97 (-52.14%)\n\n---\n\n## 1. PORTFOLIO VAR & TAIL RISK\n\n| Metric | Value |\n|--------|-------|\n| 1-day VaR (95%) | $710,377.66 (2.715%) |\n| 10-day VaR (95%) | $2,246,411.40 |\n| 1-day VaR (99%) | $1,004,461.06 |\n| **1-day CVaR (95%)** | **$1,053,301.42 (4.025%)** |\n| **10-day CVaR (95%)** | **$3,330,831.53** |\n| Tail Ratio (CVaR/VaR) | 1.413 |\n| Portfolio Beta (weighted) | 1.375 |\n| **Risk Classification** | **HIGH / CRITICAL** |\n\n---\n\n## 2. HISTORICAL PERFORMANCE METRICS\n\n| Metric | Value |\n|--------|-------|\n| Sharpe Ratio (annualized) | 0.17 |\n| Sortino Ratio (annualized) | 0.174 |\n| Annualized Volatility | 22.61% |\n| Maximum Drawdown | -17.49% |\n| Period | 2024-04-15 to 2026-03-19 |\n\n**Assessment:** Weak risk-adjusted returns; volatility elevated relative to excess return generation.\n\n---\n\n## 3. STRESS TEST RESULTS\n\n**Worst-Case Scenario: 2008 GFC (-40% market shock)**\n- Portfolio P&L: -$18,713,089.43 (-71.52%)\n- Severity: CATASTROPHIC\n- Top loss drivers: UNH (-$5,335,551.25), AAPL (-$3,815,382.40), CVX (-$3,075,406.76)\n\n**Other Severe Scenarios:**\n- COVID-19 crash (-34% shock): -$14,682,577.86 (-56.11%)\n- Tech selloff (-30% shock): -$13,642,028.97 (-52.14%)\n- Rate shock +200bps (-15% shock): -$5,937,807.22 (-22.69%)\n\nAll five tested scenarios classified as severe or catastrophic.\n\n---\n\n## 4. HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Beta | Weight | Key Flags |\n|----------|-----------|------|--------|-----------|\n| **UNH** | **45/HIGH** | 1.58 | 24.82% | Concentration breach; elevated beta |\n| **AAPL** | **45/HIGH** | 1.77 | 15.84% | Concentration"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 62,
+            "matched": 62,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 13081.9,
+      "error": null,
+      "trace_id": "69da19523ba141cc",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2477,
+        "output_tokens": 1024,
+        "cost_usd": 0.008357
+      }
+    },
+    {
+      "id": "mrm-003-subset8",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset8",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $25,003,472.29**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day CVaR at 95%: $876,738.61 (3.506% of portfolio value)\n- Tail ratio CVaR/VaR elevated at 1.413, indicating fat-tail exposure\n- 10-day CVaR: $2,772,490.94\n\n**Concentration Breaches (Policy: 30% sector / 15% single-name)**\n- **Technology: 44.27%** (excess 14.27 points; $3,567,995.50 over limit)\n- **Healthcare: 30.65%** (excess 0.65 points)\n- **MSFT: 22.61%** (excess 7.61 points; $1,902,764.24 over limit)\n- **UNH: 25.97%** (excess 10.97 points; $2,742,880.91 over limit)\n\n**Catastrophic Stress Scenarios**\n- 2008 GFC (-40% market): Portfolio loss -$15,546,292.25 (-62.18%)\n- COVID-19 crash (-34%): Portfolio loss -$12,197,860.07 (-48.78%)\n- Tech selloff (-30%): Portfolio loss -$9,790,189.91 (-39.16%)\n\n---\n\n## QUANTITATIVE RISK METRICS\n\n| Metric | Value | Assessment |\n|--------|-------|------------|\n| **1-day VaR (95%)** | $590,161.17 (2.36%) | HIGH |\n| **1-day VaR (99%)** | $834,477.13 | HIGH |\n| **10-day VaR (95%)** | $1,866,253.48 | HIGH |\n| **Portfolio Beta** | 1.196 | Elevated |\n| **Annualized Volatility** | 20.09% | High |\n| **Max Drawdown** | -17.22% | Significant |\n| **Sharpe Ratio** | 0.037 | Weak |\n| **Sortino Ratio** | 0.039 | Weak |\n\n---\n\n## HIGH-RISK POSITIONS\n\n| Position | Risk Score | Beta | Weight | Key Flags |\n|----------|-----------|------|--------|-----------|\n| **UNH** | 45/100 | 1.58 | 25.97% | Elevated beta; concentration breach; worst performer in stress |\n| **CVX** | 45/100 | 1.77 | 13.36% | Highest beta; -21.66% unrealized loss; significant stress impact |\n| **MSFT** | 25/100 | \u2014 | 22.61% | Concentration breach; tech sector concentration driver |\n| **GOOGL** | 30/100 | 1.41 | \u2014 | Elevated beta; analyst consensus Sell |\n\n---\n\n## STRESS TEST SUMMARY\n\nWorst-case drivers across scenarios:\n- **UNH** consistently largest loss across all five stress scenarios\n- **CVX** second-largest loss driver (elevated beta 1.77)\n- **MSFT** third-largest in GFC and COVID scenarios\n- Tech sector concentration amplifies losses in sector-specific downturns\n\n---\n\n## MACRO ENVIRONMENT & REGIME\n\n**Current Conditions (Feb 2026):**\n- VIX: 16.65 (Low regime)\n- Yield curve inverted: 10Y-2Y spread -1.14 percentage points\n- Fed Funds: 5.22% (held steady)\n- CPI YoY: 4.59% (rising trend)\n- ISM Manufacturing PMI: 48.7 (below 50; contraction signal)\n- Market regime: **Risk-Off**\n\n**Implication:** Inverted curve and below-50 PMI signal economic stress. Portfolio's elevated beta (1.196) and concentrated tech/healthcare exposure amplify downside in risk-off environments.\n\n---\n\n## RECOMMENDATION\n\n**Immediate actions"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 54,
+            "matched": 54,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 18236.5,
+      "error": null,
+      "trace_id": "b295964ce73945b3",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2410,
+        "output_tokens": 1024,
+        "cost_usd": 0.008283
+      }
+    },
+    {
+      "id": "mrm-003-subset9",
+      "component": "MRM-003",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset9",
+      "outputs": [
+        "# RISK ASSESSMENT REPORT\n**Horner Capital Alpha Fund (HF-ALPHA-001)**  \n**As of 2026-03-19 | AUM: $25,761,957.54**\n\n---\n\n## \ud83d\udea8 CRITICAL FINDINGS\n\n**CVaR Risk Level: CRITICAL**\n- 1-day 95% CVaR: $1,051,444.05 (4.081% of portfolio value)\n- Tail ratio (CVaR/VaR): 1.408 \u2014 elevated tail risk indicating fat-tailed loss distribution\n- 10-day CVaR: $3,324,958.02\n\n**Concentration Policy Breaches (All Three Metrics)**\n- **Technology sector:** 50.41% vs 30.0% limit (excess: 20.41 points / $5,258,015.53)\n- **UNH:** 25.21% vs 15.0% limit (excess: 10.21 points / $2,630,295.86)\n- **MSFT:** 21.95% vs 15.0% limit (excess: 6.95 points / $1,790,456.05)\n- **AAPL:** 16.09% vs 15.0% limit (excess: 1.09 points / $280,805.34)\n\n**Catastrophic Stress Scenarios**\n- 2008 GFC scenario: -72.52% portfolio loss ($18,682,953.85)\n- COVID-19 crash scenario: -56.9% loss ($14,658,933.02)\n- Tech sector selloff: -50.86% loss ($13,101,930.44)\n\n---\n\n## 1. PORTFOLIO VALUE-AT-RISK & TAIL METRICS\n\n| Metric | Value |\n|--------|-------|\n| 1-day VaR (95%) | $709,233.67 (2.753%) |\n| 1-day VaR (99%) | $1,002,843.48 |\n| 10-day VaR (95%) | $2,242,793.79 |\n| **1-day CVaR (95%)** | **$1,051,444.05 (4.081%)** |\n| **10-day CVaR (95%)** | **$3,324,958.02** |\n| **Tail Ratio** | **1.408** |\n| Portfolio Beta (weighted) | 1.395 |\n\n**Risk Assessment:** HIGH VaR; **CRITICAL CVaR** with elevated tail risk.\n\n---\n\n## 2. HISTORICAL PERFORMANCE RISK\n\n| Metric | Value |\n|--------|-------|\n| Annualized Sharpe Ratio | 0.163 |\n| Annualized Sortino Ratio | 0.167 |\n| Annualized Volatility | 22.82% |\n| Maximum Drawdown | -16.91% |\n\n**Period:** 2024-04-15 to 2026-03-19. Low risk-adjusted returns relative to volatility exposure.\n\n---\n\n## 3. STRESS TEST RESULTS\n\n**Worst-Case Scenario: 2008 Global Financial Crisis (-40% market shock)**\n- Portfolio loss: -$18,682,953.85 (-72.52%)\n- Severity: **CATASTROPHIC**\n- Worst positions: UNH (-$5,335,551.25), AAPL (-$3,815,382.40), CVX (-$3,075,406.76), MSFT (-$2,381,390.82), TSLA (-$1,161,317.50)\n\n**Other Severe Scenarios:**\n- COVID-19 crash (-34% shock): -56.9% loss\n- Tech sector selloff (-30% shock): -50.86% loss\n- Rate shock +200bps (-15% shock): -23.01% loss\n- Flash crash (-10% shock): -20.92% loss\n\n---\n\n## 4. HIGHEST-RISK POSITIONS\n\n| Position | Risk Score | Flags | Action |\n|----------|-----------|-------|--------|\n| **UNH** | **45/HIGH** | Beta 1.58x; Concentration 25.21% | **Review size; add stop-loss** |\n| **"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 65,
+            "matched": 65,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 25839.4,
+      "error": null,
+      "trace_id": "7ca851f2ac664a9e",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2464,
+        "output_tokens": 1024,
+        "cost_usd": 0.008342
+      }
+    }
+  ],
+  "components": {
+    "MRM-003": {
+      "n_items": 10,
+      "passed": 9,
+      "pass_rate": 0.9,
+      "mean_groundedness": 0.996,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 0.9,
+      "errors": 0,
+      "status": "APPROVED",
+      "usage": {
+        "bedrock_calls": 10,
+        "input_tokens": 24509,
+        "output_tokens": 10240,
+        "cost_usd": 0.08328
+      }
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "max_cost_usd": 1.0,
+  "pricing": {
+    "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "usd_per_1m_tokens": {
+      "input": 1.1,
+      "output": 5.5
+    },
+    "source": "AWS Pricing API, us.* inference profile, on-demand"
+  },
+  "usage": {
+    "bedrock_calls": 10,
+    "input_tokens": 24509,
+    "output_tokens": 10240,
+    "cost_usd": 0.08328
+  },
+  "finished_at": "2026-09-30T15:31:43+00:00"
+}

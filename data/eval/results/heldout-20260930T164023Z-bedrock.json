@@ -1,0 +1,466 @@
+{
+  "run_id": "heldout-20260930T164023Z-bedrock",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-09-30T16:40:23+00:00",
+  "provider": "bedrock",
+  "models": {
+    "chat": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "grader": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "hyde": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "embedding": "gemini-embedding-001"
+  },
+  "grader": {
+    "provider": "gemini",
+    "model_id": "gemini-3.1-flash-lite"
+  },
+  "versions": {
+    "MRM-004": {
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "prompt_versions": [
+        "portfolio_recommendations_haiku@1.0.0#45848a4d"
+      ],
+      "provider": "bedrock"
+    }
+  },
+  "throttle_s": 15.0,
+  "items": [
+    {
+      "id": "mrm-004-subset10",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset10",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: trim \u2013 HIGH risk (beta 1.77, concentration 16.51%, technical ALERT with RSI 29.4 oversold and SMA-50 below SMA-200)\n\n**UNH**: reduce \u2013 HIGH risk (beta 1.58, concentration 25.86%, technical ALERT with RSI 74.1 overbought and SMA-50 below SMA-200, unrealized loss -2.24% return since average cost)\n\n**XOM**: reduce \u2013 HIGH risk (Analyst consensus: Sell, severe drawdown -29.09% return since average cost, unrealized loss)\n\n**TSLA**: hedge \u2013 HIGH risk (very high beta 2.19, technical WATCH with RSI 25.0 oversold and price change over the market-data window 2025-12-19 to 2026-03-18 -22.49% down)\n\n---\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector breach \u2013 Technology 57.75%** exceeds 30.0% policy limit by 27.75 points ($6,968,376.55). Rebalance by reducing Technology holdings.\n\n**Single-name breaches:**\n- **MSFT**: 22.52% exceeds 15.0% limit by 7.52 points ($1,888,367.27) \u2013 trim\n- **UNH**: 25.86% exceeds 15.0% limit by 10.86 points ($2,727,083.58) \u2013 reduce\n- **AAPL**: 16.51% exceeds 15.0% limit by 1.51 points ($379,180.13) \u2013 trim\n\n---\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **UNH**: unrealized loss -$148,675.36 (-2.24% return since average cost)\n- **XOM**: unrealized loss -$297,429.86 (-29.09% return since average cost)\n\n**Total unrealized losses: -$446,105.22**"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 32,
+            "matched": 32,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 42953.6,
+      "error": null,
+      "trace_id": "df7a9720c0164993",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2592,
+        "output_tokens": 505,
+        "cost_usd": 0.005629
+      }
+    },
+    {
+      "id": "mrm-004-subset11",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset11",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**UNH**: reduce \u2013 Concentration 27.26% exceeds 15.0% policy limit by 12.26 points; beta 1.58 elevated; RSI-14 74.1 overbought; price down 24.22% over market-data window 2025-12-19 to 2026-03-18.\n\n**XOM**: reduce \u2013 Analyst consensus Sell; unrealized loss -29.09% return since average cost; risk score 40/100 HIGH.\n\n**CVX**: hedge \u2013 Beta 1.77 elevated; unrealized loss -21.66% return since average cost; RSI-14 75.9 overbought; SMA-50 87.88 below SMA-200 104.16; concentration 14.03%.\n\n**TSLA**: trim \u2013 Beta 2.19 very high; RSI-14 25.0 oversold; price down 22.49% over market-data window 2025-12-19 to 2026-03-18.\n\n---\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector \u2013 Technology**: 46.48% vs 30.0% policy limit; excess **16.48 points** ($3,925,462.02).\n\n**Sector \u2013 Healthcare**: 32.17% vs 30.0% policy limit; excess **2.17 points** ($516,884.26).\n\n**Single name \u2013 UNH**: 27.26% vs 15.0% policy limit; excess **12.26 points** ($2,920,276.97).\n\n**Single name \u2013 MSFT**: 23.74% vs 15.0% policy limit; excess **8.74 points** ($2,081,828.77).\n\n---\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **JNJ**: -$138,966.61 unrealized loss (-10.62% return since average cost)\n- **UNH**: -$148,675.36 unrealized loss (-2.24% return since average cost)\n- **XOM**: -$297,429.86 unrealized loss (-29.09% return since average cost)\n- **CVX**: -$923,765.75 unrealized loss (-21.66% return since average cost)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 40,
+            "matched": 40,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 51608.0,
+      "error": null,
+      "trace_id": "9bc59253b38b49e5",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2796,
+        "output_tokens": 562,
+        "cost_usd": 0.006167
+      }
+    },
+    {
+      "id": "mrm-004-subset12",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset12",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**CVX**: hedge or reduce \u2013 CRITICAL risk (60/100); -21.66% unrealized loss; 19.05% concentration (4.05 points above 15.0% limit); elevated beta 1.77; RSI-14 75.9 overbought.\n\n**AAPL**: trim \u2013 HIGH risk (45/100); 23.63% concentration (8.63 points above 15.0% limit); elevated beta 1.77; RSI-14 29.4 oversold; SMA-50 464.01 below SMA-200 508.46; price down 4.39% over market-data window 2025-12-19 to 2026-03-18.\n\n**MA**: reduce \u2013 HIGH risk (50/100); -31.65% unrealized loss; elevated beta 1.59; SMA-50 85.19 below SMA-200 92.83; price down 9.81% over market-data window 2025-12-19 to 2026-03-18.\n\n**XOM**: reduce \u2013 HIGH risk (40/100); -29.09% unrealized loss; analyst consensus Sell; price down 10.18% over market-data window 2025-12-19 to 2026-03-18.\n\n**TSLA**: hold \u2013 HIGH risk (35/100); very high beta 2.19; RSI-14 25.0 oversold; price down 22.49% over market-data window 2025-12-19 to 2026-03-18. Monitor closely despite modest 5.8% gain since average cost.\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Technology sector**: 40.41% vs 30.0% policy limit \u2013 excess 10.41 points ($1,826,051.46).\n\n**AAPL**: 23.63% vs 15.0% limit \u2013 excess 8.63 points ($1,513,815.95).\n\n**CVX**: 19.05% vs 15.0% limit \u2013 excess 4.05 points ($710,423.48).\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **MA**: -$587,687.32 unrealized loss\n- **JNJ**: -$138,966.61 unrealized loss\n- **XOM**: -$297,429.86 unrealized loss\n- **CVX**: -$923,765.75 unrealized loss"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 41,
+            "matched": 41,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 24855.0,
+      "error": null,
+      "trace_id": "6a9eca9470a3411d",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 3172,
+        "output_tokens": 605,
+        "cost_usd": 0.006817
+      }
+    },
+    {
+      "id": "mrm-004-subset15",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset15",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: trim \u2013 HIGH risk (beta 1.77, concentration 17.18% exceeds 15.0% limit); technical status ALERT with RSI-14 29.4 oversold.\n\n**UNH**: reduce \u2013 HIGH risk (beta 1.58, concentration 26.91% exceeds 15.0% limit, largest single-name breach); unrealized loss -2.24% return since average cost; technical status ALERT with RSI-14 74.1 overbought.\n\n**XOM**: reduce \u2013 HIGH risk; severe drawdown -29.09% return since average cost; analyst consensus Sell; technical status OK but position warrants review given loss magnitude.\n\n**CVX**: hedge \u2013 HIGH risk (beta 1.77, concentration 13.85%); notable drawdown -21.66% return since average cost; technical status ALERT with RSI-14 75.9 overbought and SMA-50 below SMA-200.\n\n**TSLA**: hold \u2013 HIGH risk (very high beta 2.19); technical status WATCH with RSI-14 25.0 oversold and price change -22.49% over market-data window; modest gain 5.8% return since average cost provides some offset.\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector (Technology)**: Portfolio weight 48.1% exceeds 30.0% policy limit by 18.1 points ($4,367,722.53). Reduce Technology exposure via AAPL and MSFT trims.\n\n**Single names**:\n- MSFT 23.43% exceeds 15.0% limit by 8.43 points ($2,034,248.67)\n- UNH 26.91% exceeds 15.0% limit by 11.91 points ($2,874,009.68)\n- AAPL 17.18% exceeds 15.0% limit by 2.18 points ($526,057.19)\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **UNH**: -$148,675.36 unrealized loss\n- **XOM**: -$297,429.86 unrealized loss\n- **CVX**: -$923,765.75 unrealized loss"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 37,
+            "matched": 37,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 29233.4,
+      "error": null,
+      "trace_id": "5eb6219baabb4bb2",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2953,
+        "output_tokens": 556,
+        "cost_usd": 0.006306
+      }
+    },
+    {
+      "id": "mrm-004-subset18",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset18",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**CVX**: hedge or reduce \u2013 Risk score 60/100 (CRITICAL). Elevated beta 1.77, unrealized loss -21.66% return since average cost, concentration breach 0.74 points, technical status ALERT with RSI-14 75.9 overbought and SMA-50 87.88 below SMA-200 104.16.\n\n**AAPL**: trim \u2013 Risk score 45/100 (HIGH). Elevated beta 1.77, concentration breach 4.53 points, technical status ALERT with RSI-14 29.4 oversold and SMA-50 464.01 below SMA-200 508.46.\n\n**MA**: reduce \u2013 Risk score 50/100 (HIGH). Elevated beta 1.59, severe unrealized loss -31.65% return since average cost, technical status WATCH with SMA-50 85.19 below SMA-200 92.83.\n\n---\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector \u2013 Technology**: Portfolio weight 68.32% exceeds 30.0% policy limit by 38.32 points ($8,133,295.35). Rebalance across five positions: GOOGL, AAPL, NVDA, MSFT, ORCL.\n\n**Single-name breaches**:\n- **MSFT**: 26.64% weight exceeds 15.0% limit by 11.64 points ($2,470,552.14).\n- **AAPL**: 19.53% weight exceeds 15.0% limit by 4.53 points ($961,477.76).\n- **CVX**: 15.74% weight exceeds 15.0% limit by 0.74 points ($157,062.59).\n\n---\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **CVX**: -$923,765.75 unrealized loss (-21.66% return since average cost)\n- **MA**: -$587,687.32 unrealized loss (-31.65% return since average cost)\n- **JNJ**: -$138,966.61 unrealized loss (-10.62% return since average cost)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 37,
+            "matched": 37,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 6119.6,
+      "error": null,
+      "trace_id": "4211a885538e448b",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2449,
+        "output_tokens": 544,
+        "cost_usd": 0.005686
+      }
+    },
+    {
+      "id": "mrm-004-subset19",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset19",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: reduce \u2013 HIGH risk (beta 1.77, concentration 16.72%, technical ALERT with RSI 29.4 oversold and SMA-50 below SMA-200)\n\n**UNH**: reduce \u2013 HIGH risk (beta 1.58, concentration 26.2%, unrealized loss -2.24% return since average cost, technical ALERT with RSI 74.1 overbought)\n\n**CVX**: hedge \u2013 HIGH risk (beta 1.77, unrealized loss -21.66% return since average cost, technical ALERT with RSI 75.9 overbought)\n\n**TSLA**: trim \u2013 HIGH risk (very high beta 2.19, technical WATCH with RSI 25.0 oversold and price down -22.49% over market-data window)\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector breach \u2013 Technology 52.4%** exceeds 30.0% policy limit by 22.4 points ($5,552,101.57 excess).\n\n**Single-name breaches:**\n- **MSFT**: 22.81% exceeds 15.0% limit by 7.81 points ($1,935,799.70 excess)\n- **UNH**: 26.2% exceeds 15.0% limit by 11.2 points ($2,776,050.79 excess)\n- **AAPL**: 16.72% exceeds 15.0% limit by 1.72 points ($426,322.09 excess)\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **UNH**: unrealized loss -$148,675.36 (-2.24% return since average cost)\n- **CVX**: unrealized loss -$923,765.75 (-21.66% return since average cost)\n\n**Summary:** Technology sector and three mega-cap positions dominate concentration risk. Reduce AAPL and UNH to policy limits; consider CVX hedge or trim given energy sector drawdown. TSLA warrants review given extreme beta (2.19) and recent technical weakness."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 34,
+            "matched": 34,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 6871.9,
+      "error": null,
+      "trace_id": "9e720ed211e64a49",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2626,
+        "output_tokens": 521,
+        "cost_usd": 0.005754
+      }
+    },
+    {
+      "id": "mrm-004-subset2",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset2",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: trim \u2013 HIGH risk score (45/100) with elevated beta 1.77 and concentration 22.28% exceeding 15.0% policy limit; technical status ALERT with RSI-14 29.4 oversold.\n\n**MA**: reduce \u2013 HIGH risk score (50/100); severe drawdown with -31.65% return since average cost; elevated beta 1.59; technical status WATCH with SMA-50 85.19 below SMA-200 92.83.\n\n**XOM**: reduce \u2013 HIGH risk score (40/100) with -29.09% return since average cost; analyst consensus Sell; price change over the market-data window 2025-12-19 to 2026-03-18 -10.18% (down).\n\n**JNJ**: hold \u2013 Unrealized loss -10.62% return since average cost, but technical status OK and analyst rating Buy; monitor.\n\n---\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Technology sector**: Portfolio weight 77.93% exceeds 30.0% policy limit by 47.93 points ($8,918,961.75). Rebalance via AAPL and MSFT reductions.\n\n**MSFT**: Single-name weight 30.38% exceeds 15.0% policy limit by 15.38 points ($2,861,957.68). Trim to bring within policy.\n\n**AAPL**: Single-name weight 22.28% exceeds 15.0% policy limit by 7.28 points ($1,354,684.78). Trim to bring within policy.\n\n---\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **MA**: -$587,687.32 unrealized loss (-31.65% return since average cost)\n- **JNJ**: -$138,966.61 unrealized loss (-10.62% return since average cost)\n- **XOM**: -$297,429.86 unrealized loss (-29.09% return since average cost)"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 29,
+            "matched": 29,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 19618.0,
+      "error": null,
+      "trace_id": "26a39b7454294d47",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2384,
+        "output_tokens": 501,
+        "cost_usd": 0.005378
+      },
+      "retried_after_error": "RuntimeError: grader unavailable: Gemini \u00b7 gemini-3.1-flash-lite: GoogleAPIError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing..."
+    },
+    {
+      "id": "mrm-004-subset3",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset3",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: hedge \u2013 elevated beta 1.77x, concentration 15.43%, technical status ALERT (RSI-14 29.4 oversold, SMA-50 below SMA-200)\n\n**MA**: reduce \u2013 severe drawdown -31.65% return since average cost, elevated beta 1.59x, technical status WATCH\n\n**UNH**: trim \u2013 concentration 24.17% (largest single-name breach), elevated beta 1.58x, technical status ALERT (RSI-14 74.1 overbought, price change over market-data window -24.22% down)\n\n**XOM**: reduce \u2013 severe drawdown -29.09% return since average cost, analyst consensus Sell, technical status OK but fundamental weakness\n\n**CVX**: trim \u2013 notable drawdown -21.66% return since average cost, elevated beta 1.77x, technical status ALERT (RSI-14 75.9 overbought)\n\n---\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector \u2013 Technology**: Portfolio weight 48.83% exceeds 30.0% policy limit by 18.83 points ($5,059,683.83). Reduce Technology exposure via AAPL and/or MSFT.\n\n**Single-name breaches**:\n- **MSFT**: 21.04% vs 15.0% limit, excess 6.04 points ($1,622,968.15)\n- **UNH**: 24.17% vs 15.0% limit, excess 9.17 points ($2,464,009.60)\n- **AAPL**: 15.43% vs 15.0% limit, excess 0.43 points ($115,542.43)\n\n---\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **MA**: -$587,687.32 unrealized loss (-31.65% return since average cost)\n- **JNJ**: -$138,966.61 unrealized loss (-10.62% return since average cost)\n- **UNH**: -$148,675.36 unrealized loss (-2.24% return since average cost)\n- **XOM**: -$297,429.86 unrealized loss (-29.09% return since average cost)\n- **CVX**: -$923,765.75 unrealized loss (-21.66% return since average cost)\n\nTotal unrealized losses across five positions: -$2,096,524.90."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 40,
+            "matched": 40,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 9955.7,
+      "error": null,
+      "trace_id": "2d3a74a9559e4bbc",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 3137,
+        "output_tokens": 603,
+        "cost_usd": 0.006767
+      }
+    },
+    {
+      "id": "mrm-004-subset7",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset7",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: hedge \u2013 elevated beta (1.77x), high concentration (15.78%), technical ALERT (RSI 29.4 oversold; SMA-50 464.01 below SMA-200 508.46; MACD signal -0.301 negative).\n\n**MA**: reduce \u2013 severe drawdown (-31.65% return since average cost), elevated beta (1.59x), technical WATCH (SMA-50 85.19 below SMA-200 92.83), price down -9.81% over market-data window 2025-12-19 to 2026-03-18.\n\n**UNH**: trim \u2013 highest single-name concentration (24.73%), elevated beta (1.58x), technical ALERT (RSI 74.1 overbought; SMA-50 150.02 below SMA-200 169.7), price down -24.22% over market-data window 2025-12-19 to 2026-03-18.\n\n**XOM**: reduce \u2013 severe drawdown (-29.09% return since average cost), analyst consensus Sell, price down -10.18% over market-data window 2025-12-19 to 2026-03-18.\n\n**TSLA**: hedge \u2013 very high beta (2.19x), technical WATCH (RSI 25.0 oversold; MACD signal -2.422 negative), price down -22.49% over market-data window 2025-12-19 to 2026-03-18.\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Technology sector**: 51.05% vs 30.0% policy limit; excess 21.05 points ($5,528,320.69).\n\n**Single-name breaches**:\n- MSFT: 21.53% vs 15.0% limit; excess 6.53 points ($1,714,961.24).\n- UNH: 24.73% vs 15.0% limit; excess 9.73 points ($2,555,371.04).\n- AAPL: 15.78% vs 15.0% limit; excess 0.78 points ($204,849.89).\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **MA**: -$587,687.32 unrealized loss (-31.65% return since average cost).\n- **JNJ**: -$138,966.61 unrealized loss (-10.62% return since average cost).\n- **UNH**: -$148,675.36 unrealized loss (-2.24% return since average cost).\n- **XOM**: -$297,429.86 unrealized loss (-29.09% return since average cost)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 47,
+            "matched": 47,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 16382.7,
+      "error": null,
+      "trace_id": "4164a817fb714e28",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 3208,
+        "output_tokens": 671,
+        "cost_usd": 0.007219
+      }
+    },
+    {
+      "id": "mrm-004-subset9",
+      "component": "MRM-004",
+      "grading": "grounded",
+      "question": null,
+      "variant": "subset9",
+      "outputs": [
+        "# Portfolio Management Review \u2013 HF-ALPHA-001\n\n## 1. CRITICAL/HIGH RISK POSITIONS\n\n**AAPL**: reduce \u2013 Technical status ALERT (RSI 29.4 oversold, SMA-50 below SMA-200); concentration 16.09% exceeds 15.0% limit; beta 1.77 elevated.\n\n**UNH**: reduce \u2013 Technical status ALERT (RSI 74.1 overbought, SMA-50 below SMA-200); concentration 25.21% exceeds 15.0% limit; unrealized loss -2.24% return since average cost; beta 1.58 elevated.\n\n**CVX**: hedge \u2013 Technical status ALERT (RSI 75.9 overbought, SMA-50 below SMA-200); unrealized loss -21.66% return since average cost; beta 1.77 elevated.\n\n**TSLA**: hold \u2013 Technical status WATCH (RSI 25.0 oversold); beta 2.19 very high; price down -22.49% over market-data window 2025-12-19 to 2026-03-18.\n\n---\n\n## 2. CONCENTRATION ADJUSTMENTS\n\n**Sector \u2013 Technology**: Portfolio weight 50.41% vs policy limit 30.0%; excess 20.41 points ($5,258,015.53).\n\n**Single names:**\n- **MSFT**: 21.95% vs 15.0% limit; excess 6.95 points ($1,790,456.05).\n- **UNH**: 25.21% vs 15.0% limit; excess 10.21 points ($2,630,295.86).\n- **AAPL**: 16.09% vs 15.0% limit; excess 1.09 points ($280,805.34).\n\n---\n\n## 3. TAX-LOSS HARVESTING CANDIDATES\n\n- **JNJ**: -$138,966.61 unrealized loss (-10.62% return since average cost).\n- **UNH**: -$148,675.36 unrealized loss (-2.24% return since average cost).\n- **CVX**: -$923,765.75 unrealized loss (-21.66% return since average cost)."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 37,
+            "matched": 37,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 25942.5,
+      "error": null,
+      "trace_id": "4bfb6ae204804cef",
+      "usage": {
+        "bedrock_calls": 1,
+        "input_tokens": 2912,
+        "output_tokens": 535,
+        "cost_usd": 0.006146
+      }
+    }
+  ],
+  "components": {
+    "MRM-004": {
+      "n_items": 10,
+      "passed": 10,
+      "pass_rate": 1.0,
+      "mean_groundedness": 1.0,
+      "exact_fact_accuracy": null,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED",
+      "usage": {
+        "bedrock_calls": 10,
+        "input_tokens": 28229,
+        "output_tokens": 5603,
+        "cost_usd": 0.061868
+      }
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "max_cost_usd": 1.0,
+  "pricing": {
+    "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "usd_per_1m_tokens": {
+      "input": 1.1,
+      "output": 5.5
+    },
+    "source": "AWS Pricing API, us.* inference profile, on-demand"
+  },
+  "usage": {
+    "bedrock_calls": 10,
+    "input_tokens": 28229,
+    "output_tokens": 5603,
+    "cost_usd": 0.061868
+  },
+  "finished_at": "2026-09-30T16:56:32+00:00"
+}

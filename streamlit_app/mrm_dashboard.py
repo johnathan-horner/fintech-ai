@@ -106,16 +106,19 @@ def render_mrm_page():
                 with col2:
                     st.markdown(f"**Business use:** {m['business_use']}")
                     st.markdown(f"**Dependencies:** {', '.join(m['dependencies'])}")
-                st.markdown("**Running version:**")
-                st.json(m["current_version"])
-                st.markdown("**Approved version:**")
+                st.markdown("**Approval per provider (the gate checks the version about to run):**")
+                for prov, gate in (m.get("provider_status") or {}).items():
+                    (st.success if gate["allowed"] else st.warning)(md_money(f"{prov}: {gate['reason']}"))
+                st.markdown("**Running versions:**")
+                st.json(m.get("current_versions") or {})
+                st.markdown("**Approved versions (written only by the eval harness):**")
                 if m.get("version_mismatch"):
-                    st.warning("The running model/prompt version differs from the approved version - live use is "
-                               "blocked until scripts/run_eval.py re-validates it.")
-                if m.get("approved_version"):
-                    st.json(m["approved_version"])
+                    st.warning("No approved record matches a running version - live use is blocked until "
+                               "scripts/run_eval.py re-validates it.")
+                if m.get("approved_versions"):
+                    st.json(m["approved_versions"])
                 else:
-                    st.caption("None - no approval record in data/mrm/approvals.json (written only by the eval harness).")
+                    st.caption("None - no approval record in data/mrm/approvals.json.")
                 st.markdown("**Known limitations:**")
                 for lim in m.get("known_limitations", []):
                     st.markdown(md_money(f"- {lim}"))

@@ -114,13 +114,14 @@ class RateLimitError(Exception):
         super().__init__(msg)
 
 
-def fake_deps_factory(components, index_dir: Optional[str] = None) -> dict:
+def fake_deps_factory(components, index_dir: Optional[str] = None, provider: str = "gemini") -> dict:
     import tempfile
 
     from src.rag.reranker import CrossEncoderReranker
     from src.rag.vector_store import build_index
 
-    deps = {"llm": FakeChatModel(), "grader_llm": FakeChatModel(), "hyde_llm": FakeChatModel()}
+    deps = {"llm": FakeChatModel(), "grader_llm": FakeChatModel(), "hyde_llm": FakeChatModel(),
+            "provider": provider, "grader_provider": "gemini", "grader_model": "fake-grader"}
     if "MRM-001" in components:
         emb = FakeEmbedder()
         deps["embedder"] = emb

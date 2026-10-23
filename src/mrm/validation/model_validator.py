@@ -466,34 +466,43 @@ def test_sensitivity_analysis(model_id: str = "MRM-006") -> ValidationResult:
 
 def test_eval_evidence(model_id: str) -> ValidationResult:
     """
-    LLM components are validated by the held-out eval harness
-    (scripts/run_eval.py). This test reads the approval record it wrote and
-    checks it covers the version that is configured right now.
+    LLM components are validated by the held-out eval harness (scripts/run_eval.py),
+    per provider (Bedrock Claude Haiku 4.5 / Gemini). Passes when at least one provider's
+    running version holds an APPROVED record; each provider's gate result is reported.
     """
+    from src.llm import config
     from src.mrm.approvals import load_approvals
     from src.mrm.model_inventory import check_approval, current_version
 
     result = ValidationResult(model_id, "Held-out Eval Evidence")
-    rec = load_approvals().get(model_id)
-    cur = current_version(model_id)
-    if not rec:
+    approvals = load_approvals()
+    records = approvals.get(model_id) or []
+    gates = {}
+    for prov in config.provider_order():
+        cur = current_version(model_id, prov)
+        gates[prov] = (cur, check_approval(model_id, cur["model_id"], cur["prompt_versions"], approvals, provider=prov))
+    if not records:
         result.findings = [
             "FAIL: No held-out eval run recorded for this component (data/mrm/approvals.json has no entry).",
-            f"Running version: {cur['model_id']} with prompts {cur['prompt_versions']}.",
-        ]
-        result.recommendations = ["Run: python scripts/run_eval.py --split heldout"]
+        ] + [f"Running version on {p}: {c['model_id']} with prompts {c['prompt_versions']}." for p, (c, _) in gates.items()]
+        result.recommendations = ["Run: python scripts/run_eval.py --split heldout --provider <bedrock|gemini>"]
         return result
-    metrics = rec.get("metrics") or {}
-    gate = check_approval(model_id, cur["model_id"], cur["prompt_versions"])
-    result.findings.append(
-        f"{'PASS' if rec['status'] != 'FAILED' else 'FAIL'}: eval run {rec.get('evidence')} -> {rec['status']} "
-        f"(pass rate {metrics.get('pass_rate')}, mean groundedness {metrics.get('mean_groundedness')}, "
-        f"n={metrics.get('n_items')})."
-    )
-    result.findings.append(("PASS: " if gate["allowed"] else "FAIL: ") + gate["reason"])
-    result.score = float(metrics.get("pass_rate") or 0.0) if gate["allowed"] else 0.0
-    result.passed = gate["allowed"] and rec["status"] == "APPROVED"
-    result.details = {"approval": rec, "current_version": cur}
+    best = None
+    for prov, (cur, gate) in gates.items():
+        rec = gate.get("record") or {}
+        metrics = rec.get("metrics") or {}
+        detail = (f" (eval run {rec.get('evidence')}: pass rate {metrics.get('pass_rate')}, mean groundedness "
+                  f"{metrics.get('mean_groundedness')}, n={metrics.get('n_items')})" if rec else "")
+        result.findings.append(("PASS: " if gate["allowed"] else "FAIL: ") + gate["reason"] + detail)
+        if gate["allowed"] and (best is None or rec.get("status") == "APPROVED"):
+            best = rec
+    result.score = float(((best or {}).get("metrics") or {}).get("pass_rate") or 0.0)
+    result.passed = bool(best) and best.get("status") == "APPROVED"
+    result.details = {"approval": best, "providers": {p: {"current_version": c, "gate": {k: v for k, v in g.items()
+                                                                                         if k != "record"}}
+                                                      for p, (c, g) in gates.items()}}
+    if not best:
+        result.recommendations = ["Run: python scripts/run_eval.py --split heldout --provider <bedrock|gemini>"]
     return result
 
 
@@ -530,7 +539,8 @@ def run_validation_suite(model_id: str, portfolio_data: Optional[dict] = None) -
     evidence = next((t for t in tests if t.test_name == "Held-out Eval Evidence"), None)
     if evidence is not None and not evidence.passed:
         rec = (evidence.details or {}).get("approval") or {}
-        recommended_status = ValidationStatus.FAILED if rec.get("status") == "FAILED" else ValidationStatus.PENDING
+        recommended_status = (ValidationStatus.CONDITIONAL if rec.get("status") == "CONDITIONAL"
+                              else ValidationStatus.PENDING)
 
     return {
         "model_id": model_id,

@@ -22,12 +22,24 @@ from src.prompts import registry
 HYDE_TOP_K = 12
 
 
-def generate_hypothetical_answer(question: str, llm=None) -> str:
-    """LLM writes a short hypothetical answer passage for ``question``."""
+def _embed(fn, embedder):
+    """Embedding calls never fall back to another provider: failures surface as EmbeddingUnavailable."""
+    from src.llm.guard import sanitize_error
+    from src.llm.router import EmbeddingUnavailable
+
+    try:
+        return call_with_retry(fn)
+    except Exception as exc:
+        name = getattr(embedder, "model_name", "embedding model")
+        raise EmbeddingUnavailable(f"query embedding ({name}) failed: {sanitize_error(exc)}") from exc
+
+
+def generate_hypothetical_answer(question: str, llm=None, provider: str = "gemini") -> str:
+    """LLM (config role "hyde" on ``provider``) writes a short hypothetical answer passage."""
     if llm is None:
         from src.llm.provider import get_chat_model
 
-        llm = get_chat_model("hyde")
+        llm = get_chat_model("hyde", provider)
     prompt = registry.get("hyde_passage").format(question=question)
     return message_text(call_llm(llm, prompt)).strip()
 
@@ -46,7 +58,7 @@ def hyde_retrieve(
     The HyDE search uses the *passage* embedding.
     """
     passage = passage if passage is not None else generate_hypothetical_answer(question, llm)
-    passage_vec = call_with_retry(lambda: embedder.embed_passage(passage))
+    passage_vec = _embed(lambda: embedder.embed_passage(passage), embedder)
     hits = index.search_by_vector(passage_vec, k=k)
     candidates: List[dict] = []
     seen = set()
@@ -54,7 +66,7 @@ def hyde_retrieve(
         seen.add(doc["source_id"])
         candidates.append({**doc, "faiss_score": score, "retrieved_by": "hyde"})
     if merge_raw_query:
-        q_vec = call_with_retry(lambda: embedder.embed_query(question))
+        q_vec = _embed(lambda: embedder.embed_query(question), embedder)
         for doc, score in index.search_by_vector(q_vec, k=k):
             if doc["source_id"] not in seen:
                 seen.add(doc["source_id"])

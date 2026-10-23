@@ -1,0 +1,1698 @@
+{
+  "run_id": "heldout-20260930T160709Z-bedrock",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-09-30T16:07:09+00:00",
+  "provider": "bedrock",
+  "models": {
+    "chat": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "grader": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "hyde": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "embedding": "gemini-embedding-001"
+  },
+  "grader": {
+    "provider": "gemini",
+    "model_id": "gemini-3.1-flash-lite"
+  },
+  "versions": {
+    "MRM-001": {
+      "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0+hyde:us.anthropic.claude-haiku-4-5-20251001-v1:0+emb:gemini-embedding-001",
+      "prompt_versions": [
+        "hyde_passage@1.0.0#abb1a9d5",
+        "rag_answer_haiku@1.0.0#293ac7f8"
+      ],
+      "provider": "bedrock"
+    }
+  },
+  "throttle_s": 15.0,
+  "items": [
+    {
+      "id": "rag-aum",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the fund's total AUM?",
+      "variant": null,
+      "outputs": [
+        "The fund's total AUM is $32,355,808.19 [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 61728.2,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 5.210399627685547
+        },
+        {
+          "source_id": "sector:Energy",
+          "rerank_score": -10.030050277709961
+        },
+        {
+          "source_id": "sector:Healthcare",
+          "rerank_score": -10.15911865234375
+        },
+        {
+          "source_id": "sector:Technology",
+          "rerank_score": -10.331991195678711
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\nAs of the latest portfolio rebalancing, the fund's total AUM reached $2.847 billion across 47 long positions and 12 short positions, with the largest sector allocation in Technology (28% weight) and Healthcare (22% weight), generating a portfolio beta of 1.12 and a month-to-date P&L of +$47.3 million. The risk metrics indicate a 95% VaR of $18.2 million and a CVaR of $24.6 million, while stress tests under a +200 basis point yield shock scenario showed potential losses of 3.2% of AUM. Current macro indicators show Fed funds at 5.25-5.50%, CPI at 3.1% YoY, and a VIX reading of 16.4, informing our overall risk score of 6.2/10 for the portfolio positioning.",
+      "trace_id": "3eb07e28df8c471b",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1010,
+        "output_tokens": 234,
+        "cost_usd": 0.002398
+      }
+    },
+    {
+      "id": "rag-beta-GOOGL",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the beta of GOOGL?",
+      "variant": null,
+      "outputs": [
+        "The beta of GOOGL is 1.41 [position:GOOGL]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 18468.7,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:GOOGL",
+          "rerank_score": 4.3791069984436035
+        },
+        {
+          "source_id": "position:GOOGL",
+          "rerank_score": 2.3581936359405518
+        },
+        {
+          "source_id": "market:GOOGL",
+          "rerank_score": -5.409493446350098
+        },
+        {
+          "source_id": "earnings:GOOGL:Q2 2024",
+          "rerank_score": -5.7163848876953125
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:GOOGL:Q2 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\nGOOGL maintains a portfolio position weight of 8.2% with a beta of 1.18 relative to the S&P 500, reflecting moderate systematic risk exposure in our Technology sector allocation. The position carries a current market value of $4.7M with a YTD P&L of +$320K and a Buy rating based on recent earnings beat (+8% EPS surprise). Our risk metrics indicate a 1-day VaR of $94K at 95% confidence and a stress test showing resilience under a -15% market drawdown scenario, with an overall risk score of 6.2/10 for this holding.",
+      "trace_id": "0434d5d6b2b54c85",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1257,
+        "output_tokens": 173,
+        "cost_usd": 0.002334
+      }
+    },
+    {
+      "id": "rag-beta-NVDA",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the beta of NVDA?",
+      "variant": null,
+      "outputs": [
+        "The beta of NVDA is 1.06 [position:NVDA]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 7553.5,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:NVDA",
+          "rerank_score": 2.3453423976898193
+        },
+        {
+          "source_id": "risk:score:NVDA",
+          "rerank_score": -4.2120513916015625
+        },
+        {
+          "source_id": "earnings:NVDA:Q1 2024",
+          "rerank_score": -5.933748722076416
+        },
+        {
+          "source_id": "earnings:NVDA:Q2 2024",
+          "rerank_score": -6.031455039978027
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:NVDA:Q1 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:NVDA:Q2 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Portfolio Position - NVDA (NVIDIA Corporation)**\nAs of the latest rebalancing cycle, NVDA maintains a market value of $8.2M representing 3.1% of total portfolio weight with a beta of 1.87 relative to the S&P 500 benchmark. The elevated beta reflects the semiconductor sector's cyclical sensitivity and NVDA's growth trajectory, contributing to a VaR estimate of $340K at the 95% confidence level. Year-to-date P&L stands at +$1.2M with a buy rating maintained through the latest earnings call summary, which noted a 45% revenue beat and strong forward guidance on AI accelerator demand.",
+      "trace_id": "f0aad5e468724c33",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1409,
+        "output_tokens": 182,
+        "cost_usd": 0.002551
+      }
+    },
+    {
+      "id": "rag-eps-JPM-Q22024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What EPS did JPM report for Q2 2024?",
+      "variant": null,
+      "outputs": [
+        "JPM reported EPS of $4.81 for Q2 2024 [earnings:JPM:Q2 2024]. This was above the consensus estimate of $4.7 [derived:earnings_vs_estimate:JPM:Q2 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 20082.5,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:JPM:Q2 2024",
+          "rerank_score": 8.360824584960938
+        },
+        {
+          "source_id": "earnings:JPM:Q1 2024",
+          "rerank_score": 7.910848617553711
+        },
+        {
+          "source_id": "earnings:GOOGL:Q2 2024",
+          "rerank_score": 5.742391586303711
+        },
+        {
+          "source_id": "earnings:JNJ:Q2 2024",
+          "rerank_score": 5.71605920791626
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:JPM:Q2 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:JPM:Q1 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:GOOGL:Q2 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:JNJ:Q2 2024",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Internal Hedge Fund Dataset Record\n\nJPM reported Q2 2024 earnings with an EPS of $4.09, beating consensus estimates by $0.12 and driving a +2.3% single-day move in the equity position. The earnings call summary noted revenue growth of 8.2% YoY, supported by strong investment banking fees and net interest margin expansion despite the lower Fed funds rate environment. Our 2.1M share position (1.8% portfolio weight) generated +$187K in P&L on the beat, with the stock's 1.15 beta providing moderate upside capture during the broader financial sector rally that month.",
+      "trace_id": "47ca05c549784010",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1738,
+        "output_tokens": 209,
+        "cost_usd": 0.003061
+      }
+    },
+    {
+      "id": "rag-eps-NVDA-Q12024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What EPS did NVDA report for Q1 2024?",
+      "variant": null,
+      "outputs": [
+        "NVDA reported EPS of $1.77 for Q1 2024 [earnings:NVDA:Q1 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 63427.9,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:NVDA:Q1 2024",
+          "rerank_score": 8.395445823669434
+        },
+        {
+          "source_id": "earnings:NVDA:Q2 2024",
+          "rerank_score": 7.818975448608398
+        },
+        {
+          "source_id": "earnings:AAPL:Q1 2024",
+          "rerank_score": 5.390495300292969
+        },
+        {
+          "source_id": "earnings:TSLA:Q1 2024",
+          "rerank_score": 5.121612071990967
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:NVDA:Q1 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:NVDA:Q2 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:AAPL:Q1 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:TSLA:Q1 2024",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# NVDA Q1 2024 Earnings Record\n\nNVDA reported EPS of $0.61 for Q1 2024, beating consensus estimates by $0.08 and driving a significant positive P&L contribution across our semiconductor sector positions. The earnings call summary noted revenue of $7.19B, representing 262% YoY growth, which supported our overweight rating on the position and contributed to a portfolio weight increase from 8.2% to 9.1%. The beat triggered a reassessment of our stress tests and risk scores for the AI/semiconductor cluster, with VaR metrics improving as implied volatility compressed following the announcement.",
+      "trace_id": "6de7cf99adc345ce",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1738,
+        "output_tokens": 181,
+        "cost_usd": 0.002907
+      }
+    },
+    {
+      "id": "rag-high-beta",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which positions have a beta above 1.5?",
+      "variant": null,
+      "outputs": [
+        "According to the sources, the positions with beta above 1.5 are: AAPL, CVX, MA, TSLA, and UNH [fund:summary] [derived:portfolio_lists]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 60963.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 2.4319541454315186
+        },
+        {
+          "source_id": "risk:score:UNH",
+          "rerank_score": -3.3517367839813232
+        },
+        {
+          "source_id": "risk:score:CVX",
+          "rerank_score": -3.44093656539917
+        },
+        {
+          "source_id": "risk:score:MA",
+          "rerank_score": -3.4745845794677734
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\nPortfolio position TSLA in the Technology sector currently carries a beta of 1.87 with a market value of $2.3M representing 4.2% portfolio weight, supported by a positive P&L of $156K and a Buy rating. Similarly, position GME in Consumer Discretionary exhibits elevated systematic risk with a beta of 1.62, market value of $890K at 1.8% weight, though recent earnings call data showed an EPS miss that contributed to a negative P&L of -$42K. Both high-beta positions exceed our 1.5 threshold and warrant monitoring against current VaR and stress test parameters given elevated market volatility with VIX at 22.3 and PMI declining to 48.1.",
+      "trace_id": "683f5854cb54461f",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 960,
+        "output_tokens": 226,
+        "cost_usd": 0.002299
+      }
+    },
+    {
+      "id": "rag-largest-position",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which position has the largest market value?",
+      "variant": null,
+      "outputs": [
+        "Based on the sources provided, the position with the largest market value is GOOGL, which is part of the Technology sector [sector:Technology]. The Technology sector has a total market value of $15,215,512.94 [sector:Technology], and GOOGL is listed as one of six positions within this sector [sector:Technology]. However, the individual market value for GOOGL is not explicitly stated in the sources.\n\nAmong the individually detailed positions, GS has a market value of $750,816.36 [position:GS] and V has a market value of $193,335.39 [position:V].\n\nThe indexed data does not contain the specific market values for individual Technology sector positions to definitively identify which single position has the largest market value across the entire portfolio."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 3,
+            "matched": 3,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": false,
+        "missing_values": [],
+        "missing_terms": [
+          "UNH"
+        ]
+      },
+      "passed": false,
+      "latency_ms": 28596.7,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "sector:Technology",
+          "rerank_score": 0.8818460702896118
+        },
+        {
+          "source_id": "sector:Consumer Discretionary",
+          "rerank_score": -0.316919207572937
+        },
+        {
+          "source_id": "position:GS",
+          "rerank_score": -1.2676985263824463
+        },
+        {
+          "source_id": "position:V",
+          "rerank_score": -1.417231559753418
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\nAs of the latest portfolio rebalancing, our largest position by market value is a 12.5% weight allocation to NVDA in the Technology sector, representing $47.8M in market value with a beta of 1.85 and a YTD P&L of +$8.2M, currently rated as a Strong Buy. This concentration reflects our conviction in semiconductor demand drivers discussed during the recent earnings call where the company beat EPS expectations by 8%, and our stress tests indicate a 95% VaR of -$2.1M under a -2 standard deviation market shock scenario.",
+      "trace_id": "70f245243f6a4f43",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1051,
+        "output_tokens": 313,
+        "cost_usd": 0.002878
+      }
+    },
+    {
+      "id": "rag-loss-positions",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which positions currently have unrealized losses?",
+      "variant": null,
+      "outputs": [
+        "The positions with unrealized losses since average cost are: CVX (-21.66%), MA (-31.65%), XOM (-29.09%), UNH (-2.24%), and JNJ (-10.62%) [derived:portfolio_lists]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 5,
+            "matched": 5,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 6810.9,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:UNH",
+          "rerank_score": -0.6384046077728271
+        },
+        {
+          "source_id": "sector:Technology",
+          "rerank_score": -0.842725396156311
+        },
+        {
+          "source_id": "position:JNJ",
+          "rerank_score": -1.602905035018921
+        },
+        {
+          "source_id": "fund:summary",
+          "rerank_score": -1.678497552871704
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\nPortfolio position TSLA in the technology sector currently shows a market value of $2.3M against a cost basis of $2.51M, resulting in an unrealized loss of $210K and a negative P&L of -8.3% with a beta of 1.85. Similarly, position XOM in the energy sector is underwater with a market value of $1.8M versus cost basis of $1.95M, generating an unrealized loss of $150K and a rating of \"Hold\" pending the next earnings call summary. The portfolio's overall stress test results indicate these two positions are primary contributors to the current drawdown, with VaR and CVaR metrics flagging elevated downside risk in both holdings.",
+      "trace_id": "a214ed405c794201",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1138,
+        "output_tokens": 224,
+        "cost_usd": 0.002484
+      }
+    },
+    {
+      "id": "rag-macro-cpi-yoy",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What was the latest CPI YoY inflation reading?",
+      "variant": null,
+      "outputs": [
+        "The latest CPI YoY inflation reading was 4.59 [macro:2026-02]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 21999.2,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "macro:2025-09",
+          "rerank_score": 1.6334952116012573
+        },
+        {
+          "source_id": "macro:2025-10",
+          "rerank_score": 1.3946908712387085
+        },
+        {
+          "source_id": "macro:2026-01",
+          "rerank_score": 1.3648697137832642
+        },
+        {
+          "source_id": "macro:2026-02",
+          "rerank_score": 0.8799372315406799
+        },
+        {
+          "source_id": "derived:macro_changes:2025-09",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:macro_changes:2025-10",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:macro_changes:2026-01",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:macro_changes:2026-02",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Macro Indicator Note - Monthly Update (December 2024):** The latest CPI YoY inflation reading came in at 3.2%, down 15 basis points from the prior month, reflecting continued moderation in headline inflation driven by softer energy and food prices. The Fed funds rate remains at 4.25-4.50%, and the market is pricing in a 60% probability of a rate cut at the January FOMC meeting based on the improving inflation trajectory. This macro backdrop has reduced our portfolio VaR by 12 basis points to 2.8% at the 95% confidence level, though our stress test scenarios still show elevated CVaR under a stagflation shock.",
+      "trace_id": "0f80028b83d841e9",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 2785,
+        "output_tokens": 189,
+        "cost_usd": 0.004103
+      }
+    },
+    {
+      "id": "rag-macro-federal-funds-rate",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the latest Federal Funds Rate in the macro data?",
+      "variant": null,
+      "outputs": [
+        "The latest Federal Funds Rate in the macro data is 5.22 [macro:2026-02], recorded for 2026-02."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 54739.2,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "macro:2025-04",
+          "rerank_score": 6.638715744018555
+        },
+        {
+          "source_id": "macro:2026-02",
+          "rerank_score": 6.556557655334473
+        },
+        {
+          "source_id": "macro:2025-12",
+          "rerank_score": 6.547408103942871
+        },
+        {
+          "source_id": "macro:2025-11",
+          "rerank_score": 6.535597801208496
+        },
+        {
+          "source_id": "derived:macro_changes:2025-04",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:macro_changes:2026-02",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:macro_changes:2025-12",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:macro_changes:2025-11",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Macro Indicator Update - December 2024\n\nThe monthly macro indicator notes reflect the latest Federal Reserve policy decision, with the Fed funds rate currently set at 4.25-4.50 basis points following the December FOMC meeting. Supporting data includes CPI readings of 2.8% YoY, a 10-year Treasury yield of 4.12%, VIX at 18.3, and Manufacturing PMI at 49.2, indicating a moderating economic environment. These macro inputs have been incorporated into our portfolio risk models, with updated VaR and stress test scenarios reflecting the current rate environment's impact on our fixed income and equity positions.",
+      "trace_id": "c542aed39688453a",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 2785,
+        "output_tokens": 181,
+        "cost_usd": 0.004059
+      }
+    },
+    {
+      "id": "rag-mv-MSFT",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the market value of our MSFT holding?",
+      "variant": null,
+      "outputs": [
+        "The market value of the MSFT holding is $5,653,824.37 [position:MSFT]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 12662.4,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:MSFT",
+          "rerank_score": 6.453688621520996
+        },
+        {
+          "source_id": "market:MSFT",
+          "rerank_score": 4.301861763000488
+        },
+        {
+          "source_id": "sector:Technology",
+          "rerank_score": 3.5057339668273926
+        },
+        {
+          "source_id": "earnings:MSFT:Q1 2024",
+          "rerank_score": 1.3808207511901855
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:MSFT:Q1 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Portfolio Position - MSFT (Microsoft Corporation)**\nAs of the last rebalancing date, our MSFT position in the Technology sector carries a market value of $47.3M, representing 8.2% of total portfolio weight with a beta of 1.15 relative to the S&Y 500. Year-to-date P&L on the position stands at +$3.8M, supported by strong earnings performance where the company beat consensus EPS estimates by $0.12 in the most recent quarter. Our internal rating on MSFT remains Buy, with risk metrics showing a 1-day VaR of $890K and a stress test indicating resilience under a -15% sector shock scenario.",
+      "trace_id": "6c60d69c83844fdc",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1312,
+        "output_tokens": 196,
+        "cost_usd": 0.002521
+      }
+    },
+    {
+      "id": "rag-mv-UNH",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the market value of our UNH holding?",
+      "variant": null,
+      "outputs": [
+        "The market value of the UNH holding is $6,494,098.40 [position:UNH]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 20512.2,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:UNH",
+          "rerank_score": 6.870458602905273
+        },
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 4.1879563331604
+        },
+        {
+          "source_id": "market:UNH",
+          "rerank_score": 4.187812805175781
+        },
+        {
+          "source_id": "sector:Healthcare",
+          "rerank_score": 3.807917594909668
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Portfolio Position - UNH (UnitedHealth Group):** As of the latest rebalancing, our UNH position in the Healthcare sector carries a market value of $47.2M, representing 3.8% portfolio weight with a beta of 0.92 and YTD P&L of +$2.1M. The position maintains a Buy rating with a risk score of 6.2/10, supported by recent earnings that beat consensus EPS estimates by $0.15 on strong revenue growth. Current VaR at 95% confidence is $1.8M, and stress testing under a 200bps yield shock scenario shows manageable downside given the defensive characteristics of our Healthcare allocation.",
+      "trace_id": "4c15a4e3935142ca",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1135,
+        "output_tokens": 196,
+        "cost_usd": 0.002327
+      }
+    },
+    {
+      "id": "rag-n-positions",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "How many positions does the fund hold?",
+      "variant": null,
+      "outputs": [
+        "The fund holds 15 positions [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 0,
+            "matched": 0,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 21553.2,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 1.066064715385437
+        },
+        {
+          "source_id": "sector:Technology",
+          "rerank_score": -5.0987467765808105
+        },
+        {
+          "source_id": "sector:Consumer Discretionary",
+          "rerank_score": -5.6574273109436035
+        },
+        {
+          "source_id": "position:UNH",
+          "rerank_score": -6.569248199462891
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\nAs of the latest portfolio rebalancing on March 15, 2024, the fund maintained a diversified portfolio consisting of 47 active positions across multiple sectors including technology, healthcare, financials, and consumer discretionary, with an aggregate market value of $2.3 billion and a portfolio-level beta of 1.12. The position-level weights ranged from 0.8% to 4.2%, with the largest holding in a mega-cap tech stock (ticker: TECH) representing 4.2% of AUM and generating a YTD P&L of +$18.5M. Risk metrics indicated a 95% VaR of $12.3M and a CVaR of $15.7M, while stress tests under a +200bps yield shock scenario projected a portfolio loss of approximately 3.2%, well within the fund's risk tolerance parameters.",
+      "trace_id": "68be448eab2f4215",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1074,
+        "output_tokens": 219,
+        "cost_usd": 0.002386
+      }
+    },
+    {
+      "id": "rag-q-concentration",
+      "component": "MRM-001",
+      "grading": "grounded",
+      "question": "How concentrated is the portfolio?",
+      "variant": null,
+      "outputs": [
+        "The portfolio exhibits significant concentration breaches against policy limits [risk:concentration].\n\n**Single-name concentration:** The largest position is UNH at 20.07% of portfolio, followed by MSFT at 17.47%. Both exceed the illustrative 15.0% single-name limit [risk:concentration].\n\n**Sector concentration:** Technology represents 47.03% of the portfolio, substantially exceeding the 30.0% sector limit [risk:concentration].\n\n**Risk implications:** UNH carries a HIGH risk score (45/100) with elevated beta (1.58x) and high concentration flagged [risk:score:UNH]. MSFT's MEDIUM risk score (25/100) reflects its high concentration (17.47%) [risk:score:MSFT]. The recommended actions include monitoring MSFT and AAPL closely, and reviewing UNH's position size with consideration of a stop-loss [risk:score:MSFT], [risk:score:AAPL], [risk:score:UNH]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 7,
+            "matched": 7,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 8113.5,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:MSFT",
+          "rerank_score": 2.340885639190674
+        },
+        {
+          "source_id": "risk:score:AAPL",
+          "rerank_score": 0.700063169002533
+        },
+        {
+          "source_id": "risk:score:UNH",
+          "rerank_score": 0.4414837062358856
+        },
+        {
+          "source_id": "risk:concentration",
+          "rerank_score": -3.394341468811035
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Portfolio Concentration Analysis Record\n\nThe portfolio exhibits moderate concentration with the top 10 positions representing 42% of total market value, driven primarily by overweight allocations in Technology and Healthcare sectors accounting for 58% of portfolio weight. Concentration risk metrics indicate a Herfindahl index of 0.085 and a stress test scenario modeling a 15% sector rotation reveals potential CVaR impact of 320 basis points, suggesting elevated idiosyncratic risk relative to benchmark. The risk score for concentration stands at 6.8/10, with beta-weighted exposure concentrated in 12 core holdings that collectively drive 73% of portfolio P&L volatility.",
+      "trace_id": "1ad9585e127d4f23",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 848,
+        "output_tokens": 380,
+        "cost_usd": 0.003023
+      }
+    },
+    {
+      "id": "rag-q-macro",
+      "component": "MRM-001",
+      "grading": "grounded",
+      "question": "Summarize the latest macro environment.",
+      "variant": null,
+      "outputs": [
+        "As of 2025-12, the macro environment shows mixed signals [macro:2025-12]. The Federal Funds Rate stands at 4.92, with CPI YoY at 3.74 and Core PCE at 2.84. The Unemployment Rate is 3.99, while GDP Growth QoQ improved to 2.2\u2014a notable recovery from 0.35 in prior quarters [macro:2025-07].\n\nHowever, sentiment has deteriorated sharply. Consumer Confidence Index declined 28.5 points to 81.8 [derived:macro_changes:2025-12], and VIX increased 6.6 points to 28.01 [derived:macro_changes:2025-12]. The 10Y Treasury Yield rose to 4.88, while the 2Y Treasury Yield decreased to 5.23, maintaining yield curve inversion pressures.\n\nISM Manufacturing PMI remains subdued at 51.5 [macro:2025-12]. Overall, growth has rebounded but consumer confidence has collapsed, suggesting economic resilience masks underlying anxiety about future conditions."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 13,
+            "matched": 13,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 13224.4,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "macro:2025-04",
+          "rerank_score": -9.226478576660156
+        },
+        {
+          "source_id": "macro:2025-06",
+          "rerank_score": -9.379401206970215
+        },
+        {
+          "source_id": "macro:2025-07",
+          "rerank_score": -9.449308395385742
+        },
+        {
+          "source_id": "macro:2025-12",
+          "rerank_score": -9.462921142578125
+        },
+        {
+          "source_id": "derived:macro_changes:2025-04",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:macro_changes:2025-06",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:macro_changes:2025-07",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:macro_changes:2025-12",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Monthly Macro Indicator Notes - October 2024:** The Fed funds rate held steady at 4.75% as inflation pressures eased, with CPI printing at 2.3% YoY, supporting the case for a patient stance on further rate cuts. Treasury yields compressed across the curve, with the 10-year falling to 3.85%, while the VIX declined to 16.2 reflecting reduced equity volatility. Manufacturing PMI remained resilient at 52.1, indicating continued economic expansion, though services PMI softened slightly to 50.8, suggesting mixed momentum heading into Q4.",
+      "trace_id": "3378c72bc95d402e",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 2767,
+        "output_tokens": 398,
+        "cost_usd": 0.005233
+      }
+    },
+    {
+      "id": "rag-revenue-CVX-Q22024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What revenue did CVX report for Q2 2024?",
+      "variant": null,
+      "outputs": [
+        "CVX reported revenue of $117.6B for Q2 2024 [earnings:CVX:Q2 2024]. This result missed analyst estimates of $124.4B [derived:earnings_vs_estimate:CVX:Q2 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 18309.5,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:CVX:Q2 2024",
+          "rerank_score": 9.806293487548828
+        },
+        {
+          "source_id": "earnings:CVX:Q1 2024",
+          "rerank_score": 9.1087007522583
+        },
+        {
+          "source_id": "earnings:XOM:Q2 2024",
+          "rerank_score": 7.135506629943848
+        },
+        {
+          "source_id": "earnings:NVDA:Q2 2024",
+          "rerank_score": 7.132153511047363
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:CVX:Q2 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:CVX:Q1 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:XOM:Q2 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:NVDA:Q2 2024",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Earnings Call Summary \u2013 CVX Q2 2024:** Chevron Corporation reported Q2 2024 revenue of $60.2 billion, representing a 12% year-over-year decline driven by lower crude oil realizations and reduced production volumes. The company posted EPS of $2.84, missing consensus estimates by $0.15 due to downstream margin compression. Portfolio position in CVX maintained a 2.3% weight with a beta of 1.1 and a realized P&L of +$4.2M for the quarter, supported by the energy sector's relative outperformance despite the earnings miss.",
+      "trace_id": "856d4bc9c4604d1e",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1728,
+        "output_tokens": 210,
+        "cost_usd": 0.003056
+      }
+    },
+    {
+      "id": "rag-revenue-XOM-Q22024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What revenue did XOM report for Q2 2024?",
+      "variant": null,
+      "outputs": [
+        "XOM reported Revenue of $65.0B for Q2 2024 [earnings:XOM:Q2 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 20455.9,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:XOM:Q2 2024",
+          "rerank_score": 9.598089218139648
+        },
+        {
+          "source_id": "earnings:XOM:Q1 2024",
+          "rerank_score": 9.209588050842285
+        },
+        {
+          "source_id": "earnings:CVX:Q2 2024",
+          "rerank_score": 6.841646671295166
+        },
+        {
+          "source_id": "earnings:META:Q2 2024",
+          "rerank_score": 6.702688217163086
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:XOM:Q2 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:XOM:Q1 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:CVX:Q2 2024",
+          "rerank_score": null
+        },
+        {
+          "source_id": "derived:earnings_vs_estimate:META:Q2 2024",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Internal Hedge Fund Dataset Record\n\nXOM reported Q2 2024 revenue of $90.74B in its earnings call summary, representing a 3.2% YoY decline driven by lower commodity prices despite stable production volumes. The earnings beat EPS expectations at $2.14 versus consensus of $2.08, supported by strong downstream margins that offset upstream headwinds. This result contributed to XOM's energy sector position maintaining a 1.15 beta with a +$2.3M P&L contribution to the portfolio's $847M market value allocation. The beat rating and stable cash generation profile supported the position's hold rating despite elevated sector volatility reflected in the 18% VaR metric for energy holdings.",
+      "trace_id": "b040793ee29e418e",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1707,
+        "output_tokens": 192,
+        "cost_usd": 0.002934
+      },
+      "retried_after_error": "RuntimeError: grader unavailable: Gemini \u00b7 gemini-3.1-flash-lite: GoogleAPIError: 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing..."
+    },
+    {
+      "id": "rag-rsi-CVX",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the latest RSI-14 for CVX?",
+      "variant": null,
+      "outputs": [
+        "The latest RSI-14 for CVX is 75.9 [market:CVX]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 24337.3,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "market:CVX",
+          "rerank_score": 4.976428031921387
+        },
+        {
+          "source_id": "market:TSLA",
+          "rerank_score": -2.2053308486938477
+        },
+        {
+          "source_id": "market:XOM",
+          "rerank_score": -2.400238037109375
+        },
+        {
+          "source_id": "market:GS",
+          "rerank_score": -2.4990882873535156
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Position Ticker:** CVX | **Sector:** Energy | **Market Value:** $2.847M | **Weight:** 3.2% | **Beta:** 1.18 | **P&L:** +$156K YTD | **Rating:** Overweight. Recent technical analysis computed RSI-14 at 62.3 as of the latest market close, indicating moderately overbought conditions within the energy sector positioning. The stock remains a core holding despite elevated VIX environment (currently 18.4) and stress test results showing acceptable downside risk under oil price shock scenarios. Earnings call summary noted strong EPS beat and raised FY guidance, supporting the current overweight thesis.",
+      "trace_id": "1d7280ad3ddd4f35",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1093,
+        "output_tokens": 189,
+        "cost_usd": 0.002242
+      }
+    },
+    {
+      "id": "rag-tail-ratio",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the CVaR to VaR tail ratio?",
+      "variant": null,
+      "outputs": [
+        "The CVaR to VaR tail ratio is 1.34 [risk:cvar], characterized as Moderate tail risk."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 18178.9,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:cvar",
+          "rerank_score": 5.776294708251953
+        },
+        {
+          "source_id": "risk:var",
+          "rerank_score": -8.384665489196777
+        },
+        {
+          "source_id": "position:CVX",
+          "rerank_score": -9.436651229858398
+        },
+        {
+          "source_id": "risk:score:CVX",
+          "rerank_score": -9.869091987609863
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Risk Metrics Summary - Portfolio Analysis Q3 2024:** Our computed risk metrics indicate a CVaR (Conditional Value at Risk) of $2.847M against a VaR (Value at Risk) of $1.923M at the 95% confidence level, yielding a tail ratio of 1.48x, which suggests moderate tail risk concentration beyond our primary loss threshold. This CVaR to VaR ratio has remained relatively stable across stress tests despite elevated VIX readings (28.5) and recent portfolio rebalancing across our long equity positions in the technology and healthcare sectors. The risk score of 6.2/10 reflects this tail behavior, with our largest position (NVDA, 8.3% weight, beta 1.67) contributing disproportionately to downside scenarios in the stress test framework.",
+      "trace_id": "e3fd5993d63c4dc5",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1047,
+        "output_tokens": 226,
+        "cost_usd": 0.002395
+      }
+    },
+    {
+      "id": "rag-top-risk",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which position has the highest risk score, and what is the score?",
+      "variant": null,
+      "outputs": [
+        "Based on the indexed data, MA has the highest risk score at 50/100 [risk:score:MA]. \n\nMA is flagged as HIGH risk level due to elevated beta (1.59x) and severe drawdown (-31.65% unrealized loss). The next highest scores are XOM at 40/100 [risk:score:XOM] and CVX at 45/100 [risk:score:CVX], both also rated HIGH risk."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 7345.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:XOM",
+          "rerank_score": 2.9693660736083984
+        },
+        {
+          "source_id": "risk:score:TSLA",
+          "rerank_score": 2.8346619606018066
+        },
+        {
+          "source_id": "risk:score:MA",
+          "rerank_score": 2.442166328430176
+        },
+        {
+          "source_id": "risk:score:CVX",
+          "rerank_score": 2.1609063148498535
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Portfolio Risk Assessment - Monthly Review:** Our risk analytics dashboard flagged NVDA as the highest risk score position at 8.7 out of 10, driven by elevated beta of 2.3 and a 95% VaR of $2.1M against a $18.5M market value holding in the Technology sector. The position's CVaR stress test under a -2% market shock scenario projects potential losses of $3.4M, while recent earnings call notes indicate the company beat EPS expectations but provided conservative forward guidance, contributing to elevated volatility metrics. This risk score of 8.7 exceeds our second-highest position (TSLA at 7.9) and has triggered a review of our hedge ratios given current macro conditions with VIX at 22 and 10-year yields at 4.2%.",
+      "trace_id": "2c374f1caec747c2",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 865,
+        "output_tokens": 300,
+        "cost_usd": 0.002601
+      }
+    },
+    {
+      "id": "rag-var95",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the portfolio's 1-day 95% parametric VaR?",
+      "variant": null,
+      "outputs": [
+        "The portfolio's 1-day 95% parametric VaR is $829,099.56, representing 2.562% of value [risk:var]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 3,
+            "matched": 3,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 10534.1,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:var",
+          "rerank_score": 8.573012351989746
+        },
+        {
+          "source_id": "risk:cvar",
+          "rerank_score": 4.477097511291504
+        },
+        {
+          "source_id": "risk:stress:flash_crash",
+          "rerank_score": -7.177605628967285
+        },
+        {
+          "source_id": "risk:score:AAPL",
+          "rerank_score": -7.927636623382568
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\n**Risk Metrics Summary - Portfolio Daily Analysis:** As of the monthly risk review, the portfolio's 1-day 95% parametric VaR was calculated at $2.47M, representing a potential loss threshold that would be exceeded only 5% of the time under normal market conditions. This VaR estimate was derived from the covariance matrix of daily returns across all sector positions, with the Technology and Financials sectors contributing the largest marginal VaR components at $890K and $620K respectively. The parametric methodology assumed a normal distribution of returns and incorporated the portfolio's aggregate beta of 1.18 relative to the S&P 500, with stress tests indicating the CVaR (expected shortfall) at 95% confidence would reach approximately $3.8M under tail risk scenarios.",
+      "trace_id": "03c92935a82445db",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1021,
+        "output_tokens": 223,
+        "cost_usd": 0.00235
+      }
+    },
+    {
+      "id": "rag-var99",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the portfolio's 1-day 99% VaR?",
+      "variant": null,
+      "outputs": [
+        "The portfolio's 1-day 99% VaR is $1,172,331.66 [risk:var]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 39406.1,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:var",
+          "rerank_score": 7.2048211097717285
+        },
+        {
+          "source_id": "risk:cvar",
+          "rerank_score": 4.341711044311523
+        },
+        {
+          "source_id": "risk:stress:flash_crash",
+          "rerank_score": -4.680037498474121
+        },
+        {
+          "source_id": "risk:score:AAPL",
+          "rerank_score": -7.264277458190918
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\nAs of the monthly risk assessment dated March 15, 2024, the portfolio's 1-day Value-at-Risk (VaR) at the 99% confidence level was calculated at $2.47 million, representing a potential maximum loss under normal market conditions with only a 1% probability of exceeding this threshold. This VaR metric was computed using historical simulation across 252 trading days of returns data, incorporating the current portfolio weight distribution across equities (68%), fixed income (22%), and alternatives (10%), with a portfolio beta of 1.12 relative to the S&P 500. The corresponding Conditional Value-at-Risk (CVaR) or expected shortfall was $3.89 million, indicating the average loss magnitude in tail events beyond the 99% VaR boundary. Stress testing under a 2008-style market shock scenario projected potential losses of $5.2 million, with the portfolio's overall risk score elevated to 7.3/10 due to elevated VIX levels (currently 19.4) and compressed credit spreads.",
+      "trace_id": "de7eec523007421a",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1017,
+        "output_tokens": 278,
+        "cost_usd": 0.002648
+      }
+    },
+    {
+      "id": "rag-weighted-beta",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the portfolio's value-weighted beta?",
+      "variant": null,
+      "outputs": [
+        "The portfolio's value-weighted portfolio beta is 1.298 [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 24626.2,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:var",
+          "rerank_score": 4.939711570739746
+        },
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 4.719372749328613
+        },
+        {
+          "source_id": "position:V",
+          "rerank_score": -1.1764135360717773
+        },
+        {
+          "source_id": "position:AAPL",
+          "rerank_score": -1.6333420276641846
+        },
+        {
+          "source_id": "derived:portfolio_lists",
+          "rerank_score": null
+        }
+      ],
+      "hypothetical_passage": "# Hedge Fund Internal Dataset Record\n\nThe portfolio's value-weighted beta was calculated at 1.18 as of the end of Q3, derived by aggregating individual position betas weighted by their respective market values across all holdings. The computation incorporated 47 active positions spanning technology (beta 1.35, 28% weight), healthcare (beta 0.92, 22% weight), and financials (beta 1.05, 18% weight) sectors, with the remaining allocation distributed across consumer discretionary and industrials. This elevated portfolio beta of 1.18 relative to the S&P 500 benchmark reflected our overweight positioning in higher-beta growth equities, consistent with the current macro environment of declining yields and low VIX readings around 14.2. The risk metrics team flagged that under stress test scenarios involving a 200 basis point Fed funds rate shock, the portfolio's beta sensitivity could expand to 1.31, with corresponding CVaR estimates increasing by 15% relative to baseline conditions.",
+      "trace_id": "bb8f40d9c80545ae",
+      "usage": {
+        "bedrock_calls": 2,
+        "input_tokens": 1144,
+        "output_tokens": 245,
+        "cost_usd": 0.002606
+      }
+    }
+  ],
+  "components": {
+    "MRM-001": {
+      "n_items": 23,
+      "passed": 22,
+      "pass_rate": 0.9565,
+      "mean_groundedness": 1.0,
+      "exact_fact_accuracy": 0.9524,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED",
+      "usage": {
+        "bedrock_calls": 46,
+        "input_tokens": 32629,
+        "output_tokens": 5364,
+        "cost_usd": 0.065394
+      }
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "max_cost_usd": 1.0,
+  "pricing": {
+    "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "usd_per_1m_tokens": {
+      "input": 1.1,
+      "output": 5.5
+    },
+    "source": "AWS Pricing API, us.* inference profile, on-demand"
+  },
+  "usage": {
+    "bedrock_calls": 46,
+    "input_tokens": 32629,
+    "output_tokens": 5364,
+    "cost_usd": 0.065394
+  },
+  "finished_at": "2026-09-30T16:33:07+00:00"
+}

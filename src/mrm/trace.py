@@ -34,6 +34,8 @@ class TraceRecord:
     model_id: str
     prompt_versions: List[str]
     mode: str = "live"                      # live | demo | blocked
+    answer_model: Optional[str] = None      # model that actually produced the output
+    fallback_reason: Optional[str] = None   # why earlier providers in the chain were not used
     embedding_model: Optional[str] = None
     index_manifest_hash: Optional[str] = None
     source_ids: List[str] = field(default_factory=list)

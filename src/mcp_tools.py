@@ -262,8 +262,8 @@ def rag_pipeline_info() -> Dict[str, Any]:
             "reranker": f"{RERANKER_MODEL} cross-encoder, top {RERANK_TOP_N}",
         },
         "llm_integration": {
-            "provider": config.get_provider(),
-            "models": config.all_model_ids(),
+            "provider_chain": config.provider_order() + ["demo"],
+            "models": {p: config.all_model_ids(p) for p in config.provider_order()},
             "free_tier_label": config.free_tier_label(),
         },
         "data_sources": [

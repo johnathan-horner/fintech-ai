@@ -139,6 +139,86 @@ DATA:
 RECOMMENDATIONS:""",
 )
 
+# -- Claude Haiku 4.5 (Bedrock) variants -------------------------------------------------
+# Separate prompt versions so the Gemini-approved prompts (and their hashes) stay unchanged.
+# They address the failure modes measured on Haiku (heldout-20260930T1*-bedrock): relabelled
+# periods ("YTD"), derived/rounded numbers, unit conversions (bps), ratio-to-percent claims,
+# inverted directions and incomplete lists.
+
+HAIKU_RULES = """STRICT RULES:
+- Every number you write must appear verbatim in the inputs. Do not round, convert units (for example
+  percentage points to bps), add, subtract, multiply, divide or compute differences, sums or percentages.
+- Quote metric names and their periods / bases exactly as labelled in the inputs. Never relabel a period:
+  a return over the market-data window or since average cost is NOT year-to-date.
+- Do not turn beta, tail ratio or any other ratio into a percentage or a "moves X% more" claim; state the
+  ratio as written.
+- Use the direction words given in the inputs (up/down, increased/decreased, above/below); never infer a
+  direction by comparing two numbers yourself.
+- When listing items that match a condition, include every matching item present in the inputs."""
+
+RAG_ANSWER_HAIKU = register(
+    "rag_answer_haiku",
+    "1.0.0",
+    """You are an analyst assistant for a hedge fund's internal research desk.
+Answer the QUESTION using ONLY the SOURCES below (synthetic demo data).
+
+""" + HAIKU_RULES + """
+- Cite the sources you use inline with their ids in square brackets, e.g. [position:AAPL].
+- If the sources do not contain the answer, say: "The indexed data does not contain this."
+- At most 150 words. Analysis only, not investment advice.
+
+CONVERSATION SO FAR (most recent last):
+{history}
+
+SOURCES:
+{sources}
+
+QUESTION: {question}
+
+ANSWER:""",
+)
+
+MARKET_ANALYSIS_HAIKU = register(
+    "market_analysis_haiku",
+    "1.0.0",
+    """You are the market analysis agent for a hedge fund (synthetic demo portfolio).
+Using ONLY the DATA below, write a concise market analysis report in Markdown:
+1. Sector exposure and performance (sector weights and average returns since cost, labelled as in the DATA).
+2. Technical signals per position (RSI, SMA-50 vs SMA-200, MACD, volume vs 20-day average, and the price
+   change over the market-data window with its stated period) - flag concerning ones.
+3. Earnings pattern from the latest quarter using only the precomputed above/below-estimate statements
+   and amounts in the DATA.
+4. Macro backdrop (latest readings, the provided 10Y-2Y spread and the month-over-month changes with their
+   stated direction and units, regime).
+""" + HAIKU_RULES + """
+Name tickers; at most 300 words; analysis only, not investment advice.
+
+DATA:
+{data}
+
+MARKET ANALYSIS REPORT:""",
+)
+
+PORTFOLIO_RECOMMENDATIONS_HAIKU = register(
+    "portfolio_recommendations_haiku",
+    "1.0.0",
+    """You are the portfolio management agent for a hedge fund (synthetic demo portfolio).
+Using ONLY the DATA below, propose actions for the portfolio manager to review:
+1. Immediate actions for CRITICAL/HIGH risk positions (reduce, hedge, review) - one line per ticker,
+   formatted as "**TICKER**: <verb> ..." with exactly one of the verbs reduce, trim, hedge, hold or add.
+2. Concentration adjustments for sectors or names above the policy limits, quoting the excess figures
+   exactly as given in the DATA (do not recompute target values or remaining weights).
+3. Tax-loss harvesting candidates: every position with an unrealized loss listed in the DATA.
+""" + HAIKU_RULES + """
+Do not invent prices or targets. At most 250 words; suggestions for human review, not investment advice
+and not orders.
+
+DATA:
+{data}
+
+RECOMMENDATIONS:""",
+)
+
 # Prompts used by each inventory component to produce its output.
 COMPONENT_PROMPTS = {
     "MRM-001": ["rag_answer", "hyde_passage"],
@@ -147,3 +227,22 @@ COMPONENT_PROMPTS = {
     "MRM-004": ["portfolio_recommendations"],
     "MRM-005": ["market_analysis", "risk_report", "portfolio_recommendations"],
 }
+
+# Provider-specific prompt selection. Gemini uses COMPONENT_PROMPTS unchanged; Bedrock (Claude Haiku
+# 4.5) swaps in the *_haiku variants. risk_report is shared (MRM-003 was approved on Haiku with it).
+HAIKU_VARIANTS = {
+    "rag_answer": "rag_answer_haiku",
+    "market_analysis": "market_analysis_haiku",
+    "portfolio_recommendations": "portfolio_recommendations_haiku",
+}
+
+
+def prompt_name_for(base: str, provider: str = "gemini") -> str:
+    """Registered prompt name to use for ``base`` on ``provider``."""
+    if provider == "bedrock":
+        return HAIKU_VARIANTS.get(base, base)
+    return base
+
+
+def component_prompts(inventory_id: str, provider: str = "gemini") -> list:
+    return [prompt_name_for(n, provider) for n in COMPONENT_PROMPTS.get(inventory_id, [])]

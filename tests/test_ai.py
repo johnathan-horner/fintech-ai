@@ -175,7 +175,7 @@ def test_orchestrator_graph_with_fakes_and_blocked_agent():
 def test_missing_key_falls_back_to_demo():
     calls = []
     res = run_guarded(lambda: calls.append(1) or {"x": 1}, lambda reason: {"text": reason})
-    assert res["mode"] == "demo" and "No Gemini API key" in res["reason"] and not calls
+    assert res["mode"] == "demo" and "No LLM provider configured" in res["reason"] and not calls
 
 
 def test_429_falls_back_to_demo():
