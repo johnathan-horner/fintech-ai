@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.llm import config  # noqa: E402
 
 st.set_page_config(
-    page_title="FinTech AI -- Hedge Fund Intelligence",
+    page_title="FinTech AI: Hedge Fund Intelligence",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -79,7 +79,7 @@ if LIVE_AVAILABLE:
     st.info("Synthetic portfolio data. AI outputs are labelled **Live AI** or **Demo mode**; "
             f"live use is gated by model approvals and capped at {MAX_LIVE_REQUESTS_PER_SESSION} requests per session.")
 else:
-    st.info("**Demo mode** -- synthetic portfolio data; quant metrics are computed live, AI sections show "
+    st.info("**Demo mode**: synthetic portfolio data; quant metrics are computed live, AI sections show "
             "deterministic templates filled from the data (no Bedrock credentials and no Gemini API key configured).")
 
 from streamlit_app.demo_pages import (  # noqa: E402

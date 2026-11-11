@@ -193,7 +193,7 @@ def page_portfolio():
     positions = portfolio.get("positions", [])
 
     st.title(k["fund_name"])
-    st.caption(f"Portfolio Overview  --  As of {k['as_of_date']}  --  synthetic data")
+    st.caption(f"Portfolio Overview · As of {k['as_of_date']} · synthetic data")
 
     col1, col2, col3, col4, col5 = st.columns(5)
     col1.metric("Total AUM", _m(k["aum"]))
@@ -263,7 +263,7 @@ def page_market():
                "ALERT = RSI extreme and SMA-50 below SMA-200; WATCH = one of those.")
     ok = []
     for t, s in sorted(sig.items(), key=lambda kv: {"ALERT": 0, "WATCH": 1, "OK": 2}[kv[1]["status"]]):
-        line = md_money(f"**{t} -- {s['status']}**  \n" + "; ".join(s["signals"]) +
+        line = md_money(f"**{t}: {s['status']}**  \n" + "; ".join(s["signals"]) +
                         f"; close ${s['close']:,.2f} on {s['date']}")
         if s["status"] == "ALERT":
             st.error(line)
@@ -275,7 +275,7 @@ def page_market():
         st.success(f"No RSI extreme and SMA-50 above SMA-200: {', '.join(ok)}")
 
     st.divider()
-    st.subheader("Analysis Report  --  multi-agent orchestrator (market agent section)")
+    st.subheader("Analysis Report: multi-agent orchestrator (market agent section)")
     _orchestrator_controls("run_orch_market")
     _render_section("market", lambda: demo_market_report(load_portfolio()))
 
@@ -320,7 +320,7 @@ def page_risk():
         for p in contrib
     )
     st.warning(md_money(
-        f"**CVaR vs VaR -- Basel III alignment**  \n"
+        f"**CVaR vs VaR: Basel III alignment**  \n"
         f"Monte Carlo CVaR of ${abs(cvar['cvar_1d']):,.0f} is {cvar['tail_ratio']}x the Monte Carlo VaR of "
         f"${abs(cvar['var_1d']):,.0f} (parametric VaR: ${abs(var['portfolio_var_1d']):,.0f}). "
         f"On days that breach VaR, average losses are higher; Basel III FRTB uses Expected Shortfall for this reason.  \n"
@@ -347,7 +347,7 @@ def page_risk():
         st.info(f"Backtest unavailable: {type(exc).__name__}")
 
     st.divider()
-    st.subheader(f"Stress Test Scenarios  --  {len(stress['scenarios'])} Historical Events")
+    st.subheader(f"Stress Test Scenarios: {len(stress['scenarios'])} Historical Events")
     scenarios = stress.get("scenarios", {})
     cols = st.columns(len(scenarios))
     for i, (key, s) in enumerate(scenarios.items()):
@@ -359,7 +359,7 @@ def page_risk():
     st.subheader("Position Risk Scores")
     for s in scored[:6]:
         lvl, score = s["risk_level"], s["risk_score"]
-        with st.expander(f"{s['ticker']}  --  Score: {score}/100  --  {lvl}"):
+        with st.expander(f"{s['ticker']} · Score: {score}/100 · {lvl}"):
             c1, c2 = st.columns(2)
             c1.metric("Risk Score", f"{score}/100")
             {"CRITICAL": c1.error, "HIGH": c1.warning, "MEDIUM": c1.info}.get(lvl, c1.success)(f"Level: {lvl}")
@@ -370,7 +370,7 @@ def page_risk():
                 st.write(md_money(f"- {flag}"))
 
     st.divider()
-    st.subheader("AI Risk Narrative  --  risk agent (MRM-003)")
+    st.subheader("AI Risk Narrative: risk agent (MRM-003)")
     _orchestrator_controls("run_orch_risk")
     _render_section("risk", lambda: demo_risk_report(load_portfolio()))
 
@@ -396,7 +396,7 @@ def page_portfolio_management():
     for it in items:
         p = by_ticker[it["ticker"]]
         body = md_money(
-            f"**{it['action'].upper()}: {it['ticker']}  --  {it['risk_level']} (score {it['risk_score']}/100)**  \n"
+            f"**{it['action'].upper()}: {it['ticker']} · {it['risk_level']} (score {it['risk_score']}/100)**  \n"
             f"Current: ${p['market_value']:,.0f} / {p['weight_pct']}% weight, beta {p['beta']}, P&L {p['pnl_pct']}%.  \n"
             f"Flags: {'; '.join(it['flags'])}"
         )
@@ -418,7 +418,7 @@ def page_portfolio_management():
         ], columns=["Ticker", "Unrealized P&L", "P&L %"]), width="stretch", hide_index=True)
 
     st.divider()
-    st.subheader("AI Recommendations  --  portfolio agent (MRM-004)")
+    st.subheader("AI Recommendations: portfolio agent (MRM-004)")
     _orchestrator_controls("run_orch_pm")
     _render_section("portfolio", lambda: demo_portfolio_recommendations(portfolio))
 
