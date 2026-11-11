@@ -5,7 +5,7 @@
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Status: Live.** The public demo works today (checked 2026-10-23; the free Streamlit host puts it to sleep when idle and it wakes on the first visit). The live demo runs branch `main`, which answers with Google Gemini. This branch makes Amazon Bedrock Claude Haiku 4.5 the primary model; all five AI components passed held-out validation on Haiku, so once this branch is merged, live answers will come from Bedrock with Gemini as the fallback.
+**Status: Live.** The public demo loads today (checked 2026-11-10; the free Streamlit host puts it to sleep when idle and it wakes on the first visit). Live answers try Amazon Bedrock Claude Haiku 4.5 first and fall back to Google Gemini; all five AI components passed held-out validation on both. On 2026-11-10 the app's AWS key was rejected, so the chat answered with the Gemini fallback until a valid key is set.
 
 Independent reference project by Shoot It Analytics LLC. Built with public or synthetic data.
 
@@ -28,7 +28,7 @@ Every AI output carries:
 
 Live AI is capped at 10 requests per browser session. When live AI is not available, the app shows deterministic output built from the same computed numbers.
 
-## Why I built this
+## Case study
 
 **The problem.** Banks and investment firms that put language models near investment decisions
 are expected to manage them like any other model: an inventory, independent validation, ongoing
@@ -114,7 +114,7 @@ All result files are in `data/eval/results/`. Earlier Haiku runs with the shared
 
 VaR backtest (MRM-006): out-of-sample 99% VaR on a rolling 250-day window over seeded synthetic prices, 254 test days, 2 to 3 exceptions depending on method, Kupiec p-values 0.72 to 0.78, Basel GREEN (run `heldout-20260929T210703Z`).
 
-Re-checked on 2026-10-23: running `portfolio_backtest()` from `src/mrm/validation/model_validator.py` reproduces these backtest numbers (historical 3 exceptions, p = 0.778; parametric and beta-proxy 2 exceptions, p = 0.724), and the full test suite passes (118 tests).
+Re-checked on 2026-10-23: running `portfolio_backtest()` from `src/mrm/validation/model_validator.py` reproduces these backtest numbers (historical 3 exceptions, p = 0.778; parametric and beta-proxy 2 exceptions, p = 0.724), and the full test suite passed (118 tests at that time; 154 on 2026-11-10).
 
 ## How to run it
 
@@ -149,7 +149,7 @@ The MCP server needs its own environment: `pip install -r requirements-mcp.txt &
 - Synthetic portfolio and prices. Results on real markets would differ.
 - The held-out evaluation set is small (23 RAG questions, 10 items for each agent and the orchestrator).
 - The grader is itself a language model and can be wrong; a deterministic numeric check backs it up.
-- The live demo still answers with Gemini until this branch is merged.
+- Live Bedrock answers need a valid AWS key in the app's Streamlit secrets; without one the app falls back to Gemini, then to demo mode.
 - The AWS CDK stack in `infra/` passes `cdk synth` but has never been deployed.
 
 ## What's next
