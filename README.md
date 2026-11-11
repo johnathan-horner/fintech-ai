@@ -51,8 +51,9 @@ version approved by a held-out evaluation before it may answer, and every answer
 - **Cost:** a 10-request cap per browser session, the cheapest capable models, and a dry-run cost
   estimate before any evaluation run.
 
-**Results.** On the held-out split with Bedrock Claude Haiku 4.5: the RAG chat passed 22 of 23
-questions (95.2% exact-fact accuracy) and all five AI components were approved. The out-of-sample
+**Results.** On the held-out split with Bedrock Claude Haiku 4.5: the RAG chat passed 23 of 23
+questions (100% exact-fact accuracy, re-measured 2026-11-10; 22 of 23 before) and all five AI
+components were approved. The out-of-sample
 VaR backtest over 254 days had 2 to 3 exceptions with Kupiec p-values 0.72 to 0.78 (Basel green
 zone). Details below.
 
@@ -92,25 +93,27 @@ How it is measured: `python scripts/run_eval.py --split heldout` on the held-out
 
 | Component | Prompt version | Held-out items | Passed | Mean groundedness | Exact-fact accuracy | Status | Eval run |
 |---|---|---|---|---|---|---|---|
-| MRM-001 RAG chat | rag_answer_haiku@1.0.0 | 23 | 22/23 (0.957) | 1.000 | 0.952 | APPROVED | heldout-20260930T160709Z-bedrock |
+| MRM-001 RAG chat | rag_answer_haiku@1.0.0 | 23 | 23/23 (1.000) | 1.000 | 1.000 | APPROVED | heldout-20261111T014446Z-bedrock |
 | MRM-002 Market agent | market_analysis_haiku@1.0.0 | 10 | 10/10 | 0.991 | n/a | APPROVED | heldout-20260930T163311Z-bedrock |
 | MRM-003 Risk agent | risk_report@1.2.0 | 10 | 9/10 | 0.996 | n/a | APPROVED | heldout-20260930T152404Z-bedrock |
 | MRM-004 Portfolio agent | portfolio_recommendations_haiku@1.0.0 | 10 | 10/10 | 1.000 | n/a | APPROVED | heldout-20260930T164023Z-bedrock |
 | MRM-005 Orchestrator (all 3 sections must pass) | the three agent prompts above | 10 | 9/10 | 0.991 | n/a | APPROVED | heldout-20261016T064021Z-bedrock |
 
-Measured Bedrock cost of these runs, from Bedrock usage data: MRM-001 $0.065, MRM-002 $0.125, MRM-003 $0.083, MRM-004 $0.062, MRM-005 $0.272.
+Measured Bedrock cost of these runs, from Bedrock usage data: MRM-001 $0.067 (2026-11-10 run), MRM-002 $0.125, MRM-003 $0.083, MRM-004 $0.062, MRM-005 $0.272.
 
 **Gemini (fallback).** Answers by `gemini-3.5-flash-lite`, graded by `gemini-3.1-flash-lite`.
 
 | Component | Held-out items | Passed | Mean groundedness | Exact-fact accuracy | Status | Eval run |
 |---|---|---|---|---|---|---|
-| MRM-001 RAG chat | 23 | 22/23 (0.957) | 1.000 | 0.952 | APPROVED | heldout-20260929T210703Z |
+| MRM-001 RAG chat | 23 | 23/23 (1.000) | 1.000 | 1.000 | APPROVED | heldout-20261111T014939Z |
 | MRM-002 Market agent | 10 | 10/10 | 1.000 | n/a | APPROVED | heldout-20260930T004656Z |
 | MRM-003 Risk agent | 10 | 10/10 | 1.000 | n/a | APPROVED | heldout-20260930T010751Z |
 | MRM-004 Portfolio agent | 10 | 10/10 | 1.000 | n/a | APPROVED | heldout-20260930T010751Z |
 | MRM-005 Orchestrator | 10 | 10/10 | 0.999 | n/a | APPROVED | heldout-20260930T005058Z |
 
 All result files are in `data/eval/results/`. Earlier Haiku runs with the shared prompts (heldout-20260930T142057Z to T153729Z, bedrock) scored lower: MRM-002 and MRM-005 FAILED, mostly because Haiku mislabeled return periods. That led to the Haiku-specific prompts above.
+
+MRM-001 was re-measured on 2026-11-10 after one change to the retrieval data: a new document, `fund:pnl_ranking`, ranks all 15 positions by unrealized P&L. Each position is its own document and the chat sees only the top 4 re-ranked chunks, so it could not answer questions that compare every position; on 2026-11-10 the live chat said the data did not show which position had the largest unrealized loss (it is CVX, -$923,765.75). Before the change both providers scored 22/23 (exact-fact accuracy 0.952): Gemini missed the list of positions with losses (`heldout-20260929T210703Z`), and Bedrock missed the largest position by market value because the fund summary was not retrieved (`heldout-20260930T160709Z-bedrock`). After the change both scored 23/23. The Gemini gain comes from the new document. The Bedrock miss was on a question the change does not touch, so that gain is run-to-run variation in retrieval, not the fix. With 23 questions, one item moves the pass rate by about 4 points.
 
 VaR backtest (MRM-006): out-of-sample 99% VaR on a rolling 250-day window over seeded synthetic prices, 254 test days, 2 to 3 exceptions depending on method, Kupiec p-values 0.72 to 0.78, Basel GREEN (run `heldout-20260929T210703Z`).
 

@@ -38,6 +38,7 @@ def load_portfolio_documents(portfolio: dict | None = None) -> List[Document]:
         ),
         metadata={"source_id": "fund:summary", "source": "portfolio", "type": "fund_summary"},
     )]
+    docs.extend(_pnl_ranking_documents(data["positions"], k))
     for name, s in k["sector_weights"].items():
         docs.append(Document(
             page_content=(
@@ -61,6 +62,41 @@ def load_portfolio_documents(portfolio: dict | None = None) -> List[Document]:
                       "ticker": p["ticker"], "sector": p["sector"]},
         ))
     return docs
+
+
+def _pnl_ranking_documents(positions: List[dict], k: dict) -> List[Document]:
+    """One document ranking every position by unrealized P&L.
+
+    Each position is its own document and the chat sees only the top re-ranked chunks, so
+    questions that compare all positions ("largest unrealized loss") need this summary.
+    """
+    if not positions:
+        return []
+    ranked = sorted(positions, key=lambda p: p["unrealized_pnl"])
+    by_pct = sorted(positions, key=lambda p: p["pnl_pct"])
+    losses = k["loss_positions"]
+
+    def entry(p: dict) -> str:
+        return f"{p['ticker']} {_money(p['unrealized_pnl'])} ({p['pnl_pct']}%)"
+
+    loss_text = (
+        f"Largest unrealized loss in dollars: {entry(ranked[0])}. "
+        f"Largest unrealized loss in percent: {entry(by_pct[0])}. "
+        if losses else "No position has an unrealized loss. "
+    )
+    return [Document(
+        page_content=(
+            f"Unrealized P&L ranking across all {len(positions)} positions. "
+            f"Positions with unrealized losses ({len(losses)}): "
+            f"{', '.join(x['ticker'] for x in losses) or 'none'}. "
+            + loss_text
+            + f"Largest unrealized gain in dollars: {entry(ranked[-1])}. "
+            f"Largest unrealized gain in percent: {entry(by_pct[-1])}. "
+            "All positions by unrealized P&L in dollars, largest loss first: "
+            + "; ".join(f"{i}. {entry(p)}" for i, p in enumerate(ranked, 1)) + "."
+        ),
+        metadata={"source_id": "fund:pnl_ranking", "source": "portfolio", "type": "pnl_ranking"},
+    )]
 
 
 def load_market_documents() -> List[Document]:
