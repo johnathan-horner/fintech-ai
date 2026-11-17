@@ -1,3 +1,5 @@
+Superseded: describes an earlier design. See README for the current architecture.
+
 # ADR-004: Multi-Source Financial Data Strategy
 
 ## Status: Accepted
