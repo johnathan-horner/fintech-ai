@@ -1,0 +1,1507 @@
+{
+  "run_id": "heldout-20261111T014939Z",
+  "split": "heldout",
+  "fake": false,
+  "started_at": "2026-11-11T01:49:39+00:00",
+  "provider": "gemini",
+  "models": {
+    "chat": "gemini-3.5-flash-lite",
+    "grader": "gemini-3.1-flash-lite",
+    "hyde": "gemini-3.1-flash-lite",
+    "embedding": "gemini-embedding-001"
+  },
+  "grader": {
+    "provider": "gemini",
+    "model_id": "gemini-3.1-flash-lite"
+  },
+  "versions": {
+    "MRM-001": {
+      "model_id": "gemini-3.5-flash-lite+hyde:gemini-3.1-flash-lite+emb:gemini-embedding-001",
+      "prompt_versions": [
+        "hyde_passage@1.0.0#abb1a9d5",
+        "rag_answer@1.0.0#b6aacf6d"
+      ],
+      "provider": "gemini"
+    }
+  },
+  "throttle_s": 4.0,
+  "items": [
+    {
+      "id": "rag-aum",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the fund's total AUM?",
+      "variant": null,
+      "outputs": [
+        "The total AUM for the Horner Capital Alpha Fund is $32,355,808.19 [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 15449.2,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 5.210399627685547
+        },
+        {
+          "source_id": "macro:2025-04",
+          "rerank_score": -8.28866958618164
+        },
+        {
+          "source_id": "macro:2025-12",
+          "rerank_score": -8.343172073364258
+        },
+        {
+          "source_id": "macro:2025-06",
+          "rerank_score": -8.421784400939941
+        }
+      ],
+      "hypothetical_passage": "Passage: As of the Q3 closing period, the aggregate market value across all active sub-portfolios reflects a total AUM of $4.2B. This capital allocation is supported by a consolidated risk profile showing a 10-day 99% VaR of $12.5M and remains aligned with current macro constraints regarding Fed funds and yield curve volatility.",
+      "trace_id": "75814ff039b54a9e",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-beta-GOOGL",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the beta of GOOGL?",
+      "variant": null,
+      "outputs": [
+        "The beta of GOOGL is 1.41 [position:GOOGL]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 9994.0,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:GOOGL",
+          "rerank_score": 4.3791069984436035
+        },
+        {
+          "source_id": "position:GOOGL",
+          "rerank_score": 2.3581936359405518
+        },
+        {
+          "source_id": "market:GOOGL",
+          "rerank_score": -5.409493446350098
+        },
+        {
+          "source_id": "earnings:GOOGL:Q2 2024",
+          "rerank_score": -5.7163848876953125
+        }
+      ],
+      "hypothetical_passage": "Passage: Portfolio position record for Ticker: GOOGL, Sector: Communication Services, Market Value: $450M, Weight: 3.2%, Beta: 1.08, P&L: +$12M, Rating: Overweight. Current risk metrics confirm a VaR of 2.1% and a CVaR of 3.4% for this position.",
+      "trace_id": "9876da8904cb429e",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-beta-NVDA",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the beta of NVDA?",
+      "variant": null,
+      "outputs": [
+        "The beta of NVDA is 1.06 [position:NVDA]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 6741.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:NVDA",
+          "rerank_score": 2.3453423976898193
+        },
+        {
+          "source_id": "risk:score:NVDA",
+          "rerank_score": -4.2120513916015625
+        },
+        {
+          "source_id": "earnings:NVDA:Q1 2024",
+          "rerank_score": -5.933748722076416
+        },
+        {
+          "source_id": "earnings:NVDA:Q2 2024",
+          "rerank_score": -6.031455039978027
+        }
+      ],
+      "hypothetical_passage": "Passage: Equity position record for NVDA (Ticker: NVDA) currently reflects a market value of $450M with a portfolio weight of 4.2% and a calculated beta of 2.15. Risk metrics for this position, including VaR and internal stress tests, remain within mandated thresholds despite recent volatility.",
+      "trace_id": "ccfbfcb8666148b7",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-eps-JPM-Q22024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What EPS did JPM report for Q2 2024?",
+      "variant": null,
+      "outputs": [
+        "For Q2 2024, JPM reported an EPS of $4.81 [earnings:JPM:Q2 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 7799.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:JPM:Q2 2024",
+          "rerank_score": 8.360824584960938
+        },
+        {
+          "source_id": "earnings:JPM:Q1 2024",
+          "rerank_score": 7.910848617553711
+        },
+        {
+          "source_id": "earnings:JNJ:Q2 2024",
+          "rerank_score": 5.71605920791626
+        },
+        {
+          "source_id": "earnings:AAPL:Q2 2024",
+          "rerank_score": 5.569704532623291
+        }
+      ],
+      "hypothetical_passage": "Passage: JPM Q2 2024 earnings call summary: Revenue $42.5B, reported EPS of $6.12, representing a $0.82 beat against consensus estimates. Portfolio position updated to reflect current market value of $450M with a beta of 1.15; internal risk score remains stable at 4.2.",
+      "trace_id": "46d8760c71a44cb3",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-eps-NVDA-Q12024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What EPS did NVDA report for Q1 2024?",
+      "variant": null,
+      "outputs": [
+        "For Q1 2024, NVDA reported an EPS of $1.77 [earnings:NVDA:Q1 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 5218.7,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:NVDA:Q1 2024",
+          "rerank_score": 8.395445823669434
+        },
+        {
+          "source_id": "earnings:NVDA:Q2 2024",
+          "rerank_score": 7.818975448608398
+        },
+        {
+          "source_id": "earnings:AAPL:Q1 2024",
+          "rerank_score": 5.390495300292969
+        },
+        {
+          "source_id": "earnings:TSLA:Q1 2024",
+          "rerank_score": 5.121612071990967
+        }
+      ],
+      "hypothetical_passage": "Passage: NVDA Q1 2024 earnings call summary: Revenue $26.0B, reported EPS of $6.12, reflecting a significant beat against consensus estimates. Portfolio position update: Market Value $450M, Weight 4.2%, Beta 1.85, Rating 'Overweight'.",
+      "trace_id": "cbd5438ae9b04c85",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-high-beta",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which positions have a beta above 1.5?",
+      "variant": null,
+      "outputs": [
+        "Based on the fund summary, the positions with a beta above 1.5 are AAPL, CVX, MA, TSLA, and UNH [fund:summary]. \n\nSpecifically, the risk scores note elevated betas for the following holdings:\n- CVX: 1.77x [risk:score:CVX]\n- MA: 1.59x [risk:score:MA]\n- UNH: 1.58x [risk:score:UNH]"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 4,
+            "matched": 4,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 8291.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 2.4319541454315186
+        },
+        {
+          "source_id": "risk:score:UNH",
+          "rerank_score": -3.3517367839813232
+        },
+        {
+          "source_id": "risk:score:CVX",
+          "rerank_score": -3.44093656539917
+        },
+        {
+          "source_id": "risk:score:MA",
+          "rerank_score": -3.4745845794677734
+        }
+      ],
+      "hypothetical_passage": "Passage: Filter identified high-volatility holdings with a beta > 1.5, specifically targeting NVDA (1.82), AMD (1.75), and TSLA (1.68) for portfolio sensitivity analysis. These positions currently show a combined CVaR of $4.2M, necessitating a reassessment of our current equity risk factor exposure.",
+      "trace_id": "d6227479e7b44179",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-largest-position",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which position has the largest market value?",
+      "variant": null,
+      "outputs": [
+        "The position with the largest market value is UNH, with a market value of $6,494,098.40 (20.07% weight) [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 19478.7,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 1.7917591333389282
+        },
+        {
+          "source_id": "position:GS",
+          "rerank_score": -1.2676985263824463
+        },
+        {
+          "source_id": "position:V",
+          "rerank_score": -1.417231559753418
+        },
+        {
+          "source_id": "position:GOOGL",
+          "rerank_score": -1.5158981084823608
+        }
+      ],
+      "hypothetical_passage": "Passage: Portfolio analysis reveals that the position in NVDA currently holds the largest market value at $482.5M, representing a 7.2% weight in the active mandate. This allocation maintains a beta of 1.45 and contributes significantly to the aggregate portfolio VaR, despite a strong earnings beat in the most recent quarterly filing.",
+      "trace_id": "61b960de684049b8",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-loss-positions",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which positions currently have unrealized losses?",
+      "variant": null,
+      "outputs": [
+        "Based on the fund's P&L ranking, there are 5 positions currently carrying unrealized losses [fund:pnl_ranking]. Ordered from largest loss in dollars to smallest, they are:\n\n1. CVX: -$923,765.75 (-21.66%) [fund:pnl_ranking]\n2. MA: -$587,687.32 (-31.65%) [fund:pnl_ranking]\n3. XOM: -$297,429.86 (-29.09%) [fund:pnl_ranking]\n4. UNH: -$148,675.36 (-2.24%) [fund:pnl_ranking]\n5. JNJ: -$138,966.61 (-10.62%) [fund:pnl_ranking]"
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 10,
+            "matched": 10,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 19992.0,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:pnl_ranking",
+          "rerank_score": 5.703267574310303
+        },
+        {
+          "source_id": "risk:score:MA",
+          "rerank_score": 1.839937448501587
+        },
+        {
+          "source_id": "position:UNH",
+          "rerank_score": -0.6384046077728271
+        },
+        {
+          "source_id": "fund:summary",
+          "rerank_score": -1.678497552871704
+        }
+      ],
+      "hypothetical_passage": "Passage: Filter portfolio positions where P&L is less than 0.00 USD to identify current unrealized losses. Cross-reference these holdings against their respective market value and beta to assess if underperforming assets are contributing to elevated VaR or negative stress test outcomes.",
+      "trace_id": "171d0be0a47a451a",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-macro-cpi-yoy",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What was the latest CPI YoY inflation reading?",
+      "variant": null,
+      "outputs": [
+        "Based on the provided data, the latest CPI YoY inflation reading is 4.59% (for 2026-02) [macro:2026-02]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 6061.2,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "macro:2025-09",
+          "rerank_score": 1.6334952116012573
+        },
+        {
+          "source_id": "macro:2025-10",
+          "rerank_score": 1.3946908712387085
+        },
+        {
+          "source_id": "macro:2026-01",
+          "rerank_score": 1.3648697137832642
+        },
+        {
+          "source_id": "macro:2026-02",
+          "rerank_score": 0.8799372315406799
+        }
+      ],
+      "hypothetical_passage": "Passage: Monthly Macro Indicator Note [2023-10-15]: The latest CPI YoY inflation reading printed at 3.7%, signaling persistent underlying price pressures. Consequently, the firm's macro risk desk has adjusted the interest rate sensitivity hedge to account for a potential \"higher-for-longer\" Fed funds trajectory.",
+      "trace_id": "c53dea22d3304a6f",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-macro-federal-funds-rate",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the latest Federal Funds Rate in the macro data?",
+      "variant": null,
+      "outputs": [
+        "The latest Federal Funds Rate in the macro data is 5.22, recorded in February 2026 (`2026-02`) [macro:2026-02]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 6423.3,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "macro:2025-04",
+          "rerank_score": 6.638715744018555
+        },
+        {
+          "source_id": "macro:2026-02",
+          "rerank_score": 6.556557655334473
+        },
+        {
+          "source_id": "macro:2025-12",
+          "rerank_score": 6.547408103942871
+        },
+        {
+          "source_id": "macro:2025-11",
+          "rerank_score": 6.535597801208496
+        }
+      ],
+      "hypothetical_passage": "Passage: The October Macro Indicator Note reflects a hawkish pivot, recording the current Federal Funds Rate at 5.50% alongside a cooling CPI print of 3.2%. Portfolio risk metrics remain constrained as we adjust our sector weightings to hedge against potential volatility in the upcoming monthly cycle.",
+      "trace_id": "5cb20454451b4cf9",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-mv-MSFT",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the market value of our MSFT holding?",
+      "variant": null,
+      "outputs": [
+        "The market value of our MSFT holding is $5,653,824.37 [position:MSFT]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 22304.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:MSFT",
+          "rerank_score": 6.453688621520996
+        },
+        {
+          "source_id": "market:MSFT",
+          "rerank_score": 4.301861763000488
+        },
+        {
+          "source_id": "earnings:MSFT:Q1 2024",
+          "rerank_score": 1.3808207511901855
+        },
+        {
+          "source_id": "earnings:MSFT:Q2 2024",
+          "rerank_score": 0.3172489404678345
+        }
+      ],
+      "hypothetical_passage": "Passage: Internal equity position report for ticker MSFT identifies a current market value of $42.5M, representing a 3.2% portfolio weight. Risk metrics indicate a beta of 1.12, with the holding contributing $1.2M to aggregate daily P&L.",
+      "trace_id": "6873e62f22774d05",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-mv-UNH",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the market value of our UNH holding?",
+      "variant": null,
+      "outputs": [
+        "The market value of our UNH holding is $6,494,098.40 [position:UNH, fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 21073.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "position:UNH",
+          "rerank_score": 6.870458602905273
+        },
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 4.1879563331604
+        },
+        {
+          "source_id": "market:UNH",
+          "rerank_score": 4.187812805175781
+        },
+        {
+          "source_id": "sector:Healthcare",
+          "rerank_score": 3.807917594909668
+        }
+      ],
+      "hypothetical_passage": "Passage: As of the current trade date, the portfolio position record for UNH indicates a total market value of $42.5M, representing a 2.4% weight in the Healthcare sector. Risk metrics for this holding currently reflect a 0.85 beta and an internal liquidity rating of A1.",
+      "trace_id": "10eaa72d363e42b9",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-n-positions",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "How many positions does the fund hold?",
+      "variant": null,
+      "outputs": [
+        "The fund holds 15 positions [fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 0,
+            "matched": 0,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 15472.6,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 1.066064715385437
+        },
+        {
+          "source_id": "sector:Technology",
+          "rerank_score": -5.0987467765808105
+        },
+        {
+          "source_id": "sector:Consumer Discretionary",
+          "rerank_score": -5.6574273109436035
+        },
+        {
+          "source_id": "sector:Healthcare",
+          "rerank_score": -5.814406871795654
+        }
+      ],
+      "hypothetical_passage": "Passage: Portfolio reconciliation as of 2024-Q3 confirms an aggregate of 142 active long positions across the Technology, Healthcare, and Energy sectors. The current net market value of $4.2B reflects these 142 holdings, maintaining a portfolio-level beta of 0.85 against the benchmark and a VaR (95%) within established risk mandates.",
+      "trace_id": "73cb2464448f4662",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-q-concentration",
+      "component": "MRM-001",
+      "grading": "grounded",
+      "question": "How concentrated is the portfolio?",
+      "variant": null,
+      "outputs": [
+        "Based on the concentration check, the largest sector weight is 47.03% (Technology), breaching the 30.0% policy limit [risk:concentration]. The largest single-name weight is 20.07%, breaching the 15.0% single-name policy limit [risk:concentration]. \n\nSpecific single-name concentration levels include:\n- UNH: 20.07% of the portfolio (High concentration, policy limit breached) [risk:score:UNH, risk:concentration].\n- MSFT: 17.47% of the portfolio (High concentration, policy limit breached) [risk:score:MSFT, risk:concentration].\n- AAPL: 12.81% of the portfolio (Moderate concentration) [risk:score:AAPL]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 7,
+            "matched": 7,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 8711.9,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:MSFT",
+          "rerank_score": 2.340885639190674
+        },
+        {
+          "source_id": "risk:score:AAPL",
+          "rerank_score": 0.700063169002533
+        },
+        {
+          "source_id": "risk:score:UNH",
+          "rerank_score": 0.4414837062358856
+        },
+        {
+          "source_id": "risk:concentration",
+          "rerank_score": -3.394341468811035
+        }
+      ],
+      "hypothetical_passage": "Portfolio concentration analysis indicates a top-ten holding weight of 42%, with the largest position in AAPL contributing 8.5% of total market value. Current risk metrics show a portfolio-wide CVaR of 4.2% and a significant factor tilt toward the Information Technology sector, signaling high idiosyncratic risk relative to the broader benchmark.",
+      "trace_id": "dfabbb226aaf49e2",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-q-macro",
+      "component": "MRM-001",
+      "grading": "grounded",
+      "question": "Summarize the latest macro environment.",
+      "variant": null,
+      "outputs": [
+        "Based on the latest available macro data (2025-12), the macroeconomic environment is characterized by the following indicators:\n\n- **Interest Rates & Yields:** The Federal Funds Rate stands at 4.92, with the 10Y Treasury Yield at 4.88 and the 2Y Treasury Yield at 5.23 [macro:2025-12].\n- **Inflation:** CPI YoY is 3.74 and Core PCE is 2.84 [macro:2025-12].\n- **Growth & Labor:** GDP Growth QoQ is 2.2, and the Unemployment Rate is 3.99 [macro:2025-12].\n- **Activity & Sentiment:** The ISM Manufacturing PMI is 51.5, the Consumer Confidence Index is 81.8, and the VIX is 28.01 [macro:2025-12]. \n\nCommentary notes that consumer spending beats expectations despite high rates [macro:2025-12]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 10,
+            "matched": 10,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": null,
+      "passed": true,
+      "latency_ms": 7414.1,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "macro:2025-04",
+          "rerank_score": -9.226478576660156
+        },
+        {
+          "source_id": "macro:2025-06",
+          "rerank_score": -9.379401206970215
+        },
+        {
+          "source_id": "macro:2025-07",
+          "rerank_score": -9.449308395385742
+        },
+        {
+          "source_id": "macro:2025-12",
+          "rerank_score": -9.462921142578125
+        }
+      ],
+      "hypothetical_passage": "Passage: Current macro indicators show CPI trending at 3.2% with the Fed funds rate held at 5.50%, signaling a restrictive environment despite a resilient PMI of 52.4. Elevated treasury yields and a VIX spike to 18.5 have triggered a defensive pivot, resulting in a reduction of portfolio beta and an increase in CVaR-hedging across all cyclical sectors.",
+      "trace_id": "bdba8348b81f4532",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-revenue-CVX-Q22024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What revenue did CVX report for Q2 2024?",
+      "variant": null,
+      "outputs": [
+        "CVX reported revenue of $117.6B for Q2 2024 [earnings:CVX:Q2 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 8268.7,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:CVX:Q2 2024",
+          "rerank_score": 9.806293487548828
+        },
+        {
+          "source_id": "earnings:CVX:Q1 2024",
+          "rerank_score": 9.1087007522583
+        },
+        {
+          "source_id": "earnings:XOM:Q2 2024",
+          "rerank_score": 7.135506629943848
+        },
+        {
+          "source_id": "earnings:NVDA:Q2 2024",
+          "rerank_score": 7.132153511047363
+        }
+      ],
+      "hypothetical_passage": "Passage: CVX Q2 2024 earnings call summary: Revenue reported at $54.1B, exceeding analyst consensus, with EPS of $2.98 representing a beat against estimates. Current portfolio position weight stands at 2.4% with a beta of 0.82 and a VaR contribution of 1.2%.",
+      "trace_id": "7b755cdabf954597",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-revenue-XOM-Q22024",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What revenue did XOM report for Q2 2024?",
+      "variant": null,
+      "outputs": [
+        "For Q2 2024, XOM reported revenue of $65.0B, beating analyst estimates of $64.3B [earnings:XOM:Q2 2024]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 11388.9,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "earnings:XOM:Q2 2024",
+          "rerank_score": 9.598089218139648
+        },
+        {
+          "source_id": "earnings:XOM:Q1 2024",
+          "rerank_score": 9.209588050842285
+        },
+        {
+          "source_id": "earnings:CVX:Q2 2024",
+          "rerank_score": 6.841646671295166
+        },
+        {
+          "source_id": "earnings:META:Q2 2024",
+          "rerank_score": 6.702688217163086
+        }
+      ],
+      "hypothetical_passage": "Passage: XOM Q2 2024 earnings call summary: Reported revenue of $93.06B, surpassing analyst consensus by $2.14B, with an EPS beat of $0.08. Portfolio position updated to reflect current market value of $450M at 2.4% weight, maintaining a beta of 0.82 and a neutral internal risk rating.",
+      "trace_id": "8b4c1a0ba0e94a16",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-rsi-CVX",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the latest RSI-14 for CVX?",
+      "variant": null,
+      "outputs": [
+        "The latest RSI-14 for CVX as of 2026-03-18 is 75.9 [market:CVX]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 25066.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "market:CVX",
+          "rerank_score": 4.976428031921387
+        },
+        {
+          "source_id": "market:TSLA",
+          "rerank_score": -2.2053308486938477
+        },
+        {
+          "source_id": "market:XOM",
+          "rerank_score": -2.400238037109375
+        },
+        {
+          "source_id": "market:GS",
+          "rerank_score": -2.4990882873535156
+        }
+      ],
+      "hypothetical_passage": "Passage: Technical analysis module updated daily; CVX current RSI-14 is 42.85, indicating neutral momentum despite recent market volatility. Position performance remains stable with a 1.2 beta and a realized P&L of +$450k against the assigned risk limit.",
+      "trace_id": "580615cfabf94ad3",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-tail-ratio",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the CVaR to VaR tail ratio?",
+      "variant": null,
+      "outputs": [
+        "Based on the provided data, the tail ratio CVaR/VaR is 1.34 (indicating moderate tail risk) [risk:cvar]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 6429.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:cvar",
+          "rerank_score": 5.776294708251953
+        },
+        {
+          "source_id": "risk:var",
+          "rerank_score": -8.384665489196777
+        },
+        {
+          "source_id": "position:CVX",
+          "rerank_score": -9.436651229858398
+        },
+        {
+          "source_id": "risk:score:CVX",
+          "rerank_score": -9.869091987609863
+        }
+      ],
+      "hypothetical_passage": "Passage: The current portfolio risk analysis indicates a 99% 1-day VaR of $4.2M against a CVaR of $6.8M, resulting in a tail ratio of 1.62. This breach of the internal risk threshold suggests heightened sensitivity to recent volatility in the tech sector, necessitating a re-evaluation of current equity weightings.",
+      "trace_id": "8c3b9a02cbe941a8",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-top-risk",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "Which position has the highest risk score, and what is the score?",
+      "variant": null,
+      "outputs": [
+        "MA has the highest risk score, with a score of 50/100 (level HIGH) [risk:score:MA]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 0,
+            "matched": 0,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 5205.5,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:score:XOM",
+          "rerank_score": 2.9693660736083984
+        },
+        {
+          "source_id": "risk:score:TSLA",
+          "rerank_score": 2.8346619606018066
+        },
+        {
+          "source_id": "risk:score:MA",
+          "rerank_score": 2.442166328430176
+        },
+        {
+          "source_id": "risk:score:CVX",
+          "rerank_score": 2.1609063148498535
+        }
+      ],
+      "hypothetical_passage": "Passage: Current risk analytics indicate that the position in TSLA exhibits the highest portfolio risk score of 8.4, driven primarily by elevated CVaR and adverse stress test results. This rating significantly exceeds the broader tech sector average, warranting an immediate review of the position's weight relative to current VIX volatility levels.",
+      "trace_id": "32d7b001ae594d1b",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-var95",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the portfolio's 1-day 95% parametric VaR?",
+      "variant": null,
+      "outputs": [
+        "Based on the provided data, the portfolio's 1-day 95% parametric VaR is $829,099.56, which represents 2.562% of the portfolio's value [risk:var]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 3,
+            "matched": 3,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 13395.4,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:var",
+          "rerank_score": 8.573012351989746
+        },
+        {
+          "source_id": "risk:cvar",
+          "rerank_score": 4.477097511291504
+        },
+        {
+          "source_id": "risk:stress:flash_crash",
+          "rerank_score": -7.177605628967285
+        },
+        {
+          "source_id": "risk:score:AAPL",
+          "rerank_score": -7.927636623382568
+        }
+      ],
+      "hypothetical_passage": "Passage: As of the EOD risk snapshot, the aggregate portfolio exhibits a 1-day 95% parametric VaR of $4.2M, driven primarily by elevated beta exposure in the Tech sector. This figure remains within current risk mandate limits, though stress tests indicate potential volatility sensitivity should the VIX break the 20-point threshold.",
+      "trace_id": "fd482ad2af304e5c",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-var99",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the portfolio's 1-day 99% VaR?",
+      "variant": null,
+      "outputs": [
+        "The portfolio's 1-day 99% VaR is $1,172,331.66 [risk:var]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 2,
+            "matched": 2,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 7701.0,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:var",
+          "rerank_score": 7.2048211097717285
+        },
+        {
+          "source_id": "risk:cvar",
+          "rerank_score": 4.341711044311523
+        },
+        {
+          "source_id": "risk:stress:flash_crash",
+          "rerank_score": -4.680037498474121
+        },
+        {
+          "source_id": "risk:stress:covid_crash",
+          "rerank_score": -7.749560356140137
+        }
+      ],
+      "hypothetical_passage": "Passage: Risk management reports for the current portfolio indicate a 1-day 99% VaR of $4.2M against a total market value of $850M. This metric reflects recent volatility adjustments and stress test sensitivities consistent with current VIX levels and sector-wide beta expansion.",
+      "trace_id": "00f2142dff9d411f",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    },
+    {
+      "id": "rag-weighted-beta",
+      "component": "MRM-001",
+      "grading": "exact_fact",
+      "question": "What is the portfolio's value-weighted beta?",
+      "variant": null,
+      "outputs": [
+        "The portfolio's value-weighted beta is 1.298 [risk:var, fund:summary]."
+      ],
+      "graders": [
+        {
+          "groundedness": 1.0,
+          "numeric_consistency": 1.0,
+          "unsupported_claims": [],
+          "verdict": "PASS",
+          "parse_error": false,
+          "llm_verdict": "PASS",
+          "numeric_check": {
+            "checked": 1,
+            "matched": 1,
+            "mismatches": [],
+            "score": 1.0
+          },
+          "grader_provider": "gemini",
+          "grader_model": "gemini-3.1-flash-lite",
+          "grader_prompt": "grader@1.0.0#13d51998"
+        }
+      ],
+      "exact_fact": {
+        "ok": true,
+        "missing_values": [],
+        "missing_terms": []
+      },
+      "passed": true,
+      "latency_ms": 7761.8,
+      "error": null,
+      "sources": [
+        {
+          "source_id": "risk:var",
+          "rerank_score": 4.939711570739746
+        },
+        {
+          "source_id": "fund:summary",
+          "rerank_score": 4.719372749328613
+        },
+        {
+          "source_id": "position:V",
+          "rerank_score": -1.1764135360717773
+        },
+        {
+          "source_id": "position:AAPL",
+          "rerank_score": -1.6333420276641846
+        }
+      ],
+      "hypothetical_passage": "Passage: As of the current reporting period, the aggregate portfolio beta is 1.08, derived from a value-weighted consolidation of active equity positions. This figure reflects current risk metrics, including a 99% VaR of $4.2M and a CVaR of $5.8M, factoring in sector-specific weights and asset-level sensitivities.",
+      "trace_id": "dcaead729ed045b3",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    }
+  ],
+  "components": {
+    "MRM-001": {
+      "n_items": 23,
+      "passed": 23,
+      "pass_rate": 1.0,
+      "mean_groundedness": 1.0,
+      "exact_fact_accuracy": 1.0,
+      "grader_pass_rate": 1.0,
+      "errors": 0,
+      "status": "APPROVED",
+      "usage": {
+        "bedrock_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "cost_usd": 0.0
+      }
+    }
+  },
+  "complete": true,
+  "stopped_reason": null,
+  "max_cost_usd": null,
+  "pricing": {
+    "model": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "usd_per_1m_tokens": {
+      "input": 1.1,
+      "output": 5.5
+    },
+    "source": "AWS Pricing API, us.* inference profile, on-demand"
+  },
+  "usage": {
+    "bedrock_calls": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": 0.0
+  },
+  "finished_at": "2026-11-11T01:55:36+00:00"
+}

@@ -1,3 +1,5 @@
+Superseded: describes an earlier design. See README for the current architecture.
+
 # ADR-001: RAG Architecture for Financial Document Processing
 
 ## Status: Accepted

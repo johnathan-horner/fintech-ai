@@ -55,7 +55,7 @@ mean groundedness >= 0.80; CONDITIONAL >= 0.70; otherwise FAILED. Orchestrator i
 
 | Component | n (held-out) | Passed | Mean groundedness | Exact-fact accuracy | Status | Eval run |
 |---|---|---|---|---|---|---|
-| MRM-001 RAG Q&A chain | 23 | 22/23 (0.9565) | 1.0000 | 0.9524 | **APPROVED** | `heldout-20260929T210703Z` |
+| MRM-001 RAG Q&A chain | 23 | 23/23 (1.0000) | 1.0000 | 1.0000 | **APPROVED** | `heldout-20261111T014939Z` |
 | MRM-002 Market agent (market_analysis@1.2.0) | 10 | 10/10 (1.0000) | 1.0000 | n/a | **APPROVED** | `heldout-20260930T004656Z` |
 | MRM-003 Risk agent (risk_report@1.2.0) | 10 | 10/10 (1.0000) | 1.0000 | n/a | **APPROVED** | `heldout-20260930T010751Z` |
 | MRM-004 Portfolio agent (portfolio_recommendations@1.2.0) | 10 | 10/10 (1.0000) | 1.0000 | n/a | **APPROVED** | `heldout-20260930T010751Z` |
@@ -65,7 +65,7 @@ mean groundedness >= 0.80; CONDITIONAL >= 0.70; otherwise FAILED. Orchestrator i
 - MRM-006 out-of-sample 99% VaR backtest (2024-04-15 to 2026-03-19, 250-day rolling window, synthetic price history): historical_rolling: 3 exceptions / 254 days (last 250: 3, GREEN), Kupiec LR 0.0795, p 0.7779; parametric_rolling: 2 exceptions / 254 days (last 250: 2, GREEN), Kupiec LR 0.1251, p 0.7236; beta_proxy_engine: 2 exceptions / 254 days (last 250: 2, GREEN), Kupiec LR 0.1251, p 0.7236.
 - History (all files kept in `data/eval/results/`): with v1.0.0 agent prompts the orchestrator FAILED 1/2 (`heldout-20260929T210703Z`) because the model computed a 10Y-2Y spread itself; the v1.1.0 market/risk/portfolio prompts were re-validated in `heldout-20260929T220706Z`, `...221455Z`, `...221956Z`. The fix (every derived number precomputed by code, prompts forbidding arithmetic, no non-authoritative upstream narratives in agent inputs, earnings above/below-estimate flags computed by code) is what the table above measures.
 - `heldout-20260929T205406Z` (answers on `gemini-3.5-flash`) is incomplete: it stopped at item 21/34 on that model's free-tier limit of 20 requests/day and wrote no LLM approvals.
-- MRM-001 was measured on 2026-09-29 and its prompts, model and index are unchanged since.
+- MRM-001 was re-measured on 2026-11-10 after adding the `fund:pnl_ranking` retrieval document (all positions ranked by unrealized P&L) and rebuilding the index; prompts and models are unchanged. The 2026-09-29 run on the old index scored 22/23 (exact-fact 0.9524, `heldout-20260929T210703Z`); its one miss was the list of positions with losses, which the new document covers.
 - Small n for the agents (10 each): treat as a smoke-level validation, not a statistically strong one. Approvals: `data/mrm/approvals.json` (written only by the harness).
 
 Bedrock Claude Haiku 4.5 path: not yet evaluated (no Haiku approvals; the gate therefore routes live calls to the Gemini fallback). Dry-run cost estimate for the full held-out Haiku eval: $0.751 (per component $0.08-$0.28).

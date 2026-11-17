@@ -2,26 +2,6 @@
   "approvals": {
     "MRM-001": [
       {
-        "approved_at": "2026-09-29T21:25:10+00:00",
-        "approved_by": "eval-harness (scripts/run_eval.py)",
-        "evidence": "heldout-20260929T210703Z",
-        "grader_model": "gemini-3.1-flash-lite",
-        "metrics": {
-          "exact_fact_accuracy": 0.9524,
-          "grader_pass_rate": 1.0,
-          "mean_groundedness": 1.0,
-          "n_items": 23,
-          "pass_rate": 0.9565
-        },
-        "model_id": "gemini-3.5-flash-lite+hyde:gemini-3.1-flash-lite+emb:gemini-embedding-001",
-        "prompt_versions": [
-          "hyde_passage@1.0.0#abb1a9d5",
-          "rag_answer@1.0.0#b6aacf6d"
-        ],
-        "provider": "gemini",
-        "status": "APPROVED"
-      },
-      {
         "approved_at": "2026-09-30T15:18:29+00:00",
         "approved_by": "eval-harness (scripts/run_eval.py)",
         "evidence": "heldout-20260930T142057Z-bedrock",
@@ -49,17 +29,17 @@
         }
       },
       {
-        "approved_at": "2026-09-30T16:33:07+00:00",
+        "approved_at": "2026-11-11T01:48:56+00:00",
         "approved_by": "eval-harness (scripts/run_eval.py)",
-        "evidence": "heldout-20260930T160709Z-bedrock",
+        "evidence": "heldout-20261111T014446Z-bedrock",
         "grader_model": "gemini-3.1-flash-lite",
         "grader_provider": "gemini",
         "metrics": {
-          "exact_fact_accuracy": 0.9524,
+          "exact_fact_accuracy": 1.0,
           "grader_pass_rate": 1.0,
           "mean_groundedness": 1.0,
           "n_items": 23,
-          "pass_rate": 0.9565
+          "pass_rate": 1.0
         },
         "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0+hyde:us.anthropic.claude-haiku-4-5-20251001-v1:0+emb:gemini-embedding-001",
         "prompt_versions": [
@@ -70,9 +50,36 @@
         "status": "APPROVED",
         "usage": {
           "bedrock_calls": 46,
-          "cost_usd": 0.065394,
-          "input_tokens": 32629,
-          "output_tokens": 5364
+          "cost_usd": 0.066806,
+          "input_tokens": 33783,
+          "output_tokens": 5390
+        }
+      },
+      {
+        "approved_at": "2026-11-11T01:55:36+00:00",
+        "approved_by": "eval-harness (scripts/run_eval.py)",
+        "evidence": "heldout-20261111T014939Z",
+        "grader_model": "gemini-3.1-flash-lite",
+        "grader_provider": "gemini",
+        "metrics": {
+          "exact_fact_accuracy": 1.0,
+          "grader_pass_rate": 1.0,
+          "mean_groundedness": 1.0,
+          "n_items": 23,
+          "pass_rate": 1.0
+        },
+        "model_id": "gemini-3.5-flash-lite+hyde:gemini-3.1-flash-lite+emb:gemini-embedding-001",
+        "prompt_versions": [
+          "hyde_passage@1.0.0#abb1a9d5",
+          "rag_answer@1.0.0#b6aacf6d"
+        ],
+        "provider": "gemini",
+        "status": "APPROVED",
+        "usage": {
+          "bedrock_calls": 0,
+          "cost_usd": 0.0,
+          "input_tokens": 0,
+          "output_tokens": 0
         }
       }
     ],

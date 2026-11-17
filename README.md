@@ -1,17 +1,17 @@
-# FinTech AI: Hedge Fund Intelligence Demo
+# FinTech AI: Hedge Fund Intelligence
 
 ![CI](https://github.com/johnathan-horner/fintech-ai/actions/workflows/ci.yml/badge.svg)
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://fintech-ai-horner.streamlit.app)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Status: Live.** The public demo works today (checked 2026-10-23; the free Streamlit host puts it to sleep when idle and it wakes on the first visit). The live demo runs branch `main`, which answers with Google Gemini. This branch makes Amazon Bedrock Claude Haiku 4.5 the primary model; all five AI components passed held-out validation on Haiku, so once this branch is merged, live answers will come from Bedrock with Gemini as the fallback.
+**Status: Live.** https://fintech-ai-horner.streamlit.app (checked 2026-11-16: a chat answer came from Amazon Bedrock Claude Haiku 4.5; the free Streamlit host puts the app to sleep when idle and it wakes on the first visit). Live answers try Bedrock first and fall back to Google Gemini; all five AI components passed held-out validation on both.
 
 Independent reference project by Shoot It Analytics LLC. Built with public or synthetic data.
 
-Live demo: https://fintech-ai-horner.streamlit.app
+Live app: https://fintech-ai-horner.streamlit.app
 
-## What the demo does today
+## What it does today
 
 FinTech AI analyzes a synthetic hedge fund portfolio (15 positions, $32.36M AUM). All data is synthetic and bundled in `data/`. No real client data is used.
 
@@ -28,61 +28,91 @@ Every AI output carries:
 
 Live AI is capped at 10 requests per browser session. When live AI is not available, the app shows deterministic output built from the same computed numbers.
 
-## Why I built this
+## Case study
 
-**The problem.** Banks and investment firms that put language models near investment decisions
-are expected to manage them like any other model: an inventory, independent validation, ongoing
-monitoring and a record of what each model said and why (Federal Reserve guidance SR 26-2,
-formerly SR 11-7). Most AI demos skip all of that, and the numbers a model writes cannot be traced
-to source data.
+**FinTech AI.** Portfolio analysis assistant over a synthetic fund: three LangGraph agents and a RAG chat, where only model and prompt versions that passed a held-out evaluation may answer, and every answer is graded by a different model and traced.
 
-**What I set out to prove.** Whether a multi-agent analysis assistant can run under model risk
-management controls in code: every number computed before the model sees it, every model and prompt
-version approved by a held-out evaluation before it may answer, and every answer graded and traced.
+Status: **Live** · [Live app](https://fintech-ai-horner.streamlit.app) · [GitHub](https://github.com/johnathan-horner/fintech-ai) · [Portfolio](https://portfolio.johnathancloudspace.com/#fintech-ai)
 
-**Key design decisions**
-- **Data:** a synthetic 15-position portfolio and synthetic price history, bundled in the repo.
-- **Numbers come from code:** VaR, Monte Carlo CVaR (10,000 seeded simulations), stress tests and
-  risk scores are computed first; agents are told not to compute numbers and a deterministic check
-  rejects numbers not in their inputs.
-- **Approval gate:** a model and prompt version may answer only after passing the held-out
-  evaluation; the gate checks the exact version before each call.
-- **Independent grading:** every answer is graded by a model from a different vendor.
-- **Cost:** a 10-request cap per browser session, the cheapest capable models, and a dry-run cost
-  estimate before any evaluation run.
+### Real-world problem
 
-**Results.** On the held-out split with Bedrock Claude Haiku 4.5: the RAG chat passed 22 of 23
-questions (95.2% exact-fact accuracy) and all five AI components were approved. The out-of-sample
-VaR backtest over 254 days had 2 to 3 exceptions with Kupiec p-values 0.72 to 0.78 (Basel green
-zone). Details below.
+SR 26-2 (April 17, 2026) replaced SR 11-7 as the Fed's model risk guidance ([Federal Reserve](https://www.federalreserve.gov/supervisionreg/srletters/SR2602.htm)), and footnote 3 of its attachment says generative and agentic AI are not within its scope ([SR 26-2 attachment](https://www.federalreserve.gov/supervisionreg/srletters/SR2602a1.pdf)). SR 26-2 leaves generative AI out of scope, so I applied its practices anyway: model inventory, validation, approval gates and monitoring. A team that puts a language model near investment decisions still needs to know which model answered, whether it was validated, and what it said.
 
-**Limits.** Synthetic data only; never used with real portfolios, clients or trading. Not
-investment advice, and not a certified or regulated product. The controls follow the structure of
-SR 26-2 but have not been reviewed by an independent validation team.
+### Why I built it
 
-**What I'd do next in a real deployment.** Connect licensed market data, have the firm's model
-validation team review the inventory and test results, deploy the CDK stack in the firm's AWS account
-with Bedrock Guardrails, and run the monitoring job on a schedule with alerts.
+I wanted to see whether those controls could live in the code rather than in a policy document: numbers computed before the model sees them, only validated model and prompt versions allowed to answer, and every answer graded and traced.
+
+### Version 1
+
+The first version ran the quant math live but mocked every LLM call, and its README showed a "SR 11-7 compliant" badge and performance figures that no code produced. I removed those figures, then rebuilt it so the agents and the chat call real models, every model and prompt version has to pass a held-out evaluation before it may answer, and each answer is graded and traced.
+
+### Key decisions
+
+- **An approval gate keyed to the exact model and prompt hash.** Each LLM component may call a provider only if the held-out evaluation recorded an approval for that provider, model ID and prompt version hash, and only the evaluation harness writes approvals. Any prompt or model change blocks live use until a new held-out run approves it; meanwhile the app falls back.
+- **Code computes every number; the model only explains.** Monte Carlo CVaR (10,000 seeded runs), VaR, stress tests and PSI drift are computed first, and the agents are told to use only those numbers. The agents can only discuss what the engine computed.
+- **Bedrock first, Gemini as fallback, and a grader that is always a different model.** Claude Haiku 4.5 answers through the US cross-Region inference profile, Gemini takes over on any Bedrock error, and fixed templates with no model call are last. The cost is two vendors and two prompt sets to validate, and Gemini is always needed for embeddings.
+- **Production stack in CDK, synthesized in CI, not deployed.** Bedrock Guardrails, KMS, CloudTrail with 7-year retention, API Gateway and Lambda are defined and checked by cdk synth on every push, with no AWS spend. Those controls are designed, not exercised.
+
+### Architecture
+
+![FinTech AI: Live architecture](docs/architecture/architecture.png)
+
+![FinTech AI: Production design (not deployed)](docs/architecture/production-design.png)
+
+A chat question passes a topic filter, then the RAG chain writes a hypothetical answer (HyDE), searches the committed FAISS index with it and the raw question, re-ranks to the top 4 with a local cross-encoder, and asks the approval gate which provider may answer: Claude Haiku 4.5 on Amazon Bedrock, then Gemini, then fixed templates with no model call. A different model grades the answer, a number check runs, and a trace record is shown under it. The second diagram is the production design in the repo's CDK code, synthesized in CI and not deployed.
+
+### Governance and safety
+
+- Approval gate: only APPROVED or CONDITIONAL records for the exact provider, model ID and prompt hash may answer; approvals are written only by the held-out evaluation harness.
+- Model inventory of 6 models (MRM-001 to MRM-006) with risk tier, lifecycle stage and validation status.
+- Independent grader on every live output (always a different model) plus a check that every number rounds from a source number; marked UNGRADED if no other model is available.
+- A trace record per output: provider, model, prompt versions, index hash, sources, grade, approval status and latency.
+- A topic filter refuses insider-trading and market-manipulation questions, a PII regex redacts every output, live use is capped at 10 requests per session, and every output names the provider and model that answered.
+- Not in the running app: Bedrock Guardrails, KMS and CloudTrail (defined in CDK only), human review, and a durable audit log (traces are kept in memory).
+
+### Results
+
+- Held-out RAG chat (MRM-001), latest run on 2026-11-11: 23 of 23 passed on Claude Haiku 4.5 with 100% exact-fact accuracy, for $0.067 of Bedrock calls; the Gemini fallback also passed 23 of 23. The run before it passed 22 of 23, and on a 23-item set one item is about 4 points, so the change from 22 to 23 on Haiku is within run-to-run variation.
+- Agents on held-out sets with Claude Haiku 4.5: market 10/10, risk 9/10, portfolio 10/10, orchestrator 9/10, all approved.
+- 99% VaR backtest over 254 test days: 2 to 3 exceptions, Kupiec p-value 0.72 to 0.78, Basel green zone.
+- 118 automated tests in CI, plus cdk synth of the production stack.
+
+### What I got wrong
+
+- **I published numbers before measuring them.** The first README listed performance figures no code produced. I removed them, built a held-out evaluation, and now publish only its results.
+- **The model did its own arithmetic.** Early orchestrator runs failed when the model computed numbers itself. Now the engine computes every number first and the agents may only use those.
+- **One prompt set did not fit two models.** With the shared prompts, Claude Haiku 4.5 mislabeled return periods and two agents failed their held-out runs, so each provider now has its own validated prompts.
+- **Retrieval could not answer whole-portfolio questions.** Each position was its own document, so a question like the largest unrealized loss could not be answered from the top 4 chunks. A ranked P&L document fixed it.
+
+### Constraints
+
+- Synthetic portfolio, prices, macro data and transcripts only.
+- Hosted on the free Streamlit tier, which has no IAM role, so the Bedrock key comes from the host's secret store and the app sleeps when idle.
+- Live AI is capped at 10 requests per browser session, and the Gemini fallback runs on the free tier with its rate limits.
+- No AWS spend on infrastructure: the production stack is synthesized in CI, not deployed.
+- Every model or prompt change has to pass a held-out evaluation before it may answer.
+
+### Limits
+
+Synthetic portfolio and market data, small held-out sets (23 chat items, 10 per agent), not reviewed by an independent validation team or a regulator, and not investment advice.
+
+### What I'd do in a real deployment
+
+Deploy the CDK stack with the approval gate, RAG and grader inside the Lambda, apply Bedrock Guardrails to every call, keep traces in a durable audit store, use the bank's own market data, and have an independent validation team review it before anyone relies on it.
+
+### Sources
+
+- [Federal Reserve: SR 26-2, Revised Guidance on Model Risk Management](https://www.federalreserve.gov/supervisionreg/srletters/SR2602.htm)
+- [SR 26-2 attachment (footnote 3)](https://www.federalreserve.gov/supervisionreg/srletters/SR2602a1.pdf)
+- [Live app](https://fintech-ai-horner.streamlit.app)
+- [GitHub](https://github.com/johnathan-horner/fintech-ai)
+- [Portfolio](https://portfolio.johnathancloudspace.com/#fintech-ai)
+
+Built by Johnathan Horner, Shoot It Analytics LLC
 
 ## Architecture
 
-```
-data/*.json and computed metrics
-  -> chunking (1000 tokens, 200 overlap) -> gemini-embedding-001 -> FAISS index (committed)
-  -> HyDE retrieval -> cross-encoder re-rank (ms-marco-MiniLM-L-6-v2, local ONNX)
-  -> model governance gate (approval check for the exact model and prompt version)
-  -> answer: Amazon Bedrock Claude Haiku 4.5, then Gemini, then demo mode
-  -> independent grader (a different model) + deterministic numeric check
-  -> trace record -> Streamlit UI or FastAPI
-```
-
-Agents: START -> Market Analysis Agent (MRM-002) -> Risk Assessment Agent (MRM-003) -> Portfolio Management Agent (MRM-004) -> END, run by the orchestrator (MRM-005). The RAG chain is MRM-001. The metrics engine is MRM-006.
-
-**Provider order.** Bedrock Claude Haiku 4.5 (`us.anthropic.claude-haiku-4-5-20251001-v1:0`) is tried first. Any Bedrock error, throttle, missing credentials or missing approval falls through to Gemini (`gemini-3.5-flash-lite`). If no live provider works, the app shows demo mode.
-
-**Governance gate.** Approvals live in `data/mrm/approvals.json` and are written only by the evaluation harness. Each approval is tied to a component, provider, model ID and prompt versions. Before any model call, the gate checks the exact version that is about to run. A version that is not approved is skipped for that provider.
-
-**Production target.** `infra/` is AWS CDK code (Bedrock Guardrails, KMS, CloudTrail with 7-year retention, Lambda, API Gateway, least-privilege IAM). It passes `cdk synth` in CI. It is not deployed and is not used by the live demo.
+The architecture diagram and how it works are in the [Case study](#architecture) above.
 
 ## Measured evaluation (held-out split)
 
@@ -92,19 +122,19 @@ How it is measured: `python scripts/run_eval.py --split heldout` on the held-out
 
 | Component | Prompt version | Held-out items | Passed | Mean groundedness | Exact-fact accuracy | Status | Eval run |
 |---|---|---|---|---|---|---|---|
-| MRM-001 RAG chat | rag_answer_haiku@1.0.0 | 23 | 22/23 (0.957) | 1.000 | 0.952 | APPROVED | heldout-20260930T160709Z-bedrock |
+| MRM-001 RAG chat | rag_answer_haiku@1.0.0 | 23 | 23/23 (1.000) | 1.000 | 1.000 | APPROVED | heldout-20261111T014446Z-bedrock |
 | MRM-002 Market agent | market_analysis_haiku@1.0.0 | 10 | 10/10 | 0.991 | n/a | APPROVED | heldout-20260930T163311Z-bedrock |
 | MRM-003 Risk agent | risk_report@1.2.0 | 10 | 9/10 | 0.996 | n/a | APPROVED | heldout-20260930T152404Z-bedrock |
 | MRM-004 Portfolio agent | portfolio_recommendations_haiku@1.0.0 | 10 | 10/10 | 1.000 | n/a | APPROVED | heldout-20260930T164023Z-bedrock |
 | MRM-005 Orchestrator (all 3 sections must pass) | the three agent prompts above | 10 | 9/10 | 0.991 | n/a | APPROVED | heldout-20261016T064021Z-bedrock |
 
-Measured Bedrock cost of these runs, from Bedrock usage data: MRM-001 $0.065, MRM-002 $0.125, MRM-003 $0.083, MRM-004 $0.062, MRM-005 $0.272.
+Measured Bedrock cost of these runs, from Bedrock usage data: MRM-001 $0.067 (2026-11-10 run), MRM-002 $0.125, MRM-003 $0.083, MRM-004 $0.062, MRM-005 $0.272.
 
 **Gemini (fallback).** Answers by `gemini-3.5-flash-lite`, graded by `gemini-3.1-flash-lite`.
 
 | Component | Held-out items | Passed | Mean groundedness | Exact-fact accuracy | Status | Eval run |
 |---|---|---|---|---|---|---|
-| MRM-001 RAG chat | 23 | 22/23 (0.957) | 1.000 | 0.952 | APPROVED | heldout-20260929T210703Z |
+| MRM-001 RAG chat | 23 | 23/23 (1.000) | 1.000 | 1.000 | APPROVED | heldout-20261111T014939Z |
 | MRM-002 Market agent | 10 | 10/10 | 1.000 | n/a | APPROVED | heldout-20260930T004656Z |
 | MRM-003 Risk agent | 10 | 10/10 | 1.000 | n/a | APPROVED | heldout-20260930T010751Z |
 | MRM-004 Portfolio agent | 10 | 10/10 | 1.000 | n/a | APPROVED | heldout-20260930T010751Z |
@@ -112,9 +142,11 @@ Measured Bedrock cost of these runs, from Bedrock usage data: MRM-001 $0.065, MR
 
 All result files are in `data/eval/results/`. Earlier Haiku runs with the shared prompts (heldout-20260930T142057Z to T153729Z, bedrock) scored lower: MRM-002 and MRM-005 FAILED, mostly because Haiku mislabeled return periods. That led to the Haiku-specific prompts above.
 
+MRM-001 was re-measured on 2026-11-10 after one change to the retrieval data: a new document, `fund:pnl_ranking`, ranks all 15 positions by unrealized P&L. Each position is its own document and the chat sees only the top 4 re-ranked chunks, so it could not answer questions that compare every position; on 2026-11-10 the live chat said the data did not show which position had the largest unrealized loss (it is CVX, -$923,765.75). Before the change both providers scored 22/23 (exact-fact accuracy 0.952): Gemini missed the list of positions with losses (`heldout-20260929T210703Z`), and Bedrock missed the largest position by market value because the fund summary was not retrieved (`heldout-20260930T160709Z-bedrock`). After the change both scored 23/23. The Gemini gain comes from the new document. The Bedrock miss was on a question the change does not touch, so that gain is run-to-run variation in retrieval, not the fix. With 23 questions, one item moves the pass rate by about 4 points.
+
 VaR backtest (MRM-006): out-of-sample 99% VaR on a rolling 250-day window over seeded synthetic prices, 254 test days, 2 to 3 exceptions depending on method, Kupiec p-values 0.72 to 0.78, Basel GREEN (run `heldout-20260929T210703Z`).
 
-Re-checked on 2026-10-23: running `portfolio_backtest()` from `src/mrm/validation/model_validator.py` reproduces these backtest numbers (historical 3 exceptions, p = 0.778; parametric and beta-proxy 2 exceptions, p = 0.724), and the full test suite passes (118 tests).
+Re-checked on 2026-10-23: running `portfolio_backtest()` from `src/mrm/validation/model_validator.py` reproduces these backtest numbers (historical 3 exceptions, p = 0.778; parametric and beta-proxy 2 exceptions, p = 0.724), and the full test suite passed (118 tests at that time; 154 on 2026-11-10).
 
 ## How to run it
 
@@ -149,7 +181,7 @@ The MCP server needs its own environment: `pip install -r requirements-mcp.txt &
 - Synthetic portfolio and prices. Results on real markets would differ.
 - The held-out evaluation set is small (23 RAG questions, 10 items for each agent and the orchestrator).
 - The grader is itself a language model and can be wrong; a deterministic numeric check backs it up.
-- The live demo still answers with Gemini until this branch is merged.
+- Live Bedrock answers need a valid AWS key in the app's Streamlit secrets; without one the app falls back to Gemini, then to demo mode.
 - The AWS CDK stack in `infra/` passes `cdk synth` but has never been deployed.
 
 ## What's next

@@ -1,3 +1,5 @@
+Superseded: describes an earlier design. See README for the current architecture.
+
 # ADR-003: LangGraph for Multi-Agent Financial Workflows
 
 ## Status: Accepted
