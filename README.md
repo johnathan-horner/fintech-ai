@@ -1,17 +1,17 @@
-# FinTech AI: Hedge Fund Intelligence Demo
+# FinTech AI: Hedge Fund Intelligence
 
 ![CI](https://github.com/johnathan-horner/fintech-ai/actions/workflows/ci.yml/badge.svg)
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://fintech-ai-horner.streamlit.app)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Status: Live.** The public demo loads today (checked 2026-11-10; the free Streamlit host puts it to sleep when idle and it wakes on the first visit). Live answers try Amazon Bedrock Claude Haiku 4.5 first and fall back to Google Gemini; all five AI components passed held-out validation on both. On 2026-11-10 the app's AWS key was rejected, so the chat answered with the Gemini fallback until a valid key is set.
+**Status: Live.** https://fintech-ai-horner.streamlit.app (checked 2026-11-16: a chat answer came from Amazon Bedrock Claude Haiku 4.5; the free Streamlit host puts the app to sleep when idle and it wakes on the first visit). Live answers try Bedrock first and fall back to Google Gemini; all five AI components passed held-out validation on both.
 
 Independent reference project by Shoot It Analytics LLC. Built with public or synthetic data.
 
-Live demo: https://fintech-ai-horner.streamlit.app
+Live app: https://fintech-ai-horner.streamlit.app
 
-## What the demo does today
+## What it does today
 
 FinTech AI analyzes a synthetic hedge fund portfolio (15 positions, $32.36M AUM). All data is synthetic and bundled in `data/`. No real client data is used.
 
@@ -30,52 +30,69 @@ Live AI is capped at 10 requests per browser session. When live AI is not availa
 
 ## Case study
 
-**The problem.** Banks and investment firms that put language models near investment decisions
-are expected to manage them like any other model: an inventory, independent validation, ongoing
-monitoring and a record of what each model said and why (Federal Reserve guidance SR 26-2,
-formerly SR 11-7). Most AI demos skip all of that, and the numbers a model writes cannot be traced
-to source data.
+Built by Johnathan Horner, Shoot It Analytics LLC. The same case study is on the [portfolio](https://portfolio.johnathancloudspace.com/#fintech-ai).
 
-**What I set out to prove.** Whether a multi-agent analysis assistant can run under model risk
-management controls in code: every number computed before the model sees it, every model and prompt
-version approved by a held-out evaluation before it may answer, and every answer graded and traced.
+### The problem
 
-**Key design decisions**
-- **Data:** a synthetic 15-position portfolio and synthetic price history, bundled in the repo.
-- **Numbers come from code:** VaR, Monte Carlo CVaR (10,000 seeded simulations), stress tests and
-  risk scores are computed first; agents are told not to compute numbers and a deterministic check
-  rejects numbers not in their inputs.
-- **Approval gate:** a model and prompt version may answer only after passing the held-out
-  evaluation; the gate checks the exact version before each call.
-- **Independent grading:** every answer is graded by a model from a different vendor.
-- **Cost:** a 10-request cap per browser session, the cheapest capable models, and a dry-run cost
-  estimate before any evaluation run.
+Banks that put language models near investment decisions have to manage them as models under SR 26-2 (formerly SR 11-7): an inventory, independent validation, ongoing monitoring and a record of what each model said. Most AI assistants skip all of that.
 
-**Results.** On the held-out split with Bedrock Claude Haiku 4.5: the RAG chat passed 23 of 23
-questions (100% exact-fact accuracy, re-measured 2026-11-10; 22 of 23 before) and all five AI
-components were approved. The out-of-sample
-VaR backtest over 254 days had 2 to 3 exceptions with Kupiec p-values 0.72 to 0.78 (Basel green
-zone). Details below.
+### Why I built it
 
-**Limits.** Synthetic data only; never used with real portfolios, clients or trading. Not
-investment advice, and not a certified or regulated product. The controls follow the structure of
-SR 26-2 but have not been reviewed by an independent validation team.
+I wanted to see whether those controls could live in the code rather than in a policy document: numbers computed before the model sees them, only validated model and prompt versions allowed to answer, and every answer graded and traced.
 
-**What I'd do next in a real deployment.** Connect licensed market data, have the firm's model
-validation team review the inventory and test results, deploy the CDK stack in the firm's AWS account
-with Bedrock Guardrails, and run the monitoring job on a schedule with alerts.
+### Key decisions
+
+1. **An approval gate keyed to the exact model and prompt hash.** Each LLM component may call a provider only if the held-out evaluation recorded an approval for that provider, model ID and prompt version hash, and only the evaluation harness writes approvals. Any prompt or model change blocks live use until a new held-out run approves it; meanwhile the app falls back.
+2. **Code computes every number; the model only explains.** Monte Carlo CVaR (10,000 seeded runs), VaR, stress tests and PSI drift are computed first, and the agents are told to use only those numbers. Earlier failures came from the model doing its own arithmetic. The agents can only discuss what the engine computed.
+3. **Bedrock first, Gemini as fallback, and a grader that is always a different model.** Claude Haiku 4.5 answers through the US cross-Region inference profile, Gemini takes over on any Bedrock error, and demo mode is last. Every output gets an LLM grade from a different model plus a deterministic number check. The cost is two vendors and two prompt sets to validate, and Gemini is always needed for embeddings.
+4. **Production stack in CDK, synthesized in CI, not deployed.** Bedrock Guardrails, KMS, CloudTrail with 7-year retention, API Gateway and Lambda are defined and checked by cdk synth on every push, with no AWS spend. Those controls are designed, not exercised, and the CDK Lambda does not yet carry the approval gate, RAG or grader.
+
+### Architecture
+
+The diagram and the flow are in [Architecture](#architecture) below.
+
+### Governance and safety
+
+- Approval gate: only APPROVED or CONDITIONAL records for the exact provider, model ID and prompt hash may answer; approvals are written only by the held-out evaluation harness.
+- Model inventory of 6 models (MRM-001 to MRM-006) with risk tier, lifecycle stage and validation status.
+- Independent grader on every live output (always a different model) plus a check that every number rounds from a source number; marked UNGRADED if no other model is available.
+- A trace record per output: provider, model, prompt versions, index hash, sources, grade, approval status and latency.
+- A topic filter refuses insider-trading and market-manipulation questions, a PII regex redacts every output, live use is capped at 10 requests per session, and every output names the provider and model that answered.
+- Not in the running app: Bedrock Guardrails, KMS and CloudTrail (defined in CDK only), human review, and a durable audit log (traces are kept in memory).
+
+### Results
+
+- Held-out RAG chat (MRM-001), latest run on 2026-11-11: 23 of 23 passed on Claude Haiku 4.5 with 100% exact-fact accuracy, for $0.067 of Bedrock calls; the Gemini fallback also passed 23 of 23. On a 23-item set, one item is about 4 points.
+- Agents on held-out sets with Claude Haiku 4.5: market 10/10, risk 9/10, portfolio 10/10, orchestrator 9/10, all approved.
+- 99% VaR backtest over 254 test days: 2 to 3 exceptions, Kupiec p-value 0.72 to 0.78, Basel green zone.
+- 118 automated tests in CI, plus cdk synth of the production stack.
+
+### Limits
+
+Synthetic portfolio and market data, small held-out sets (23 chat items, 10 per agent), not reviewed by an independent validation team or a regulator, and not investment advice.
+
+### What I'd do in a real deployment
+
+Deploy the CDK stack with the approval gate, RAG and grader inside the Lambda, apply Bedrock Guardrails to every call, keep traces in a durable audit store, use the bank's own market data, and have an independent validation team review it before anyone relies on it.
+
+### Links
+
+- Live app: https://fintech-ai-horner.streamlit.app
+- GitHub: https://github.com/johnathan-horner/fintech-ai
+- Diagram: [docs/architecture/architecture.png](docs/architecture/architecture.png)
+- Production design: [docs/architecture/production-design.png](docs/architecture/production-design.png)
 
 ## Architecture
 
-```
-data/*.json and computed metrics
-  -> chunking (1000 tokens, 200 overlap) -> gemini-embedding-001 -> FAISS index (committed)
-  -> HyDE retrieval -> cross-encoder re-rank (ms-marco-MiniLM-L-6-v2, local ONNX)
-  -> model governance gate (approval check for the exact model and prompt version)
-  -> answer: Amazon Bedrock Claude Haiku 4.5, then Gemini, then demo mode
-  -> independent grader (a different model) + deterministic numeric check
-  -> trace record -> Streamlit UI or FastAPI
-```
+![FinTech AI: What runs today](docs/architecture/architecture.png)
+
+A chat question passes a topic filter, then the RAG chain writes a hypothetical answer (HyDE), searches the committed FAISS index with it and the raw question, re-ranks to the top 4 with a local cross-encoder, and asks the approval gate which provider may answer: Claude Haiku 4.5 on Amazon Bedrock, then Gemini, then demo mode. A different model grades the answer, a number check runs, and a trace record is shown under it. The second diagram is the production design in the repo's CDK code, synthesized in CI and not deployed.
+
+**Production design (not deployed).**
+
+![FinTech AI: Production design (not deployed)](docs/architecture/production-design.png)
+
+The diagrams are built with the Python `diagrams` library from [`docs/architecture/`](docs/architecture/). Each arrow is checked against the code and, for AWS calls, the AWS documentation; see [`docs/architecture/arrow-verification.md`](docs/architecture/arrow-verification.md). A 1200x1500 copy of each diagram (`*-linkedin.png`) is in the same folder.
 
 Agents: START -> Market Analysis Agent (MRM-002) -> Risk Assessment Agent (MRM-003) -> Portfolio Management Agent (MRM-004) -> END, run by the orchestrator (MRM-005). The RAG chain is MRM-001. The metrics engine is MRM-006.
 
