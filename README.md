@@ -112,23 +112,7 @@ Built by Johnathan Horner, Shoot It Analytics LLC
 
 ## Architecture
 
-![FinTech AI: What runs today](docs/architecture/architecture.png)
-
-A chat question passes a topic filter, then the RAG chain writes a hypothetical answer (HyDE), searches the committed FAISS index with it and the raw question, re-ranks to the top 4 with a local cross-encoder, and asks the approval gate which provider may answer: Claude Haiku 4.5 on Amazon Bedrock, then Gemini, then demo mode. A different model grades the answer, a number check runs, and a trace record is shown under it. The second diagram is the production design in the repo's CDK code, synthesized in CI and not deployed.
-
-**Production design (not deployed).**
-
-![FinTech AI: Production design (not deployed)](docs/architecture/production-design.png)
-
-The diagrams are built with the Python `diagrams` library from [`docs/architecture/`](docs/architecture/). Each arrow is checked against the code and, for AWS calls, the AWS documentation; see [`docs/architecture/arrow-verification.md`](docs/architecture/arrow-verification.md). A 1200x1500 copy of each diagram (`*-linkedin.png`) is in the same folder.
-
-Agents: START -> Market Analysis Agent (MRM-002) -> Risk Assessment Agent (MRM-003) -> Portfolio Management Agent (MRM-004) -> END, run by the orchestrator (MRM-005). The RAG chain is MRM-001. The metrics engine is MRM-006.
-
-**Provider order.** Bedrock Claude Haiku 4.5 (`us.anthropic.claude-haiku-4-5-20251001-v1:0`) is tried first. Any Bedrock error, throttle, missing credentials or missing approval falls through to Gemini (`gemini-3.5-flash-lite`). If no live provider works, the app shows demo mode.
-
-**Governance gate.** Approvals live in `data/mrm/approvals.json` and are written only by the evaluation harness. Each approval is tied to a component, provider, model ID and prompt versions. Before any model call, the gate checks the exact version that is about to run. A version that is not approved is skipped for that provider.
-
-**Production target.** `infra/` is AWS CDK code (Bedrock Guardrails, KMS, CloudTrail with 7-year retention, Lambda, API Gateway, least-privilege IAM). It passes `cdk synth` in CI. It is not deployed and is not used by the live demo.
+The architecture diagram and how it works are in the [Case study](#architecture) above.
 
 ## Measured evaluation (held-out split)
 
